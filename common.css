@@ -1,0 +1,35 @@
+*{
+    font-family: 'Poppins', sans-serif;
+}
+
+.nav-font  {
+  font-family: 'Cinzel Decorative', serif;
+  letter-spacing: 1px;
+}
+
+
+.section-font {
+  font-family: 'Cinzel Decorative', serif;
+  letter-spacing: 1px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.custom-bg{
+    background-color: #293462;
+    border: 1px solid #293462;
+}
+
+.custom-bg:hover{
+    background-color: #3d4e93;
+    border-color: #3d4e93;
+}
