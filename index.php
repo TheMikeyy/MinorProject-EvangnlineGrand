@@ -513,7 +513,7 @@
   <div class="convenience-row">
     <div class="convenience-card">
       <i class="fa-solid fa-mug-saucer"></i>
-      <h5 class="mt-3">Complimentary gourmet breakfast</h5>
+      <h5 class="mt-3">Complimentary breakfast</h5>
     </div>
     <div class="convenience-card">
       <i class="fa-solid fa-charging-station"></i>
@@ -700,6 +700,10 @@
   </div>
 </div>
 
+  <div class="col-lg-12 text-center mt-5">
+    <a href="#" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none rounded-pill px-3">Know About More ></a>
+   </div>
+
 <h2 class="mt-5 pt-4 mb-4 text-center fw-bold section-font">LOCATE US</h2>
 
 <div class="container">
@@ -746,9 +750,41 @@
   </div>
 </div>
 
-<br><br><br><br>
-<br><br><br><br>
+<div class="container-fluid bg-white mt-5">
+ <div class="row">
+   <div class="col-lg-4 p4">
+     <h3 class="h-font fw-bold fs-3 mb-2">Évangéline Grand</h3>
+     <p>The perfect mix of reliable comfort and warm,
+        genuine hospitality. Our peaceful lodges
+        give you exactly what you need for a restful night's sleep.
+   </div>
+   <div class="col-lg-4 p4">
+     <h5 class="mb-3">Quick Links</h5>
+      <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Home</a><br>
+      <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Lodges</a><br>
+      <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Comforts</a><br>
+      <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">About</a><br>
+      <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">Contact</a><br>
+   </div>
+   <div class="col-lg-4 p4">
+      <h5 class="mb-3">Follow Us</h5>
+        <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">
+          <i class="bi bi-instagram"></i> Instagram
+        </a><br>
+        <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">
+          <i class="bi bi-facebook me-1"></i> Facebook
+        </a><br>
+        <a href="#" class="d-inline-block mb-2 text-dark text-decoration-none">
+          <i class="bi bi-youtube"></i> Youtube
+        </a><br>
+        <a href="#" class="d-inline-block text-dark text-decoration-none">
+          <i class="bi bi-twitter-x"></i> X (Formally Twitter)
+        </a><br>
+   </div>
+ </div>
+</div>
 
+<h6 class="text-center bg-dark text-white p-3 m-0">© 2026 Évangéline Grand. All rights reserved.</h6>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
