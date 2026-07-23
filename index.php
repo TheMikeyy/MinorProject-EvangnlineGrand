@@ -6,11 +6,11 @@
     <title>Évangéline Grand</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="common.css">
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cinzel+Decorative:wght@700&family=Cormorant+SC:wght@600&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,wght@0,600;1,600&family=Great+Vibes&family=Tenor+Sans&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
   </head>
 <body class="bg-light">
@@ -413,143 +413,113 @@
   <div class="swiper swiper-testimonials position-relative">
     <div class="swiper-wrapper">
 
-      <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">User1</h6>
-        </div>
-        <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
-        <div class="rating">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-        </div>
-      </div>
-
-      <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">Random User2</h6>
-        </div>
-        <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
-        <div class="rating">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-        </div>
-      </div>
-
-      <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">Random User3</h6>
-        </div>
-        <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
-        <div class="rating">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
-        </div>
-      </div>
-
-      <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">Random User4</h6>
-        </div>
-        <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
-        <div class="rating">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-        </div>
-      </div>
-
-      <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">Random User5</h6>
-        </div>
-        <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
-        <div class="rating">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
-        </div>
-      </div>
-
-      <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">Random User6</h6>
-        </div>
-        <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
-        <div class="rating">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-        </div>
-      </div>
-
-      <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">Random User7</h6>
-        </div>
-        <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
-        <div class="rating">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-        </div>
-      </div>
-
-      <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">Random User8</h6>
-        </div>
-        <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
-        <div class="rating">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
-        </div>
-      </div>
-
-      <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <div class="d-flex align-items-center justify-content-center mb-3">
-          <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">Random User9</h6>
-        </div>
-        <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
-        <div class="rating">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-        </div>
-      </div>
-
+  <div class="swiper-slide testimonial-card bg-white p-4 text-center">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+      <img src="https://ui-avatars.com/api/?name=Ananya+Rao&background=7A2333&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <h6 class="mb-0 ms-2">Ananya Rao</h6>
     </div>
+    <p class="mb-3">The Nirvana Pavilion exceeded every expectation, the bed alone made the whole trip worth it. Breakfast was a lovely surprise too.</p>
+    <div class="rating">
+      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+    </div>
+  </div>
+
+  <div class="swiper-slide testimonial-card bg-white p-4 text-center">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+      <img src="https://ui-avatars.com/api/?name=Mackenzie+Fraser&background=1F2A52&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <h6 class="mb-0 ms-2">Mackenzie Fraser</h6>
+    </div>
+    <p class="mb-3">Beautiful property, quiet and peaceful just like the name promises. Rooftop bar at sunset is unmissable.</p>
+    <div class="rating">
+      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+    </div>
+  </div>
+
+  <div class="swiper-slide testimonial-card bg-white p-4 text-center">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+      <img src="https://ui-avatars.com/api/?name=Rohan+Malhotra&background=591A26&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <h6 class="mb-0 ms-2">Rohan Malhotra</h6>
+    </div>
+    <p class="mb-3">Booked the Panorama Suite for our anniversary and the staff went out of their way to make it special. Will be back.</p>
+    <div class="rating">
+      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+    </div>
+  </div>
+
+  <div class="swiper-slide testimonial-card bg-white p-4 text-center">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+      <img src="https://ui-avatars.com/api/?name=Charlotte+Belanger&background=1F2A52&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <h6 class="mb-0 ms-2">Charlotte Bélanger</h6>
+    </div>
+    <p class="mb-3">Loved the location in the Annapolis Valley, peaceful mornings with coffee on the balcony. Wifi could be a touch faster.</p>
+    <div class="rating">
+      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+    </div>
+  </div>
+
+  <div class="swiper-slide testimonial-card bg-white p-4 text-center">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+      <img src="https://ui-avatars.com/api/?name=Ishaan+Verma&background=7A2333&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <h6 class="mb-0 ms-2">Ishaan Verma</h6>
+    </div>
+    <p class="mb-3">The Regal Canopy Lodge is worth every penny. Butler service felt genuinely personal, not scripted.</p>
+    <div class="rating">
+      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+    </div>
+  </div>
+
+  <div class="swiper-slide testimonial-card bg-white p-4 text-center">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+      <img src="https://ui-avatars.com/api/?name=Emily+Thompson&background=591A26&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <h6 class="mb-0 ms-2">Emily Thompson</h6>
+    </div>
+    <p class="mb-3">Clean, comfortable, and the pool area is gorgeous at golden hour. Would've liked more late-night dining options.</p>
+    <div class="rating">
+      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+    </div>
+  </div>
+
+  <div class="swiper-slide testimonial-card bg-white p-4 text-center">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+      <img src="https://ui-avatars.com/api/?name=Priya+Nair&background=1F2A52&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <h6 class="mb-0 ms-2">Priya Nair</h6>
+    </div>
+    <p class="mb-3">Check-in was seamless and the room upgrade they gave us was a wonderful surprise. Highly recommend the spa.</p>
+    <div class="rating">
+      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+    </div>
+  </div>
+
+  <div class="swiper-slide testimonial-card bg-white p-4 text-center">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+      <img src="https://ui-avatars.com/api/?name=Liam+OConnell&background=7A2333&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <h6 class="mb-0 ms-2">Liam O'Connell</h6>
+    </div>
+    <p class="mb-3">Nice stay overall, though our room's AC was a little noisy at night. Staff fixed it quickly when we mentioned it.</p>
+    <div class="rating">
+      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+    </div>
+  </div>
+
+  <div class="swiper-slide testimonial-card bg-white p-4 text-center">
+    <div class="d-flex align-items-center justify-content-center mb-3">
+      <img src="https://ui-avatars.com/api/?name=Sanya+Kapoor&background=591A26&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <h6 class="mb-0 ms-2">Sanya Kapoor</h6>
+    </div>
+    <p class="mb-3">Honestly one of the best hotel experiences we've had, the EV charging station was a nice bonus for our road trip too.</p>
+    <div class="rating">
+      <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+    </div>
+  </div>
+
+</div>
   </div>
 </div>
 <div class="col-lg-12 text-center mt-3">
   <a href="#" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none rounded-pill px-3">Know About More ></a>
 </div>
 
-<!-- LOCATE US — photographic section -->
+<!-- LOCATE US  -->
 <div id="locate" class="locate-section">
   <div class="locate-bg"></div>
   <div class="locate-overlay"></div>
@@ -634,16 +604,16 @@
       <div class="col-lg-4">
         <h5 class="mb-3">Follow Us</h5>
         <a href="#" class="d-inline-block mb-2 text-decoration-none">
-          <i class="bi bi-instagram"></i> Instagram
+          <i class="bi bi-instagram me-1"></i> Instagram
         </a><br>
         <a href="#" class="d-inline-block mb-2 text-decoration-none">
           <i class="bi bi-facebook me-1"></i> Facebook
         </a><br>
         <a href="#" class="d-inline-block mb-2 text-decoration-none">
-          <i class="bi bi-youtube"></i> Youtube
+          <i class="bi bi-youtube me-1"></i> Youtube
         </a><br>
         <a href="#" class="d-inline-block text-decoration-none">
-          <i class="bi bi-twitter-x"></i> X (Formerly Twitter)
+          <i class="bi bi-twitter-x me-1"></i> X (Formerly Twitter)
         </a>
       </div>
     </div>

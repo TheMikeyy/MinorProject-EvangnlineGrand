@@ -135,7 +135,7 @@ input[type="number"] {
   border-color: var(--ink);
 }
 
-/* ---------- Navbar (transparent over hero, blurs on scroll) ---------- */
+/* ---------- Navbar  ---------- */
 .navbar{
   position: fixed;
   top: 0; left: 0; right: 0;
