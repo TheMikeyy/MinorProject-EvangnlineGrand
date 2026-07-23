@@ -12,12 +12,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cinzel+Decorative:wght@700&family=Cormorant+SC:wght@600&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,wght@0,600;1,600&family=Great+Vibes&family=Tenor+Sans&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-</head>
+  </head>
 <body class="bg-light">
 
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container-fluid">
-    <a class="navbar-brand me-3 fw-bold fs-3 nav-font" href="index.php">Évangéline Grand</a>
+    <a class="navbar-brand me-3" href="index.php">
+      <img src="images/logo/logo-dark.png" alt="Évangéline Grand" class="logo-img logo-img-transparent">
+      <img src="images/logo/logo-light.png" alt="Évangéline Grand" class="logo-img logo-img-scrolled">
+    </a>
     <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -173,7 +176,7 @@
       </div>
   </div>
   <div class="hero-overlay">
-    <span class="hero-script">Bienvenue</span>
+    <span class="hero-script">Welcome To The</span>
     <h2 class="hero-title">Évangéline Grand</h2>
     <p class="hero-tagline">The perfect mix of reliable comfort and warm, genuine hospitality & a restful night's sleep, exactly as it should be.</p>
   </div>
@@ -182,9 +185,8 @@
 <div class="container availability-form">
   <div class="row justify-content-center">
     <div class="col-lg-10">
-      <div class="bg-white shadow p-4 rounded availability-card">
-        <span class="section-eyebrow d-block mb-1">Reserve your stay</span>
-        <h5 class="mb-4" style="color: var(--ink); font-weight:600;">Check Lodge Availability</h5>
+      <div class="bg-white shadow p-4 availability-card">
+        <span class="section-eyebrow d-block mb-1 text-center">Reserve your stay</span>
         <form>
           <div class="row align-items-end availability-row">
 
@@ -231,14 +233,14 @@
 
 <!-- LODGES -->
 <div id="lodges" class="section-pad text-center section-head reveal">
-  <span class="section-eyebrow">Some Of The Best</span>
-  <h2 class="mb-0 fw-bold section-font">OUR LODGES</h2>
+  
+  <h2 class="mb-0 fw-bold section-font">PREVIEW OUR LODGES</h2>
 </div>
 
 <div class="container">
  <div class="row">
    <div class="col-lg-4 col-md-6 my-3">
-    <div class="card border-0 shadow lodge-hover reveal" style="max-width: 350px; margin: auto;">
+    <div class="card border-0 shadow lodge-hover" style="max-width: 350px; margin: auto;">
       <img src="images/lodge/1.jpeg" class="card-img-top" alt="The Nirvana Pavilion">
       <div class="card-body text-center">
         <span class="lodge-tier">Signature</span>
@@ -276,7 +278,7 @@
    </div>
 
  <div class="col-lg-4 col-md-6 my-3">
-    <div class="card border-0 shadow lodge-hover reveal" style="max-width: 350px; margin: auto;">
+    <div class="card border-0 shadow lodge-hover" style="max-width: 350px; margin: auto;">
       <img src="images/lodge/2.jpeg" class="card-img-top" alt="The Panorama Suite">
       <div class="card-body text-center">
         <span class="lodge-tier">Premier</span>
@@ -314,7 +316,7 @@
    </div>
 
     <div class="col-lg-4 col-md-6 my-3">
-    <div class="card border-0 shadow lodge-hover reveal" style="max-width: 350px; margin: auto;">
+    <div class="card border-0 shadow lodge-hover" style="max-width: 350px; margin: auto;">
       <img src="images/lodge/3.jpeg" class="card-img-top" alt="The Regal Canopy Lodge">
       <div class="card-body text-center">
         <span class="lodge-tier">Grand Reserve</span>
@@ -360,37 +362,37 @@
 <!-- CONVENIENCE -->
 <div class="section-white mt-5">
   <div id="comforts" class="section-pad text-center section-head reveal">
-    <span class="section-eyebrow">Every comfort, considered</span>
+    <span class="section-eyebrow">Where Every Comfort Is Considered</span>
     <h2 class="mb-0 fw-bold section-font">OUR CONVENIENCE</h2>
   </div>
 
   <div class="container pb-5">
     <div class="convenience-row">
-      <div class="convenience-card reveal">
+      <div class="convenience-card">
         <div class="convenience-icon"><i class="fa-solid fa-mug-saucer"></i></div>
         <h5>Complimentary breakfast</h5>
       </div>
-      <div class="convenience-card reveal">
+      <div class="convenience-card">
         <div class="convenience-icon"><i class="fa-solid fa-charging-station"></i></div>
         <h5>EV Charging Station</h5>
       </div>
-      <div class="convenience-card reveal">
+      <div class="convenience-card">
         <div class="convenience-icon"><i class="fa-solid fa-video"></i></div>
         <h5>24/7 security &amp; CCTV</h5>
       </div>
-      <div class="convenience-card reveal">
+      <div class="convenience-card">
         <div class="convenience-icon"><i class="fa-solid fa-people-group"></i></div>
         <h5>Conference/banquet halls</h5>
       </div>
-      <div class="convenience-card reveal">
+      <div class="convenience-card">
         <div class="convenience-icon"><i class="fa-solid fa-shirt"></i></div>
         <h5>Laundry service</h5>
       </div>
-      <div class="convenience-card reveal">
+      <div class="convenience-card">
         <div class="convenience-icon"><i class="fa-solid fa-martini-glass-citrus"></i></div>
         <h5>Rooftop Bar</h5>
       </div>
-      <div class="convenience-card reveal">
+      <div class="convenience-card">
         <div class="convenience-icon"><i class="fa-solid fa-water-ladder"></i></div>
         <h5>Swimming pool &amp; spa</h5>
       </div>
@@ -400,11 +402,10 @@
 
 <!-- TESTIMONIALS -->
 <div class="section-pad text-center section-head reveal">
-  <span class="section-eyebrow">In their words</span>
   <h2 class="mb-0 fw-bold section-font">TESTIMONIALS</h2>
 </div>
 
-<div class="container reveal">
+<div class="container">
   <div class="d-flex justify-content-center mb-3">
     <div class="swiper-pagination position-static"></div>
   </div>
@@ -413,22 +414,20 @@
     <div class="swiper-wrapper">
 
       <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <span class="testimonial-quote-mark">&ldquo;</span>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
-          <h6 class="mb-0 ms-2">Random User1</h6>
+          <h6 class="mb-0 ms-2">User1</h6>
         </div>
         <p class="mb-3">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum animi debitis nemo?</p>
         <div class="rating">
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
+          <i class="bi bi-star-fill"></i>
         </div>
       </div>
 
       <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <span class="testimonial-quote-mark">&ldquo;</span>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
           <h6 class="mb-0 ms-2">Random User2</h6>
@@ -438,12 +437,11 @@
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
+          <i class="bi bi-star-fill"></i>
         </div>
       </div>
 
       <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <span class="testimonial-quote-mark">&ldquo;</span>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
           <h6 class="mb-0 ms-2">Random User3</h6>
@@ -458,7 +456,6 @@
       </div>
 
       <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <span class="testimonial-quote-mark">&ldquo;</span>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
           <h6 class="mb-0 ms-2">Random User4</h6>
@@ -468,12 +465,12 @@
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
         </div>
       </div>
 
       <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <span class="testimonial-quote-mark">&ldquo;</span>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
           <h6 class="mb-0 ms-2">Random User5</h6>
@@ -488,7 +485,6 @@
       </div>
 
       <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <span class="testimonial-quote-mark">&ldquo;</span>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
           <h6 class="mb-0 ms-2">Random User6</h6>
@@ -498,12 +494,12 @@
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
         </div>
       </div>
 
       <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <span class="testimonial-quote-mark">&ldquo;</span>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
           <h6 class="mb-0 ms-2">Random User7</h6>
@@ -513,12 +509,10 @@
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
         </div>
       </div>
 
       <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <span class="testimonial-quote-mark">&ldquo;</span>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
           <h6 class="mb-0 ms-2">Random User8</h6>
@@ -528,12 +522,12 @@
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-half"></i>
         </div>
       </div>
 
       <div class="swiper-slide testimonial-card bg-white p-4 text-center">
-        <span class="testimonial-quote-mark">&ldquo;</span>
         <div class="d-flex align-items-center justify-content-center mb-3">
           <img src="images/testimonials/1.jpeg" width="40" class="rounded-circle">
           <h6 class="mb-0 ms-2">Random User9</h6>
@@ -543,14 +537,14 @@
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
           <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
+          <i class="bi bi-star-fill"></i>
+          <i class="bi bi-star-fill"></i>
         </div>
       </div>
 
     </div>
   </div>
 </div>
-
 <div class="col-lg-12 text-center mt-3">
   <a href="#" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none rounded-pill px-3">Know About More ></a>
 </div>
@@ -582,8 +576,8 @@
             <span>Grand Pré, Annapolis Valley, Nova Scotia, Canada</span>
           </div>
           <div class="hours-row"><span>Reception</span><span>24 / 7</span></div>
-          <div class="hours-row"><span>Concierge desk</span><span>7:00 am – 11:00 pm</span></div>
-          <div class="hours-row"><span>Rooftop Bar</span><span>5:00 pm – 1:00 am</span></div>
+          <div class="hours-row"><span>Concierge desk</span><span>7:00 am To 11:00 pm</span></div>
+          <div class="hours-row"><span>Rooftop Bar</span><span>5:00 pm To 1:00 am</span></div>
         </div>
 
         <div class="p-4 locate-card reveal">
@@ -625,11 +619,11 @@
   <div class="container">
     <hr class="footer-divider">
     <div class="row">
-      <div class="col-lg-4 mb-4 mb-lg-0 reveal">
+      <div class="col-lg-4 mb-4 mb-lg-0">
         <h3 class="h-font fw-bold fs-3 mb-3">Évangéline Grand</h3>
         <p>The perfect mix of reliable comfort and warm, genuine hospitality. Our peaceful lodges give you exactly what you need for a restful night's sleep.</p>
       </div>
-      <div class="col-lg-4 mb-4 mb-lg-0 reveal">
+      <div class="col-lg-4 mb-4 mb-lg-0">
         <h5 class="mb-3">Quick Links</h5>
         <a href="#" class="d-inline-block mb-2 text-decoration-none">Home</a><br>
         <a href="#lodges" class="d-inline-block mb-2 text-decoration-none">Lodges</a><br>
@@ -637,7 +631,7 @@
         <a href="#" class="d-inline-block mb-2 text-decoration-none">About</a><br>
         <a href="#locate" class="d-inline-block mb-2 text-decoration-none">Contact</a>
       </div>
-      <div class="col-lg-4 reveal">
+      <div class="col-lg-4">
         <h5 class="mb-3">Follow Us</h5>
         <a href="#" class="d-inline-block mb-2 text-decoration-none">
           <i class="bi bi-instagram"></i> Instagram
@@ -683,8 +677,8 @@ var swiperTestimonials = new Swiper('.swiper-testimonials', {
   loop: true,
   initialSlide: 0,
   coverflowEffect: {
-    rotate: 50,
-    stretch: 0,
+    rotate: 30,
+    stretch: -40,
     depth: 100,
     modifier: 1,
     slideShadows: false,
@@ -702,6 +696,7 @@ var swiperTestimonials = new Swiper('.swiper-testimonials', {
 });
 
 // Navbar: transparent over the hero, blurs solid once you scroll
+// (the logo image + text/border colors switch together via the .navbar-scrolled class)
 (function(){
   var nav = document.querySelector('.navbar');
   function onScroll(){

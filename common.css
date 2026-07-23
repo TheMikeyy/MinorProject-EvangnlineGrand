@@ -1,3 +1,8 @@
+/* ===================================================================
+   Évangéline Grand — Design Tokens v2
+   Ink Navy #1F2A52 · Near-Black #13141C · Wine #7A2333
+   Wine Deep #591A26 · Dusty Rose #E7C9C7 · Ivory #F7F1E6 · Paper #FFFFFF
+=================================================================== */
 
 :root{
   --ink: #1F2A52;
@@ -34,7 +39,7 @@ p, .copy-serif{
 
 /* Preserved exactly as-is per request */
 .h-font{
-  font-family: 'Cinzel Decorative', serif;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 .section-font{
@@ -50,9 +55,9 @@ p, .copy-serif{
 
 .section-eyebrow{
   display: block;
-  font-family: 'Great Vibes', cursive;
-  font-size: 2.5rem;
-  color: var(--wine);
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.5rem;
+  color: var(--ink);
 }
 
 .section-eyebrow.on-dark{
@@ -145,6 +150,36 @@ input[type="number"] {
 .navbar .navbar-brand{
   color: var(--paper) !important;
   transition: color .35s ease;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding-top: 0;
+  padding-bottom: 0;
+  min-height: 34px;
+}
+
+.logo-img{
+  height: 35px;
+  width: auto;
+  display: block;
+  margin: auto 0;
+  transition: opacity .35s ease;
+}
+
+.logo-img-scrolled{
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  opacity: 0;
+}
+
+.navbar-scrolled .logo-img-transparent{
+  opacity: 0;
+}
+
+.navbar-scrolled .logo-img-scrolled{
+  opacity: 1;
 }
 
 .navbar .nav-link{
@@ -180,6 +215,11 @@ input[type="number"] {
 .navbar .btn-outline-dark:hover{
   background-color: var(--paper);
   color: var(--ink);
+}
+
+.navbar .btn-outline-dark:focus,
+.navbar .btn-outline-dark:active{
+  box-shadow: 0 0 0 4px rgba(231,201,199,.35) !important;
 }
 
 .navbar-scrolled{
@@ -221,6 +261,13 @@ input[type="number"] {
   background-color: var(--ink);
   color: var(--paper);
 }
+
+.navbar-scrolled .btn-outline-dark:focus,
+.navbar-scrolled .btn-outline-dark:active{
+  box-shadow: 0 0 0 4px rgba(122,35,51,.25) !important;
+}
+
+/* Login stays solid navy (.custom-bg) in both navbar states */
 
 @media (max-width: 991.98px){
   .navbar-collapse.show,
@@ -306,24 +353,31 @@ input[type="number"] {
 
 .hero-script{
   display: block;
-  font-family: 'Great Vibes', cursive;
-  font-size: 2.4rem;
+  font-family: "Great Vibes", cursive;
+  font-size: 3.0rem;
+  font-weight: 400;
+  line-height: 1;
   color: var(--rose);
-  margin-bottom: -.5rem;
+  margin-bottom: -.10rem;
 }
 
 .hero-title{
-  font-family: 'DM Serif Display', serif;
+  font-family: 'Merriweather', serif;
   font-size: 3.2rem;
+  font-weight: 400;
+  line-height: 1.15;
   letter-spacing: .5px;
-  margin-bottom: .5rem;
+  margin-bottom: .6rem;
+  color: var(--rose);
 }
 
 .hero-tagline{
   font-family: 'Merriweather', serif;
-  font-size: 1rem;
-  color: rgba(255,255,255,.88);
-  max-width: 480px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--rose);
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -351,6 +405,16 @@ input[type="number"] {
 
 .availability-card{
   border-top: 3px solid var(--wine);
+  border-radius: 16px;
+}
+
+.availability-card .section-eyebrow{
+  text-align: center;
+}
+
+.availability-row .form-control,
+.availability-row .form-select,
+.availability-row .btn{
   border-radius: 12px;
 }
 
@@ -480,7 +544,7 @@ input[type="number"] {
 
 .convenience-card i{
   font-size: 22px;
-  color: var(--wine);
+  color: var(--ink);
   display: inline-block;
 }
 
@@ -518,7 +582,6 @@ input[type="number"] {
 
 .testimonial-card{
   border-radius: 14px;
-  box-shadow: 0 10px 24px rgba(31,42,82,.08);
 }
 
 .testimonial-quote-mark{
@@ -539,7 +602,7 @@ input[type="number"] {
   background-color: var(--wine) !important;
 }
 
-/* ---------- Locate us (photographic section) ---------- */
+/* ---------- Locate us ---------- */
 .locate-section{
   position: relative;
   overflow: hidden;
