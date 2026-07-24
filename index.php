@@ -12,150 +12,12 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cinzel+Decorative:wght@700&family=Cormorant+SC:wght@600&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,wght@0,600;1,600&family=Great+Vibes&family=Tenor+Sans&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Jost:ital,wght@0,100..900;1,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+
   </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-expand-lg navbar-light">
-  <div class="container-fluid">
-    <a class="navbar-brand me-3" href="index.php">
-      <img src="images/logo/logo-dark.png" alt="Évangéline Grand" class="logo-img logo-img-transparent">
-      <img src="images/logo/logo-light.png" alt="Évangéline Grand" class="logo-img logo-img-scrolled">
-    </a>
-    <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active me-1" aria-current="page" href="index.php">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link me-1" href="">Lodges</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link me-1" href="">Comforts</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link me-1" href="#">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#locate">Contact</a>
-        </li>
-      </ul>
-      <div class="d-flex">
-        <button type="button" class="btn btn-outline-dark shadow-none me-lg-3 me-3" data-bs-toggle="modal" data-bs-target="#signupModal">
-          Signup
-        </button>
-        <button type="button" class="btn btn-dark shadow-none custom-bg" data-bs-toggle="modal" data-bs-target="#loginModal">
-          Login
-        </button>
-      </div>
-    </div>
-  </div>
-</nav>
-
-<div class="modal fade" id="signupModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <form>
-        <div class="modal-header">
-          <h5 class="modal-title d-flex align-items-center">
-            <i class="bi bi-person-plus-fill fs-4 me-2"></i>User Signup
-          </h5>
-          <button type="reset" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-
-        <div class="modal-body">
-          <span class="badge rounded-pill bg-light text-dark mb-3 text-wrap lh-base">
-            Note: Your details must match with your ID (Aadhar card, Passport, Driving license, Voter ID, etc.) that will be required during check-in.
-          </span>
-
-          <div class="container-fluid">
-            <div class="row">
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label">User Name</label>
-                <input type="text" class="form-control shadow-none">
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Email Address</label>
-                <input type="email" class="form-control shadow-none">
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Phone Number</label>
-                <input type="tel" class="form-control shadow-none">
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label">User Picture</label>
-                <input type="file" class="form-control shadow-none">
-              </div>
-
-              <div class="col-md-12 mb-3">
-                <label class="form-label">Communication Address</label>
-                <textarea class="form-control shadow-none" rows="1"></textarea>
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Pin Code</label>
-                <input type="number" class="form-control shadow-none">
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Date Of Birth</label>
-                <input type="date" class="form-control shadow-none">
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Account Password</label>
-                <input type="password" class="form-control shadow-none">
-              </div>
-
-              <div class="col-md-6 mb-3">
-                <label class="form-label">Confirm Password</label>
-                <input type="password" class="form-control shadow-none">
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer justify-content-center border-0 pt-0">
-          <button type="submit" class="btn btn-wine shadow-none px-4">Register</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-<div class="modal fade" id="loginModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <form>
-         <div class="modal-header">
-        <h5 class="modal-title d-flex align-items-center">
-        <i class="bi bi-person-circle fs-4 me-2"></i>User Login</h5>
-        <button type="reset" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-         <label class="form-label">Email address</label>
-         <input type="email" class="form-control shadow-none">
-        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-      </div>
-       <div class="mb-4">
-         <label class="form-label">Password</label>
-         <input type="password" class="form-control shadow-none">
-      </div>
-      <div class="d-flex align-items-center justify-content-between mb-2">
-        <button type="submit" class="btn btn-wine shadow-none">Submit</button>
-        <a href="javascript: void(0)" class="text-secondary text-decoration-none">Forgot Password?</a>
-      </div>
-      </div>
-      </form>
-    </div>
-  </div>
-</div>
+<?php require('include/navbar.php')?>
 
 <!-- HERO -->
 <div class="hero-wrap">
@@ -177,7 +39,7 @@
   </div>
   <div class="hero-overlay">
     <span class="hero-script">Welcome To The</span>
-    <h2 class="hero-title">Évangéline Grand</h2>
+    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="hero-logo-img">
     <p class="hero-tagline">The perfect mix of reliable comfort and warm, genuine hospitality & a restful night's sleep, exactly as it should be.</p>
   </div>
 </div>
@@ -531,8 +393,8 @@
 
     <div class="row g-4">
       <div class="col-lg-7">
-        <div class="p-3 rounded locate-card reveal">
-          <iframe class="w-100 rounded" height="470" style="border:0;"
+        <div class="p-3 locate-card locate-card-map reveal">
+          <iframe class="w-100" height="472" style="border:0;"
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2816.1670154276353!2d-64.30946076511229!3d45.10268230000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4b58559db9646275%3A0xcca6eaa98adc0353!2sThe%20Evangeline%20Hotel!5e0!3m2!1sen!2sin!4v1784649732488!5m2!1sen!2sin" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
           </iframe>
         </div>
@@ -585,42 +447,7 @@
 </div>
 
 <!-- FOOTER -->
-<div class="container-fluid site-footer pt-5 pb-4">
-  <div class="container">
-    <hr class="footer-divider">
-    <div class="row">
-      <div class="col-lg-4 mb-4 mb-lg-0">
-        <h3 class="h-font fw-bold fs-3 mb-3">Évangéline Grand</h3>
-        <p>The perfect mix of reliable comfort and warm, genuine hospitality. Our peaceful lodges give you exactly what you need for a restful night's sleep.</p>
-      </div>
-      <div class="col-lg-4 mb-4 mb-lg-0">
-        <h5 class="mb-3">Quick Links</h5>
-        <a href="#" class="d-inline-block mb-2 text-decoration-none">Home</a><br>
-        <a href="#lodges" class="d-inline-block mb-2 text-decoration-none">Lodges</a><br>
-        <a href="#comforts" class="d-inline-block mb-2 text-decoration-none">Comforts</a><br>
-        <a href="#" class="d-inline-block mb-2 text-decoration-none">About</a><br>
-        <a href="#locate" class="d-inline-block mb-2 text-decoration-none">Contact</a>
-      </div>
-      <div class="col-lg-4">
-        <h5 class="mb-3">Follow Us</h5>
-        <a href="#" class="d-inline-block mb-2 text-decoration-none">
-          <i class="bi bi-instagram me-1"></i> Instagram
-        </a><br>
-        <a href="#" class="d-inline-block mb-2 text-decoration-none">
-          <i class="bi bi-facebook me-1"></i> Facebook
-        </a><br>
-        <a href="#" class="d-inline-block mb-2 text-decoration-none">
-          <i class="bi bi-youtube me-1"></i> Youtube
-        </a><br>
-        <a href="#" class="d-inline-block text-decoration-none">
-          <i class="bi bi-twitter-x me-1"></i> X (Formerly Twitter)
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
-
-<h6 class="text-center footer-bottom p-3 m-0">© 2026 Évangéline Grand. All rights reserved.</h6>
+<?php require('include/footer.php') ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
@@ -665,8 +492,6 @@ var swiperTestimonials = new Swiper('.swiper-testimonials', {
   }
 });
 
-// Navbar: transparent over the hero, blurs solid once you scroll
-// (the logo image + text/border colors switch together via the .navbar-scrolled class)
 (function(){
   var nav = document.querySelector('.navbar');
   function onScroll(){
@@ -680,7 +505,6 @@ var swiperTestimonials = new Swiper('.swiper-testimonials', {
   onScroll();
 })();
 
-// Scroll-reveal: fade + rise each section/card into view once
 (function(){
   var items = document.querySelectorAll('.reveal');
   if (!('IntersectionObserver' in window)) {
