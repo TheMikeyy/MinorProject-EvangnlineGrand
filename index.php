@@ -4,16 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Évangéline Grand</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="common.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <?php require('include/links.php') ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Cinzel+Decorative:wght@700&family=Cormorant+SC:wght@600&family=DM+Serif+Display:ital@0;1&family=Fraunces:ital,wght@0,600;1,600&family=Great+Vibes&family=Tenor+Sans&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300..700;1,300..700&family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=Jost:ital,wght@0,100..900;1,100..900&family=Lora:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
-
   </head>
 <body class="bg-light">
 
@@ -288,7 +280,7 @@
 
   <div class="swiper-slide testimonial-card bg-white p-4 text-center">
     <div class="d-flex align-items-center justify-content-center mb-3">
-      <img src="https://ui-avatars.com/api/?name=Mackenzie+Fraser&background=1F2A52&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <img src="https://ui-avatars.com/api/?name=Mackenzie+Fraser&background=7A2333&color=fff&bold=true&size=128" width="40" class="rounded-circle">
       <h6 class="mb-0 ms-2">Mackenzie Fraser</h6>
     </div>
     <p class="mb-3">Beautiful property, quiet and peaceful just like the name promises. Rooftop bar at sunset is unmissable.</p>
@@ -299,7 +291,7 @@
 
   <div class="swiper-slide testimonial-card bg-white p-4 text-center">
     <div class="d-flex align-items-center justify-content-center mb-3">
-      <img src="https://ui-avatars.com/api/?name=Rohan+Malhotra&background=591A26&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <img src="https://ui-avatars.com/api/?name=Rohan+Malhotra&background=7A2333&color=fff&bold=true&size=128" width="40" class="rounded-circle">
       <h6 class="mb-0 ms-2">Rohan Malhotra</h6>
     </div>
     <p class="mb-3">Booked the Panorama Suite for our anniversary and the staff went out of their way to make it special. Will be back.</p>
@@ -310,7 +302,7 @@
 
   <div class="swiper-slide testimonial-card bg-white p-4 text-center">
     <div class="d-flex align-items-center justify-content-center mb-3">
-      <img src="https://ui-avatars.com/api/?name=Charlotte+Belanger&background=1F2A52&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <img src="https://ui-avatars.com/api/?name=Charlotte+Belanger&background=7A2333&color=fff&bold=true&size=128" width="40" class="rounded-circle">
       <h6 class="mb-0 ms-2">Charlotte Bélanger</h6>
     </div>
     <p class="mb-3">Loved the location in the Annapolis Valley, peaceful mornings with coffee on the balcony. Wifi could be a touch faster.</p>
@@ -332,7 +324,7 @@
 
   <div class="swiper-slide testimonial-card bg-white p-4 text-center">
     <div class="d-flex align-items-center justify-content-center mb-3">
-      <img src="https://ui-avatars.com/api/?name=Emily+Thompson&background=591A26&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <img src="https://ui-avatars.com/api/?name=Emily+Thompson&background=7A2333&color=fff&bold=true&size=128" width="40" class="rounded-circle">
       <h6 class="mb-0 ms-2">Emily Thompson</h6>
     </div>
     <p class="mb-3">Clean, comfortable, and the pool area is gorgeous at golden hour. Would've liked more late-night dining options.</p>
@@ -343,7 +335,7 @@
 
   <div class="swiper-slide testimonial-card bg-white p-4 text-center">
     <div class="d-flex align-items-center justify-content-center mb-3">
-      <img src="https://ui-avatars.com/api/?name=Priya+Nair&background=1F2A52&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <img src="https://ui-avatars.com/api/?name=Priya+Nair&background=7A2333&color=fff&bold=true&size=128" width="40" class="rounded-circle">
       <h6 class="mb-0 ms-2">Priya Nair</h6>
     </div>
     <p class="mb-3">Check-in was seamless and the room upgrade they gave us was a wonderful surprise. Highly recommend the spa.</p>
@@ -365,7 +357,7 @@
 
   <div class="swiper-slide testimonial-card bg-white p-4 text-center">
     <div class="d-flex align-items-center justify-content-center mb-3">
-      <img src="https://ui-avatars.com/api/?name=Sanya+Kapoor&background=591A26&color=fff&bold=true&size=128" width="40" class="rounded-circle">
+      <img src="https://ui-avatars.com/api/?name=Sanya+Kapoor&background=7A2333&color=fff&bold=true&size=128" width="40" class="rounded-circle">
       <h6 class="mb-0 ms-2">Sanya Kapoor</h6>
     </div>
     <p class="mb-3">Honestly one of the best hotel experiences we've had, the EV charging station was a nice bonus for our road trip too.</p>

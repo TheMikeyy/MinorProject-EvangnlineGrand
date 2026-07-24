@@ -1,4 +1,4 @@
-div class="container-fluid site-footer pt-5 pb-4">
+<div class="container-fluid site-footer pt-5 pb-4">
   <div class="container">
     <hr class="footer-divider">
     <div class="row align-items-start">
