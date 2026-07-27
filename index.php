@@ -3,11 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Évangéline Grand</title>
+    <title>Home | Évangéline Grand</title>
     <?php require('include/links.php') ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
   </head>
 <body class="bg-light">
+
+<style>
+  .hero-wrap{
+  position: relative;
+  margin-top: 0;
+}
+
+.hero-swiper .swiper-slide img{
+  height: 620px;
+  object-fit: cover;
+  filter: saturate(1.02);
+}
+
+.hero-wrap::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(19,20,28,.62) 0%, rgba(19,20,28,0) 20%, rgba(19,20,28,0) 52%, rgba(19,20,28,.88) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-overlay{
+  position: absolute;
+  left: 0; right: 0; bottom: 70px;
+  z-index: 2;
+  text-align: center;
+  color: var(--paper);
+  padding: 0 1rem;
+}
+
+.hero-script{
+  display: block;
+  font-family: "Great Vibes", cursive;
+  font-size: 3.1rem;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--rose);
+  margin-bottom: -.10rem;
+}
+
+.hero-logo-img{
+  display: block;
+  width: 46%;
+  max-width: 460px;
+  min-width: 260px;
+  height: auto;
+  margin: 0 auto .6rem;
+  filter: drop-shadow(10 3px 140px rgba(0,0,0,.4));
+}
+
+.hero-tagline{
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.5rem;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--rose);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 575px){
+    .hero-swiper .swiper-slide img{
+        height: 340px;
+    }
+    .hero-title{ font-size: 2.5rem; }
+    .hero-script{ font-size: 2rem; }
+    .hero-overlay{ bottom: 40px; }
+    .hero-logo-img{
+      width: 60%;
+      min-width: 0;
+      max-width: 400px;
+      margin-bottom: .4rem;
+    }
+    .hero-tagline{
+      font-size: 1.1rem;
+      line-height: 1.5;
+      padding: 0 .75rem;
+    }
+}
+
+/* ---------- Availability form ---------- */
+.availability-form{
+    margin-top: -60px;
+    z-index: 3;
+    position: relative;
+}
+
+@media screen and (max-width: 575px){
+    .availability-form{
+        margin-top: -30px;
+    }
+}
+
+.availability-card{
+  border-top: 3px solid var(--wine);
+  border-radius: 16px;
+  background: rgba(255,255,255,.92);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,.4);
+  box-shadow: 0 12px 30px rgba(31,42,82,.14);
+}
+
+.availability-card .section-eyebrow{
+  text-align: center;
+}
+
+.availability-row .form-control,
+.availability-row .form-select,
+.availability-row .btn{
+  border-radius: 12px;
+}
+
+.availability-row {
+    --gap: 0.75rem;
+  }
+.availability-row > div {
+  padding-left: var(--gap);
+  padding-right: var(--gap);
+}
+
+@media (max-width: 991.98px) {
+  .availability-row > div {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 992px) {
+  .field-checkin   { flex: 0 0 20%; max-width: 20%; }
+  .field-checkout  { flex: 0 0 20%; max-width: 20%; }
+  .field-children  { flex: 0 0 24%; max-width: 24%; }
+  .field-adult     { flex: 0 0 24%; max-width: 24%; }
+  .field-submit    { flex: 0 0 12%; max-width: 12%; }
+}
+
+/* ---------- Section rhythm ---------- */
+.section-pad{
+  padding-top: 5rem;
+}
+
+.section-white{
+  background-color: var(--paper);
+}
+
+/* ---------- Lodge cards ---------- */
+.card{
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 26px rgba(31,42,82,.08);
+  background-color: var(--paper);
+}
+
+.lodge-hover{
+  transition: transform .3s ease, box-shadow .3s ease;
+  border-top: 3px solid transparent !important;
+}
+
+.lodge-hover:hover{
+  transform: translateY(-8px);
+  box-shadow: 0 20px 36px rgba(31,42,82,.16) !important;
+  border-top: 3px solid var(--wine) !important;
+}
+
+.lodge-tier{
+  display: inline-block;
+  font-size: .7rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--wine);
+  font-weight: 600;
+  margin-bottom: .35rem;
+}
+
+.card-body h5{
+  font-family: 'DM Serif Display', serif;
+  color: var(--ink);
+}
+
+.card-body h6:not(.mb-1){
+  color: var(--muted);
+  font-weight: 500;
+}
+
+.rating i.bi-star-fill,
+.rating i.bi-star-half{
+  color: var(--wine) !important;
+}
+
+.pill{
+  display: inline-block;
+  font-size: .74rem;
+  padding: .35rem .7rem;
+  margin: .2rem;
+  border-radius: 30px;
+  border: 1px solid rgba(122,35,51,.22);
+  background-color: var(--cream);
+  color: var(--ink);
+}
+
+/* ---------- Convenience ---------- */
+.convenience-row{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  padding: 0 1rem;
+}
+
+.convenience-card{
+  flex: 0 0 calc(25% - 18px);
+  max-width: calc(25% - 18px);
+  background: var(--cream);
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(31,42,82,.06);
+  padding: 2.2rem 1rem;
+  text-align: center;
+  transition: box-shadow .25s ease, transform .25s ease, background-color .25s ease;
+}
+
+.convenience-card:hover{
+  box-shadow: 0 14px 28px rgba(31,42,82,.14);
+  transform: translateY(-4px);
+  background-color: var(--paper);
+}
+
+.convenience-icon{
+  width: 62px;
+  height: 62px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(122,35,51,.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.convenience-card i{
+  font-size: 22px;
+  color: var(--ink);
+  display: inline-block;
+}
+
+.convenience-card h5{
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--charcoal);
+  margin-bottom: 0;
+  letter-spacing: .2px;
+}
+
+@media (max-width: 991px){
+  .convenience-card{
+      flex: 0 0 calc(33.333% - 16px);
+      max-width: calc(33.333% - 16px);
+  }
+}
+@media (max-width: 767px){
+  .convenience-card{
+      flex: 0 0 calc(50% - 12px);
+      max-width: calc(50% - 12px);
+  }
+}
+@media (max-width: 480px){
+  .convenience-card{
+      flex: 0 0 100%;
+      max-width: 100%;
+  }
+}
+
+/* ---------- Testimonials ---------- */
+.swiper-testimonials{
+  padding: 1.5rem .5rem 3rem;
+}
+
+.testimonial-card{
+  border-radius: 14px;
+}
+
+.testimonial-card p{
+  font-style: italic;
+  color: var(--charcoal);
+}
+
+.swiper-pagination-bullet-active{
+  background-color: var(--wine) !important;
+}
+
+/* ---------- Locate us ---------- */
+.locate-section{
+  position: relative;
+  overflow: hidden;
+  padding: 5.5rem 0 5rem;
+  margin-top: 4rem;
+}
+
+.locate-bg{
+  position: absolute;
+  inset: 0;
+  background-image: url('images/crousel/5.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  filter: brightness(.5) saturate(1.05);
+  transform: scale(1.03);
+}
+
+.locate-overlay{
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(19,20,28,.75) 0%, rgba(19,20,28,.55) 45%, rgba(19,20,28,.85) 100%);
+}
+
+.locate-content{
+  position: relative;
+  z-index: 2;
+}
+
+.locate-card{
+  border-radius: 14px;
+  box-shadow: 0 14px 34px rgba(0,0,0,.28);
+  background-color: rgba(255,255,255,.94);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border-top: 3px solid var(--wine);
+}
+
+.locate-card-map iframe{
+  border-radius: 15px;
+  display: block;
+}
+
+.locate-card h5{
+  color: var(--ink);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.locate-card .hours-row{
+  display: flex;
+  justify-content: space-between;
+  font-size: .88rem;
+  padding: .3rem 0;
+  border-bottom: 1px dashed rgba(31,42,82,.12);
+}
+
+.locate-card .hours-row:last-child{
+  border-bottom: none;
+}
+
+.contact-row{
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+
+.contact-icon{
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: 1px solid rgba(122,35,51,.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--wine);
+}
+
+.social-pill{
+  border: 1px solid rgba(122,35,51,.3);
+  color: var(--ink) !important;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+.social-pill:hover{
+  background-color: var(--wine);
+  color: var(--paper) !important;
+  border-color: var(--wine);
+}
+</style>
 
 <?php require('include/navbar.php')?>
 
@@ -39,7 +422,7 @@
 <div class="container availability-form">
   <div class="row justify-content-center">
     <div class="col-lg-10">
-      <div class="bg-white shadow p-4 availability-card">
+      <div class="shadow p-4 availability-card">
         <span class="section-eyebrow d-block mb-1 text-center">Reserve your stay</span>
         <form>
           <div class="row align-items-end availability-row">
@@ -123,6 +506,11 @@
           <span class="pill">Streaming Smart TV</span>
           <span class="pill">Work Desk and Chair</span>
         </div>
+        <div class="guests-limit mb-4">
+           <h6 class="mb-1">Guests Limit:</h6>
+          <span class="pill">6 Adults</span>
+          <span class="pill">4 Childrens</span>
+        </div>
         <div class="d-flex justify-content-center gap-3 mb-2">
           <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
           <a href="#" class="btn btn-sm btn-outline-dark shadow-none rounded-pill px-3">More Details</a>
@@ -161,6 +549,11 @@
           <span class="pill">Air Conditioning</span>
           <span class="pill">Glass top coffee table</span>
         </div>
+        <div class="guests-limit mb-4">
+           <h6 class="mb-1">Guests Limit:</h6>
+          <span class="pill">7 Adults</span>
+          <span class="pill">3 Childrens</span>
+        </div>
         <div class="d-flex justify-content-center gap-3 mb-2">
           <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
           <a href="#" class="btn btn-sm btn-outline-dark shadow-none rounded-pill px-3">More Details</a>
@@ -190,7 +583,7 @@
           <h6 class="mb-1">Features:</h6>
           <span class="pill">Curved Floor Ceiling</span>
           <span class="pill">Elevated private platform</span>
-          <span class="pill">Four poster canopy bed</span>
+          <span class="pill">Four canopPoster bed</span>
           <span class="pill">Mirror paneled accent wall</span>
         </div>
         <div class="facilities mb-4">
@@ -200,6 +593,11 @@
           <span class="pill">In room mini-bar</span>
           <span class="pill">High-speed Wi-Fi</span>
         </div>
+        <div class="guests-limit mb-4">
+           <h6 class="mb-1">Guests Limit:</h6>
+          <span class="pill">8 Adults</span>
+          <span class="pill">6 Childrens</span>
+        </div>
         <div class="d-flex justify-content-center gap-3 mb-2">
           <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
           <a href="#" class="btn btn-sm btn-outline-dark shadow-none rounded-pill px-3">More Details</a>
@@ -208,7 +606,7 @@
         </div>
        </div>
       <div class="col-lg-12 text-center mt-5">
-    <a href="#" class="btn btn-sm btn-outline-dark rounded-0 fw-bold shadow-none rounded-pill px-3">Explore More Lodges ></a>
+    <a href="#" class="btn btn-md btn-outline-dark rounded-0 fw-bold shadow-none rounded-pill px-3">Explore More Lodges ></a>
    </div>
  </div>
 </div>

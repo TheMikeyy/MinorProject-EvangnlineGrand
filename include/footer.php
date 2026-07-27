@@ -52,4 +52,27 @@
   onScroll();
 })();
 
+(function(){
+  var PAGE_ORDER = { 'index.php': 0, 'comforts.php': 1 }; // add new pages here as you build them, in site order
+
+  function pageKey(url){
+    var path = new URL(url, location.href).pathname.split('/').pop();
+    return path === '' ? 'index.php' : path;
+  }
+
+  window.addEventListener('pageswap', function(e){
+    if (!e.viewTransition || !e.activation) return;
+    var from = PAGE_ORDER[pageKey(location.href)] ?? 0;
+    var to = PAGE_ORDER[pageKey(e.activation.entry.url)] ?? 0;
+    document.documentElement.setAttribute('data-transition', to < from ? 'back' : 'forward');
+  });
+
+  window.addEventListener('pagereveal', function(e){
+    if (!e.viewTransition || !window.navigation || !navigation.activation || !navigation.activation.from) return;
+    var from = PAGE_ORDER[pageKey(navigation.activation.from.url)] ?? 0;
+    var to = PAGE_ORDER[pageKey(location.href)] ?? 0;
+    document.documentElement.setAttribute('data-transition', to < from ? 'back' : 'forward');
+  });
+})();
+
 </script>

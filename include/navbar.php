@@ -1,3 +1,7 @@
+<?php
+  $current_page = basename($_SERVER['PHP_SELF']);
+?>
+
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container-fluid">
     <a class="navbar-brand me-3" href="index.php">
@@ -9,21 +13,21 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active me-1" aria-current="page" href="index.php">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link me-1" href="">Lodges</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link me-1" href="">Comforts</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link me-1" href="#">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#locate">Contact</a>
-        </li>
+      <li class="nav-item">
+        <a class="nav-link me-1 <?php if ($current_page === 'index.php') echo 'active'; ?>" aria-current="page" href="index.php">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link me-1 <?php if ($current_page === 'lodges.php') echo 'active'; ?>" href="">Lodges</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link me-1 <?php if ($current_page === 'comforts.php') echo 'active'; ?>" href="comforts.php">Comforts</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link me-1 <?php if ($current_page === 'about.php') echo 'active'; ?>" href="about.php">About</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link <?php if ($current_page === 'contact.php') echo 'active'; ?>" href="contact.php">Contact</a>
+      </li>
       </ul>
       <div class="d-flex">
         <button type="button" class="btn btn-outline-dark shadow-none me-lg-3 me-3" data-bs-toggle="modal" data-bs-target="#signupModal">
