@@ -493,8 +493,8 @@
           <div class="team-card-tier"><i class="fa-solid fa-handshake"></i></div>
           <img src="images/about/person4.jpeg" alt="Marcus Hill">
           <div class="team-card-info">
-            <span class="team-card-role">Guest Relations</span>
-            <h6></h6>
+            <span class="team-card-role">Guest Relations Handler</span>
+            <h6>Dhruv Vyas</h6>
             <p class="team-card-note">The familiar face at check-in, and the one who remembers how you take your coffee.</p>
           </div>
         </div>
@@ -503,6 +503,7 @@
     </div>
   </div>
 </div>
+
 <!-- FOOTER -->
 <?php require('include/footer.php') ?>
 

@@ -105,7 +105,7 @@
 
 .availability-card{
   border-top: 3px solid var(--wine);
-  border-radius: 16px;
+  border-radius: 40px;
   background: rgba(255,255,255,.92);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -480,7 +480,6 @@
     <div class="card border-0 shadow lodge-hover" style="max-width: 350px; margin: auto;">
       <img src="images/lodge/1.jpeg" class="card-img-top" alt="The Nirvana Pavilion">
       <div class="card-body text-center">
-        <span class="lodge-tier">Signature</span>
         <h5>The Nirvana Pavilion</h5>
         <h6 class="mb-4">₹5,000 – ₹9,000 per night</h6>
          <div class="rating mb-4">
@@ -523,7 +522,6 @@
     <div class="card border-0 shadow lodge-hover" style="max-width: 350px; margin: auto;">
       <img src="images/lodge/2.jpeg" class="card-img-top" alt="The Panorama Suite">
       <div class="card-body text-center">
-        <span class="lodge-tier">Premier</span>
         <h5>The Panorama Suite</h5>
         <h6 class="mb-4">₹10,000 – ₹15,000 per night</h6>
          <div class="rating mb-4">
@@ -566,7 +564,6 @@
     <div class="card border-0 shadow lodge-hover" style="max-width: 350px; margin: auto;">
       <img src="images/lodge/3.jpeg" class="card-img-top" alt="The Regal Canopy Lodge">
       <div class="card-body text-center">
-        <span class="lodge-tier">Grand Reserve</span>
         <h5>The Regal Canopy Lodge</h5>
         <h6 class="mb-4">₹18,000 – ₹23,000 per night</h6>
          <div class="rating mb-4">

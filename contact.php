@@ -14,7 +14,7 @@
     background-image: none !important;
   }
 
-  /* ---------- Contact hero (background image  ---------- */
+  /* ---------- Contact hero ---------- */
   .contact-hero{
     position: relative;
     min-height: 460px;
@@ -22,10 +22,22 @@
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    background-image: linear-gradient(155deg, rgba(31,29,35,.82) 0%, rgba(94,26,41,.82) 62%, rgba(15,14,17,.9) 100%),
-    url('images/contact/front.jpeg');
+  }
+
+  .contact-hero-bg{
+    position: absolute;
+    inset: 0;
+    background-image: url('images/contact/front.jpeg');
     background-size: cover;
     background-position: center;
+    transform: scale(1.03);
+  }
+
+  .contact-hero::after{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(19,20,28,.66) 0%, rgba(19,20,28,.42) 45%, rgba(19,20,28,.8) 100%);
   }
 
   .contact-hero-content{
@@ -33,38 +45,46 @@
     z-index: 2;
     text-align: center;
     color: var(--paper);
-    padding: 6.5rem 1rem 2rem;
+    padding: 2rem 1rem 0;
     max-width: 640px;
   }
 
   .contact-hero-eyebrow{
     display: block;
-    font-family: 'Cinzel Decorative', serif;
-    font-size: 1.6rem;
-    letter-spacing: 1px;
+    font-family: "Great Vibes", cursive;
+    font-size: 2.2rem;
     color: var(--rose);
-    margin-bottom: .6rem;
+    margin-bottom: -.1rem;
+  }
+
+  .contact-hero-logo{
+    display: block;
+    width: 46%;
+    max-width: 700px;
+    min-width: 380px;
+    height: auto;
+    margin: 0 auto 1rem;
+    filter: drop-shadow(0 3px 14px rgba(0,0,0,.4));
   }
 
   .contact-hero-title{
-    font-family: "Jost", sans-serif;
-    font-weight: 600;
+    font-family: 'DM Serif Display', serif;
     letter-spacing: 1.5px;
-    font-size: 2.6rem;
+    font-size: 2.2rem;
     margin-bottom: .9rem;
   }
 
   .contact-hero-sub{
-    font-size: 1rem;
+    font-size: 1.1rem;
     line-height: 1.75;
     color: rgba(255,255,255,.8);
-    margin: 0 auto;
+    margin: 0 auto 1.5rem;
   }
 
   @media screen and (max-width: 575px){
     .contact-hero{ min-height: 380px; }
-    .contact-hero-title{ font-size: 2rem; }
-    .contact-hero-icon{ font-size: 220px; }
+    .contact-hero-logo{ width: 60%; min-width: 0; max-width: 380px; }
+    .contact-hero-title{ font-size: 1.7rem; }
   }
 
   /* ---------- Intro ---------- */
@@ -113,7 +133,7 @@
     padding: 2rem 1.6rem 2.9rem;
     text-align: center;
     color: var(--paper);
-    background-image: linear-gradient(135deg, rgba(31,29,35,.86) 0%, rgba(94,26,41,.86) 100%), var(--card-cap-img, none);
+    background-image: linear-gradient(150deg, rgba(19,20,28,.82) 0%, rgba(19,20,28,.55) 60%, rgba(19,20,28,.85) 100%), var(--card-cap-img, none);
     background-size: cover;
     background-position: center;
     overflow: hidden;
@@ -141,8 +161,7 @@
   .card-cap h5{
     position: relative;
     z-index: 1;
-    font-family: "Jost", sans-serif;
-    font-weight: 600;
+    font-family: 'DM Serif Display', serif;
     font-size: 1.45rem;
     margin: 0;
   }
@@ -170,6 +189,7 @@
     height: 260px;
     border: 0;
     display: block;
+    margin-top: 30px;
   }
 
   .contact-info-pad{
@@ -205,7 +225,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--ink);
+    color: var(--wine);
     font-size: 14px;
   }
 
@@ -334,14 +354,13 @@
 
 <!-- CONTACT HERO -->
 <div class="contact-hero">
-  <i class="fa-solid fa-envelope contact-hero-icon"></i>
-  <i class="fa-solid fa-envelope contact-hero-icon-left"></i>
+  <div class="contact-hero-bg"></div>
   <div class="contact-hero-content">
-    <span class="contact-hero-eyebrow">We'd Love To Hear From You</span>
+    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="contact-hero-logo">
     <h1 class="contact-hero-title">Contact Us</h1>
     <p class="contact-hero-sub">
       Questions about a stay, a booking already in place, or something you'd like arranged before you
-      arrive — reach us directly and we'll get back to you shortly.
+      arrive, reach us directly and we'll get back to you shortly.
     </p>
   </div>
 </div>
@@ -361,11 +380,10 @@
 <div class="container contact-grid">
   <div class="row g-4">
 
-    <!-- MAP + INFO -->
+    <!-- MAP -->
     <div class="col-lg-6 reveal">
       <div class="contact-card">
         <div class="card-cap card-cap-visit">
-          <i class="fa-solid fa-map-location-dot card-cap-icon-decor"></i>
           <span class="card-cap-eyebrow">Find The Valley</span>
           <h5>Visit Us</h5>
         </div>
@@ -388,7 +406,7 @@
               <span class="contact-info-icon"><i class="fa-solid fa-phone"></i></span>
               Call Us
             </div>
-            <p><a href="tel:+19025550142">+91 90165 88906</a></p>
+            <p><a href="tel:+19025550142">+1 902 555 0198</a></p>
             <p><a href="tel:+19025550198">+1 902 555 0198</a></p>
           </div>
 
@@ -420,7 +438,6 @@
     <div class="col-lg-6 reveal">
       <div class="contact-card">
         <div class="card-cap card-cap-message">
-          <i class="fa-solid fa-paper-plane card-cap-icon-decor"></i>
           <span class="card-cap-eyebrow">Get In Touch</span>
           <h5>Send A Message</h5>
         </div>

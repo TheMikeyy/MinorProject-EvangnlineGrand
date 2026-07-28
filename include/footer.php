@@ -3,7 +3,7 @@
     <hr class="footer-divider">
     <div class="row align-items-start">
       <div class="col-lg-4 mb-4 mb-lg-0">
-        <h3 class="h-font fw-bold fs-3 mb-3">Évangéline Grand</h3>
+        <h3 class="h-font fw-bold fs-3 mb-3">ÉVANGÉLINE GRAND</h3>
         <p>The perfect mix of reliable comfort and warm, genuine hospitality. Our peaceful lodges give you exactly what you need for a restful night's sleep.</p>
       </div>
       <div class="col-lg-4 mb-4 mb-lg-0 text-lg-center">
