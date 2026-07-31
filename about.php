@@ -48,11 +48,12 @@
     padding: 2rem 1rem 0;
   }
 
+  /* ---------- STANDARDIZED HERO LOGO (same on all 3 pages) ---------- */
    .page-hero-logo{
     display: block;
     width: 46%;
     max-width: 700px;
-    min-width: 450px;
+    min-width: 400px;
     height: auto;
     margin: 0 auto 1rem;
     filter: drop-shadow(0 3px 14px rgba(0,0,0,.4));
@@ -73,8 +74,14 @@
 
   @media screen and (max-width: 575px){
     .page-hero{ height: 320px; }
-    .page-hero-logo{ width: 55%; }
-    .page-hero-title{ font-size: 1.7rem; }
+    .page-hero-logo{
+      width: 70%;
+      min-width: 0;
+      max-width: 240px;
+      margin-bottom: .6rem;
+    }
+    .page-hero-eyebrow{ font-size: 1.6rem; }
+    .page-hero-title{ font-size: 1.4rem; padding: 0 .5rem; }
   }
 
   /* ---------- Intro ---------- */
@@ -98,8 +105,8 @@
   }
 
   .feature-row{
-    display: flex !important;
-    align-items: flex-start !important;
+    display: flex;
+    align-items: flex-start;
     gap: 3rem;
     margin-bottom: 4.5rem;
   }
@@ -110,10 +117,6 @@
     flex-direction: row-reverse;
   }
 
-  .feature-row > .col-lg-6{
-    align-self: flex-start !important;
-  }
-  
   .feature-row img{
     border-radius: 16px;
     box-shadow: 0 16px 34px rgba(31,42,82,.14);
@@ -325,7 +328,7 @@
   <div class="page-hero-bg"></div>
   <div class="page-hero-content">
     <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="page-hero-logo">
-    <h1 class="page-hero-title">Our Story | About Us</h1>
+    <h1 class="page-hero-title">About Us</h1>
   </div>
 </div>
 

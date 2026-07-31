@@ -17,7 +17,7 @@
         <a class="nav-link me-1 <?php if ($current_page === 'index.php') echo 'active'; ?>" aria-current="page" href="index.php">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link me-1 <?php if ($current_page === 'lodges.php') echo 'active'; ?>" href="">Lodges</a>
+        <a class="nav-link me-1 <?php if ($current_page === 'lodges.php') echo 'active'; ?>" href="lodges.php">Lodges</a>
       </li>
       <li class="nav-item">
         <a class="nav-link me-1 <?php if ($current_page === 'comforts.php') echo 'active'; ?>" href="comforts.php">Comforts</a>

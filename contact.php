@@ -57,11 +57,12 @@
     margin-bottom: -.1rem;
   }
 
+  /* ---------- STANDARDIZED HERO LOGO (same on all 3 pages) ---------- */
   .contact-hero-logo{
     display: block;
     width: 46%;
     max-width: 700px;
-    min-width: 380px;
+    min-width: 400px;
     height: auto;
     margin: 0 auto 1rem;
     filter: drop-shadow(0 3px 14px rgba(0,0,0,.4));
@@ -83,7 +84,12 @@
 
   @media screen and (max-width: 575px){
     .contact-hero{ min-height: 380px; }
-    .contact-hero-logo{ width: 60%; min-width: 0; max-width: 380px; }
+    .contact-hero-logo{
+      width: 70%;
+      min-width: 0;
+      max-width: 240px;
+      margin-bottom: .6rem;
+    }
     .contact-hero-title{ font-size: 1.7rem; }
   }
 
@@ -97,7 +103,7 @@
     max-width: 720px;
     margin: 1.25rem auto 0;
     color: var(--ink-black);
-    font-size: 1.05rem;
+    font-size: 1.24rem;
     line-height: 1.8;
   }
 
@@ -358,10 +364,6 @@
   <div class="contact-hero-content">
     <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="contact-hero-logo">
     <h1 class="contact-hero-title">Contact Us</h1>
-    <p class="contact-hero-sub">
-      Questions about a stay, a booking already in place, or something you'd like arranged before you
-      arrive, reach us directly and we'll get back to you shortly.
-    </p>
   </div>
 </div>
 

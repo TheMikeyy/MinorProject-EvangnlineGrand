@@ -104,12 +104,14 @@
 }
 
 .availability-card{
+  position: relative;
+  z-index: 10;
   border-top: 3px solid var(--wine);
   border-radius: 40px;
-  background: rgba(255,255,255,.92);
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: 1px solid rgba(255,255,255,.4);
+  background: rgba(255,255,255,.90);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255, 0.4);
   box-shadow: 0 12px 30px rgba(31,42,82,.14);
 }
 

@@ -57,11 +57,12 @@
     margin-bottom: -.1rem;
   }
 
+  /* ---------- STANDARDIZED HERO LOGO (same on all 3 pages) ---------- */
   .page-hero-logo{
     display: block;
     width: 46%;
     max-width: 700px;
-    min-width: 450px;
+    min-width: 400px;
     height: auto;
     margin: 0 auto 1rem;
     filter: drop-shadow(0 3px 14px rgba(0,0,0,.4));
@@ -73,7 +74,7 @@
     font-size: 2.2rem;
   }
 
- @media screen and (max-width: 575px){
+  @media screen and (max-width: 575px){
     .page-hero{ height: 320px; }
     .page-hero-logo{
       width: 70%;
