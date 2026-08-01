@@ -48,14 +48,14 @@
     padding: 2rem 1rem 0;
   }
 
-  /* ---------- STANDARDIZED HERO LOGO (same on all 3 pages) ---------- */
+  /* ---------- STANDARDIZED HERO LOGO (unified with index page sizing) ---------- */
    .page-hero-logo{
     display: block;
     width: 46%;
-    max-width: 700px;
-    min-width: 400px;
+    max-width: 460px;
+    min-width: 260px;
     height: auto;
-    margin: 0 auto 1rem;
+    margin: 1rem auto 0;
     filter: drop-shadow(0 3px 14px rgba(0,0,0,.4));
   }
   .page-hero-eyebrow{
@@ -75,10 +75,10 @@
   @media screen and (max-width: 575px){
     .page-hero{ height: 320px; }
     .page-hero-logo{
-      width: 70%;
+      width: 60%;
       min-width: 0;
-      max-width: 240px;
-      margin-bottom: .6rem;
+      max-width: 400px;
+      margin-top: .4rem;
     }
     .page-hero-eyebrow{ font-size: 1.6rem; }
     .page-hero-title{ font-size: 1.4rem; padding: 0 .5rem; }
@@ -327,14 +327,14 @@
 <div class="page-hero">
   <div class="page-hero-bg"></div>
   <div class="page-hero-content">
-    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="page-hero-logo">
     <h1 class="page-hero-title">About Us</h1>
+    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="page-hero-logo">
   </div>
 </div>
 
 <!-- INTRO -->
 <div class="container about-intro text-center">
-  <h2 class="mb-0 fw-bold section-font">ABOUT ÉVANGÉLINE GRAND</h2>
+  <h2 class="mb-0 fw-bold section-font">Story Behind ÉVANGÉLINE GRAND</h2>
   <div class="h-line bg-dark mx-auto mt-3"></div>
   <p>
     Tucked into the quiet folds of the Annapolis Valley, Évangéline Grand was built on a simple idea,

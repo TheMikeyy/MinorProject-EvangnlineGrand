@@ -57,14 +57,14 @@
     margin-bottom: -.1rem;
   }
 
-  /* ---------- STANDARDIZED HERO LOGO (same on all 3 pages) ---------- */
+  /* ---------- STANDARDIZED HERO LOGO (unified with index page sizing) ---------- */
   .contact-hero-logo{
     display: block;
     width: 46%;
-    max-width: 700px;
-    min-width: 400px;
+    max-width: 460px;
+    min-width: 260px;
     height: auto;
-    margin: 0 auto 1rem;
+    margin: 1rem auto 0;
     filter: drop-shadow(0 3px 14px rgba(0,0,0,.4));
   }
 
@@ -85,10 +85,10 @@
   @media screen and (max-width: 575px){
     .contact-hero{ min-height: 380px; }
     .contact-hero-logo{
-      width: 70%;
+      width: 60%;
       min-width: 0;
-      max-width: 240px;
-      margin-bottom: .6rem;
+      max-width: 400px;
+      margin-top: .4rem;
     }
     .contact-hero-title{ font-size: 1.7rem; }
   }
@@ -362,8 +362,8 @@
 <div class="contact-hero">
   <div class="contact-hero-bg"></div>
   <div class="contact-hero-content">
-    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="contact-hero-logo">
     <h1 class="contact-hero-title">Contact Us</h1>
+    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="contact-hero-logo">
   </div>
 </div>
 
@@ -408,7 +408,7 @@
               <span class="contact-info-icon"><i class="fa-solid fa-phone"></i></span>
               Call Us
             </div>
-            <p><a href="tel:+19025550142">+1 902 555 0198</a></p>
+            <p><a href="tel:+919016588906">+1 902 555 0198</a></p>
             <p><a href="tel:+19025550198">+1 902 555 0198</a></p>
           </div>
 
