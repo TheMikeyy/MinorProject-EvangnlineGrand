@@ -4,7 +4,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container-fluid">
-    <a class="navbar-brand me-3" href="index.php">
+    <a class="navbar-brand me-3" href="admin/admin-index.php">
       <img src="images/logo/logo-dark.png" alt="Évangéline Grand" class="logo-img logo-img-transparent">
       <img src="images/logo/logo-light.png" alt="Évangéline Grand" class="logo-img logo-img-scrolled">
     </a>

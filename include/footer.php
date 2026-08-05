@@ -53,7 +53,7 @@
 })();
 
 (function(){
-  var PAGE_ORDER = { 'index.php': 0, 'comforts.php': 1 }; // add new pages here as you build them, in site order
+  var PAGE_ORDER = { 'index.php': 0, 'comforts.php': 1 }; 
 
   function pageKey(url){
     var path = new URL(url, location.href).pathname.split('/').pop();

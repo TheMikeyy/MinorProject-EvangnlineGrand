@@ -582,13 +582,13 @@
           <h6 class="mb-1">Features:</h6>
           <span class="pill">Curved Floor Ceiling</span>
           <span class="pill">Elevated private platform</span>
-          <span class="pill">Four canopPoster bed</span>
+          <span class="pill">Four Poster bed</span>
           <span class="pill">Mirror paneled accent wall</span>
         </div>
         <div class="facilities mb-4">
            <h6 class="mb-1">Facilities:</h6>
           <span class="pill">Special Butler Service</span>
-          <span class="pill">Round designer coffee table</span>
+          <span class="pill">Round coffee table</span>
           <span class="pill">In room mini-bar</span>
           <span class="pill">High-speed Wi-Fi</span>
         </div>
