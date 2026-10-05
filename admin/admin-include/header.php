@@ -33,21 +33,23 @@ $menu = [
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= e($page_title) ?> | Admin Panel | <?= e(setting('hotel_name')) ?></title>
+    <title><?= e($page_title) ?> | Administration Panel | <?= e(setting('hotel_name')) ?></title>
     <?php require __DIR__ . '/links.php'; ?>
     <link rel="stylesheet" href="admin.css">
 </head>
 <body class="admin-body">
 
-<nav class="navbar admin-navbar">
+<nav class="navbar navbar-scrolled admin-navbar">
   <div class="container-fluid">
     <a class="navbar-brand" href="admin-dashboard.php">
       <img src="admin-images/logo/logo-light.png" alt="<?= e(setting('hotel_name')) ?>" class="logo-img">
-      <span class="admin-brand-label">Admin Panel</span>
+      <span class="admin-brand-label">Administration Panel</span>
     </a>
-    <div class="d-flex gap-2">
-      <a href="../index.php" target="_blank" class="btn btn-admin-back">View Website</a>
-      <a href="admin-logout.php" class="btn btn-admin-logout">Logout</a>
+    <div class="d-flex">
+      <a href="../index.php" class="btn btn-outline-dark shadow-none me-lg-3 me-3">
+        <span class="d-none d-sm-inline">Back to Your Website</span><span class="d-sm-none">Back</span>
+      </a>
+      <a href="admin-logout.php" class="btn btn-dark shadow-none custom-bg">Logout</a>
     </div>
   </div>
 </nav>

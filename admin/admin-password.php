@@ -42,7 +42,7 @@ require 'admin-include/header.php';
 <div class="page-head">
   <div>
     <h1>Account &amp; Password</h1>
-    <p>Change the name and password used to sign in to this admin panel. Choose a strong password before handing the website to the hotel.</p>
+    <p>Change the name and password used to sign in to this Administration Panel. Choose a strong password before handing the website to the hotel.</p>
   </div>
 </div>
 

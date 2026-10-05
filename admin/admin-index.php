@@ -125,7 +125,7 @@
 
   .admin-login-title{
     text-align: center;
-    font-family: 'DM Serif Display', serif;
+    font-family: serif;
     color: var(--ink);
     font-size: 1.7rem;
     margin-bottom: .4rem;
@@ -193,7 +193,7 @@
   }
 
   .admin-login-options a{
-    color: var(--wine);
+    color: var(--ink);
     text-decoration: none;
   }
 
@@ -206,9 +206,9 @@
   }
 
   .admin-login-error{
-    background-color: rgba(122,35,51,.08);
-    border: 1px solid rgba(122,35,51,.25);
-    color: var(--wine-deep);
+    background-color: #f1f1f3;
+    border: 1px solid #c9c9d0;
+    color: #26262b;
     font-size: .88rem;
     border-radius: 12px;
     padding: .7rem .9rem;
@@ -247,7 +247,7 @@
   }
 
   .admin-login-back:hover{
-    color: var(--rose);
+    color: rgba(255,255,255,.75);
   }
 
   .admin-login-footnote{

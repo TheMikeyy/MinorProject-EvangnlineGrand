@@ -38,7 +38,7 @@ $messages = rows('SELECT * FROM contact_messages ORDER BY created_at DESC, id DE
     <div class="meta">
       <b><?= e($m['name']) ?></b> &middot; <a href="mailto:<?= e($m['email']) ?>?subject=<?= rawurlencode('Re: ' . $m['subject']) ?>"><?= e($m['email']) ?></a>
       &middot; <?= e(date('d M Y, H:i', strtotime($m['created_at']))) ?>
-      <?php if (!$m['is_read']): ?><span class="badge-pill warn ms-1">New</span><?php endif; ?>
+      <?php if (!$m['is_read']): ?><span class="badge-pill good ms-1">New</span><?php endif; ?>
     </div>
     <h3><?= e($m['subject']) ?></h3>
     <div class="text"><?= e($m['message']) ?></div>

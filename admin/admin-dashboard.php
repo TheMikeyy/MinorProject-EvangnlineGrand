@@ -20,7 +20,7 @@ $latest = rows('SELECT * FROM contact_messages ORDER BY created_at DESC, id DESC
 <div class="page-head">
   <div>
     <h1>Welcome, <?= e($_SESSION['admin_name'] ?? 'Admin') ?></h1>
-    <p>You're signed in to the <?= e(setting('hotel_name')) ?> admin panel. Everything you change here goes live on the website straight away.</p>
+    <p>You're signed in to the <?= e(setting('hotel_name')) ?> Administration Panel. Everything you change here goes live on the website straight away.</p>
   </div>
 </div>
 
@@ -30,16 +30,6 @@ $latest = rows('SELECT * FROM contact_messages ORDER BY created_at DESC, id DESC
   <?php endforeach; ?>
 </div>
 
-<h2 class="h5 mb-3" style="font-family:'DM Serif Display',serif;color:var(--ink)">What would you like to change?</h2>
-<div class="quick-grid mb-4">
-  <a class="quick-card" href="admin-setting.php?tab=general"><div class="qi"><i class="fa-solid fa-phone"></i></div><div><b>Phone, email &amp; address</b><span>Contact details, map, opening hours, social media</span></div></a>
-  <a class="quick-card" href="admin-lodge.php"><div class="qi"><i class="fa-solid fa-bed"></i></div><div><b>Lodges &amp; rooms</b><span>Photos, prices, features, facilities, guest limits</span></div></a>
-  <a class="quick-card" href="admin-slides.php"><div class="qi"><i class="fa-solid fa-images"></i></div><div><b>Home page photos</b><span>The slideshow at the top of the home page</span></div></a>
-  <a class="quick-card" href="admin-team.php"><div class="qi"><i class="fa-solid fa-people-group"></i></div><div><b>Team on About page</b><span>Photos, names and roles</span></div></a>
-  <a class="quick-card" href="admin-comforts.php"><div class="qi"><i class="fa-solid fa-mug-saucer"></i></div><div><b>Comforts &amp; amenities</b><span>Breakfast, spa, parking and more</span></div></a>
-  <a class="quick-card" href="admin-setting.php?tab=aboutpage"><div class="qi"><i class="fa-solid fa-pen-to-square"></i></div><div><b>Page texts &amp; banners</b><span>About, Contact, Lodges and Comforts pages</span></div></a>
-</div>
-
 <div class="panel-card">
   <h2>Latest messages</h2>
   <div class="note">From the Contact page of the website.</div>
@@ -47,7 +37,7 @@ $latest = rows('SELECT * FROM contact_messages ORDER BY created_at DESC, id DESC
     <p class="text-muted mb-0">No messages yet.</p>
   <?php else: foreach ($latest as $m): ?>
     <div class="d-flex justify-content-between gap-3 py-2 border-top flex-wrap">
-      <div><b><?= e($m['name']) ?></b> &ndash; <?= e($m['subject']) ?> <?= $m['is_read'] ? '' : '<span class="badge-pill warn ms-1">New</span>' ?></div>
+      <div><b><?= e($m['name']) ?></b> &ndash; <?= e($m['subject']) ?> <?= $m['is_read'] ? '' : '<span class="badge-pill good ms-1">New</span>' ?></div>
       <div class="text-muted small"><?= e(date('d M Y, H:i', strtotime($m['created_at']))) ?></div>
     </div>
   <?php endforeach; ?>

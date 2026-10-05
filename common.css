@@ -88,43 +88,6 @@ input[type="number"] {
   .reveal{ opacity: 1; transform: none; transition: none; }
 }
 
-/* ---------- Page transitions ---------- */
-@view-transition {
-  navigation: auto;
-}
-
-/* slides left/right */
-::view-transition-old(root){
-  animation: 350ms cubic-bezier(.4,0,.2,1) both page-slide-out-left;
-}
-::view-transition-new(root){
-  animation: 400ms cubic-bezier(.2,.7,.3,1) both page-slide-in-right;
-}
-
-/*reversed direction */
-html[data-transition="back"]::view-transition-old(root){
-  animation: 350ms cubic-bezier(.4,0,.2,1) both page-slide-out-right;
-}
-html[data-transition="back"]::view-transition-new(root){
-  animation: 400ms cubic-bezier(.2,.7,.3,1) both page-slide-in-left;
-}
-
-@keyframes page-slide-out-left{ from{ opacity:1; transform: translateX(0); } to{ opacity:0; transform: translateX(-6%); } }
-@keyframes page-slide-in-right{ from{ opacity:0; transform: translateX(6%); } to{ opacity:1; transform: translateX(0); } }
-@keyframes page-slide-out-right{ from{ opacity:1; transform: translateX(0); } to{ opacity:0; transform: translateX(6%); } }
-@keyframes page-slide-in-left{ from{ opacity:0; transform: translateX(-6%); } to{ opacity:1; transform: translateX(0); } }
-
-/* Fallback for browsers without View Transitions support — opacity ONLY, never transform on body (transform on body breaks position:fixed navbars) */
-@keyframes page-fade-in{ from{ opacity: 0; } to{ opacity: 1; } }
-body{ animation: page-fade-in .4s ease both; }
-
-@media (prefers-reduced-motion: reduce){
-  body{ animation: none; }
-  ::view-transition-old(root), ::view-transition-new(root),
-  html[data-transition="back"]::view-transition-old(root),
-  html[data-transition="back"]::view-transition-new(root){ animation: none; }
-}
-
 /* ---------- Buttons ---------- */
 .custom-bg{
     background-color: var(--ink);
