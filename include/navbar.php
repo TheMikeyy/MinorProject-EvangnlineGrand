@@ -5,8 +5,8 @@
 <nav class="navbar navbar-expand-lg navbar-light">
   <div class="container-fluid">
     <a class="navbar-brand me-3" href="admin/admin-index.php">
-      <img src="images/logo/logo-dark.png" alt="Évangéline Grand" class="logo-img logo-img-transparent">
-      <img src="images/logo/logo-light.png" alt="Évangéline Grand" class="logo-img logo-img-scrolled">
+      <img src="<?= e(img('logo_dark')) ?>" alt="<?= e(setting('hotel_name')) ?>" class="logo-img logo-img-transparent">
+      <img src="<?= e(img('logo_light')) ?>" alt="<?= e(setting('hotel_name')) ?>" class="logo-img logo-img-scrolled">
     </a>
     <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>

@@ -1,9 +1,10 @@
+<?php require_once __DIR__ . '/admin/admin-include/db_config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us | Évangéline Grand</title>
+    <title>About Us | <?= e(setting('hotel_name')) ?></title>
     <?php require('include/links.php') ?>
 </head>
 <body class="bg-light">
@@ -27,7 +28,7 @@
   .page-hero-bg{
     position: absolute;
     inset: 0;
-    background-image: url('images/about/aboutbanner.jpeg');
+    background-image: url('<?= e(img('about_banner')) ?>');
     background-size: cover;
     background-position: center;
     transform: scale(1.03);
@@ -328,18 +329,16 @@
   <div class="page-hero-bg"></div>
   <div class="page-hero-content">
     <h1 class="page-hero-title">About Us</h1>
-    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="page-hero-logo">
+    <img src="<?= e(img('logo_hero')) ?>" alt="<?= e(setting('hotel_name')) ?>" class="page-hero-logo">
   </div>
 </div>
 
 <!-- INTRO -->
 <div class="container about-intro text-center">
-  <h2 class="mb-0 fw-bold section-font">Story Behind ÉVANGÉLINE GRAND</h2>
+  <h2 class="mb-0 fw-bold section-font"><?= e(setting('about_title')) ?></h2>
   <div class="h-line bg-dark mx-auto mt-3"></div>
   <p>
-    Tucked into the quiet folds of the Annapolis Valley, Évangéline Grand was built on a simple idea,
-    that hospitality should feel personal, not performed. Every room, every meal, and every small
-    gesture here is shaped around that belief.
+    <?= e(setting('about_text')) ?>
   </p>
 </div>
 
@@ -347,31 +346,26 @@
 <div class="container story-section">
   <div class="feature-row reveal">
     <div class="col-lg-6">
-      <img src="images/about/story1.jpeg" alt="How it began">
+      <img src="<?= e(img('story1_image')) ?>" alt="How it began">
     </div>
     <div class="col-lg-6 feature-text">
-      <span class="lodge-tier">How It Began</span>
-      <h3>A Home Before It Was A Hotel</h3>
+      <span class="lodge-tier"><?= e(setting('story1_tag')) ?></span>
+      <h3><?= e(setting('story1_title')) ?></h3>
       <p>
-        Évangéline Grand started as a family estate, passed down through generations who loved this
-        stretch of the valley enough to keep it standing. What began as a private retreat slowly opened
-        its doors, first to friends, then to guests, until it became the property it is today. Still
-        run with the same care as when it was simply home.
+        <?= e(setting('story1_text')) ?>
       </p>
     </div>
   </div>
 
   <div class="feature-row reverse reveal">
     <div class="col-lg-6">
-      <img src="images/about/story2.jpeg" alt="What we do today">
+      <img src="<?= e(img('story2_image')) ?>" alt="What we do today">
     </div>
     <div class="col-lg-6 feature-text">
-      <span class="lodge-tier">Where We Are Now</span>
-      <h3>Hospitality, Done Quietly</h3>
+      <span class="lodge-tier"><?= e(setting('story2_tag')) ?></span>
+      <h3><?= e(setting('story2_title')) ?></h3>
       <p>
-        Today, we welcome travelers from across the world into a handful of signature lodges, each
-        designed to feel more like a considered retreat than a hotel room. We keep things intentionally
-        small, so every stay can still be shaped around the person having it.
+        <?= e(setting('story2_text')) ?>
       </p>
     </div>
   </div>
@@ -383,26 +377,26 @@
     <div class="row g-4">
       <div class="col-6 col-lg-3 reveal">
         <div class="stat-item">
-          <div class="stat-number">15+</div>
-          <div class="stat-label">Years Hosting</div>
+          <div class="stat-number"><?= e(setting('stat1_number')) ?></div>
+          <div class="stat-label"><?= e(setting('stat1_label')) ?></div>
         </div>
       </div>
       <div class="col-6 col-lg-3 reveal">
         <div class="stat-item">
-          <div class="stat-number">5+</div>
-          <div class="stat-label">Signature Lodges</div>
+          <div class="stat-number"><?= e(setting('stat2_number')) ?></div>
+          <div class="stat-label"><?= e(setting('stat2_label')) ?></div>
         </div>
       </div>
       <div class="col-6 col-lg-3 reveal">
         <div class="stat-item">
-          <div class="stat-number">4.8</div>
-          <div class="stat-label">Average Rating</div>
+          <div class="stat-number"><?= e(setting('stat3_number')) ?></div>
+          <div class="stat-label"><?= e(setting('stat3_label')) ?></div>
         </div>
       </div>
       <div class="col-6 col-lg-3 reveal">
         <div class="stat-item">
-          <div class="stat-number">13k+</div>
-          <div class="stat-label">Guests Welcomed</div>
+          <div class="stat-number"><?= e(setting('stat4_number')) ?></div>
+          <div class="stat-label"><?= e(setting('stat4_label')) ?></div>
         </div>
       </div>
     </div>
@@ -413,32 +407,32 @@
 <div class="values-section">
   <div class="container">
     <div class="text-center section-head reveal">
-      <span class="section-eyebrow">What Inspires Us</span>
-      <h2 class="mb-0 fw-bold section-font">OUR VALUES</h2>
+      <span class="section-eyebrow"><?= e(setting('values_eyebrow')) ?></span>
+      <h2 class="mb-0 fw-bold section-font"><?= e(setting('values_title')) ?></h2>
     </div>
 
     <div class="row g-4">
       <div class="col-lg-4 col-md-6 reveal">
         <div class="value-card">
-          <div class="value-icon"><i class="fa-solid fa-heart"></i></div>
-          <h5>Genuine Hospitality</h5>
-          <p>Warmth that isn't scripted & every member of our team is here because they care about the guests in front of them.</p>
+          <div class="value-icon"><i class="<?= e(setting('value1_icon')) ?>"></i></div>
+          <h5><?= e(setting('value1_title')) ?></h5>
+          <p><?= e(setting('value1_text')) ?></p>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-6 reveal">
         <div class="value-card">
-          <div class="value-icon"><i class="fa-solid fa-leaf"></i></div>
-          <h5>Rooted In Place</h5>
-          <p>We work closely with local growers, makers, and craftsmen, so a stay here also feels like a stay in the valley itself.</p>
+          <div class="value-icon"><i class="<?= e(setting('value2_icon')) ?>"></i></div>
+          <h5><?= e(setting('value2_title')) ?></h5>
+          <p><?= e(setting('value2_text')) ?></p>
         </div>
       </div>
 
       <div class="col-lg-4 col-md-6 reveal">
         <div class="value-card">
-          <div class="value-icon"><i class="fa-solid fa-gem"></i></div>
-          <h5>Considered Detail</h5>
-          <p>From linens to lighting, nothing here is an afterthought. Every detail is chosen, not defaulted to.</p>
+          <div class="value-icon"><i class="<?= e(setting('value3_icon')) ?>"></i></div>
+          <h5><?= e(setting('value3_title')) ?></h5>
+          <p><?= e(setting('value3_text')) ?></p>
         </div>
       </div>
     </div>
@@ -449,59 +443,25 @@
 <div class="section-white team-section">
   <div class="container">
     <div class="text-center section-head reveal">
-      <span class="section-eyebrow">The People Behind The Grand</span>
-      <h2 class="mb-0 fw-bold section-font">MEET OUR TEAM</h2>
+      <span class="section-eyebrow"><?= e(setting('team_eyebrow')) ?></span>
+      <h2 class="mb-0 fw-bold section-font"><?= e(setting('team_title')) ?></h2>
     </div>
 
     <div class="row g-4">
 
+      <?php foreach (rows('SELECT * FROM team_members ORDER BY sort_order, id') as $tm): ?>
       <div class="col-lg-3 col-md-6 reveal">
         <div class="team-card">
-          <div class="team-card-tier"><i class="fa-solid fa-key"></i></div>
-          <img src="images/about/person1.jpeg" alt="Elise Martin">
+          <div class="team-card-tier"><i class="<?= e($tm['icon']) ?>"></i></div>
+          <img src="<?= e(asset($tm['image'])) ?>" alt="<?= e($tm['name']) ?>">
           <div class="team-card-info">
-            <span class="team-card-role">General Manager</span>
-            <h6>Meet Ranpura</h6>
-            <p class="team-card-note">Oversees every stay from arrival to departure, making sure nothing here ever feels routine.</p>
+            <span class="team-card-role"><?= e($tm['role']) ?></span>
+            <h6><?= e($tm['name']) ?></h6>
+            <p class="team-card-note"><?= e($tm['note']) ?></p>
           </div>
         </div>
       </div>
-
-      <div class="col-lg-3 col-md-6 reveal">
-        <div class="team-card">
-          <div class="team-card-tier"><i class="fa-solid fa-utensils"></i></div>
-          <img src="images/about/person2.jpeg" alt="Daniel Roy">
-          <div class="team-card-info">
-            <span class="team-card-role">Head Chef</span>
-            <h6>Jaydeep Chawla</h6>
-            <p class="team-card-note">Builds every breakfast and evening menu around what's fresh in the valley that week.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6 reveal">
-        <div class="team-card">
-          <div class="team-card-tier"><i class="fa-solid fa-concierge-bell"></i></div>
-          <img src="images/about/person3.jpeg" alt="Naomi Blake">
-          <div class="team-card-info">
-            <span class="team-card-role">Head Desk Manager</span>
-            <h6>Bhavesh Yadav</h6>
-            <p class="team-card-note">The first call for reservations, local tips, and anything a guest needs arranged.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-6 reveal">
-        <div class="team-card">
-          <div class="team-card-tier"><i class="fa-solid fa-handshake"></i></div>
-          <img src="images/about/person4.jpeg" alt="Marcus Hill">
-          <div class="team-card-info">
-            <span class="team-card-role">Guest Relations Handler</span>
-            <h6>Dhruv Vyas</h6>
-            <p class="team-card-note">The familiar face at check-in, and the one who remembers how you take your coffee.</p>
-          </div>
-        </div>
-      </div>
+      <?php endforeach; ?>
 
     </div>
   </div>

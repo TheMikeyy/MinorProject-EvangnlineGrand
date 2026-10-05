@@ -1,125 +1,58 @@
 <?php
-  session_start();
+require_once 'admin-include/db_config.php';
+require_admin();
 
-  if (empty($_SESSION['admin_logged_in'])) {
-    header('Location: admin-index.php');
-    exit;
-  }
+$page_title = 'Dashboard';
+$active     = 'dashboard';
+require 'admin-include/header.php';
+
+$counts = [
+    'lodges'   => [(int)value('SELECT COUNT(*) FROM lodges WHERE is_active = 1'),        'Lodges live',         'fa-solid fa-bed',          'admin-lodge.php'],
+    'comforts' => [(int)value('SELECT COUNT(*) FROM comforts WHERE is_active = 1'),      'Comforts live',       'fa-solid fa-mug-saucer',   'admin-comforts.php'],
+    'team'     => [(int)value('SELECT COUNT(*) FROM team_members'),                      'Team members',        'fa-solid fa-people-group', 'admin-team.php'],
+    'reviews'  => [(int)value('SELECT COUNT(*) FROM testimonials WHERE is_active = 1'),  'Guest reviews',       'fa-solid fa-comments',     'admin-testimonials.php'],
+    'slides'   => [(int)value('SELECT COUNT(*) FROM hero_slides WHERE is_active = 1'),   'Slideshow photos',    'fa-solid fa-images',       'admin-slides.php'],
+    'messages' => [$unread,                                                              'Unread messages',     'fa-solid fa-envelope',     'admin-messages.php'],
+];
+$latest = rows('SELECT * FROM contact_messages ORDER BY created_at DESC, id DESC LIMIT 4');
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel | Évangéline Grand</title>
-    <?php require('admin-include/links.php') ?>
-</head>
-<body class="bg-light">
-
-<style>
-  .admin-navbar{
-    background-color: var(--ink);
-    padding: .9rem 0;
-    box-shadow: 0 4px 16px rgba(19,20,28,.14);
-  }
-
-  .admin-navbar .navbar-brand{
-    display: flex;
-    align-items: center;
-    color: var(--paper) !important;
-  }
-
-  .admin-navbar .logo-img{
-    height: 34px;
-    width: auto;
-    display: block;
-  }
-
-  .admin-navbar .admin-brand-label{
-    font-family: 'DM Serif Display', serif;
-    font-size: 1.1rem;
-    color: var(--paper);
-    margin-left: .7rem;
-    letter-spacing: .3px;
-  }
-
-  .admin-navbar .btn-admin-back{
-    background-color: transparent;
-    border: 1.5px solid rgba(255,255,255,.5);
-    color: var(--paper);
-    font-weight: 500;
-    border-radius: 50px;
-    padding: .45rem 1.1rem;
-    font-size: .9rem;
-    transition: background-color .2s ease, border-color .2s ease;
-  }
-
-  .admin-navbar .btn-admin-back:hover{
-    background-color: rgba(255,255,255,.12);
-    border-color: rgba(255,255,255,.8);
-    color: var(--paper);
-  }
-
-  .admin-navbar .btn-admin-logout{
-    background-color: var(--wine);
-    border: 1.5px solid var(--wine);
-    color: var(--paper);
-    font-weight: 600;
-    border-radius: 50px;
-    padding: .45rem 1.2rem;
-    font-size: .9rem;
-    transition: background-color .2s ease, border-color .2s ease;
-  }
-
-  .admin-navbar .btn-admin-logout:hover{
-    background-color: var(--wine-deep);
-    border-color: var(--wine-deep);
-    color: var(--paper);
-  }
-
-  .admin-shell{
-    min-height: calc(100vh - 70px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 3rem 1rem;
-  }
-
-  .admin-shell h1{
-    font-family: 'DM Serif Display', serif;
-    color: var(--ink);
-    font-size: 1.9rem;
-    margin-bottom: .5rem;
-  }
-
-  .admin-shell p{
-    color: var(--ink-black);
-    font-size: 1rem;
-  }
-</style>
-
-<nav class="navbar navbar-expand-lg admin-navbar">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="admin-dashboard.php">
-      <img src="admin-images/logo/logo-light.png" alt="Évangéline Grand" class="logo-img">
-      <span class="admin-brand-label">Admin Panel</span>
-    </a>
-    <div class="d-flex gap-2">
-      <a href="../index.php" class="btn btn-admin-back">Back to Site</a>
-      <a href="admin-logout.php" class="btn btn-admin-logout">Logout</a>
-    </div>
-  </div>
-</nav>
-
-<div class="admin-shell text-center">
+<div class="page-head">
   <div>
-    <h1>Welcome, <?php echo htmlspecialchars($_SESSION['admin_name']); ?></h1>
-    <p>You're signed in to the Évangéline Grand admin panel.</p>
+    <h1>Welcome, <?= e($_SESSION['admin_name'] ?? 'Admin') ?></h1>
+    <p>You're signed in to the <?= e(setting('hotel_name')) ?> admin panel. Everything you change here goes live on the website straight away.</p>
   </div>
 </div>
 
-<?php require('script.php') ?>
+<div class="stat-grid">
+  <?php foreach ($counts as [$num, $label, $icon, $href]): ?>
+    <a class="stat-box" href="<?= e($href) ?>"><i class="<?= e($icon) ?>"></i><div class="num"><?= $num ?></div><div class="lbl"><?= e($label) ?></div></a>
+  <?php endforeach; ?>
+</div>
 
-</body>
-</html>
+<h2 class="h5 mb-3" style="font-family:'DM Serif Display',serif;color:var(--ink)">What would you like to change?</h2>
+<div class="quick-grid mb-4">
+  <a class="quick-card" href="admin-setting.php?tab=general"><div class="qi"><i class="fa-solid fa-phone"></i></div><div><b>Phone, email &amp; address</b><span>Contact details, map, opening hours, social media</span></div></a>
+  <a class="quick-card" href="admin-lodge.php"><div class="qi"><i class="fa-solid fa-bed"></i></div><div><b>Lodges &amp; rooms</b><span>Photos, prices, features, facilities, guest limits</span></div></a>
+  <a class="quick-card" href="admin-slides.php"><div class="qi"><i class="fa-solid fa-images"></i></div><div><b>Home page photos</b><span>The slideshow at the top of the home page</span></div></a>
+  <a class="quick-card" href="admin-team.php"><div class="qi"><i class="fa-solid fa-people-group"></i></div><div><b>Team on About page</b><span>Photos, names and roles</span></div></a>
+  <a class="quick-card" href="admin-comforts.php"><div class="qi"><i class="fa-solid fa-mug-saucer"></i></div><div><b>Comforts &amp; amenities</b><span>Breakfast, spa, parking and more</span></div></a>
+  <a class="quick-card" href="admin-setting.php?tab=aboutpage"><div class="qi"><i class="fa-solid fa-pen-to-square"></i></div><div><b>Page texts &amp; banners</b><span>About, Contact, Lodges and Comforts pages</span></div></a>
+</div>
+
+<div class="panel-card">
+  <h2>Latest messages</h2>
+  <div class="note">From the Contact page of the website.</div>
+  <?php if (!$latest): ?>
+    <p class="text-muted mb-0">No messages yet.</p>
+  <?php else: foreach ($latest as $m): ?>
+    <div class="d-flex justify-content-between gap-3 py-2 border-top flex-wrap">
+      <div><b><?= e($m['name']) ?></b> &ndash; <?= e($m['subject']) ?> <?= $m['is_read'] ? '' : '<span class="badge-pill warn ms-1">New</span>' ?></div>
+      <div class="text-muted small"><?= e(date('d M Y, H:i', strtotime($m['created_at']))) ?></div>
+    </div>
+  <?php endforeach; ?>
+    <a class="btn-soft mt-3" href="admin-messages.php">Open inbox</a>
+  <?php endif; ?>
+</div>
+
+<?php require 'admin-include/footer.php'; ?>

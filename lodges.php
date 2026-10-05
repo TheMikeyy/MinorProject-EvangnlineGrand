@@ -1,9 +1,10 @@
+<?php require_once __DIR__ . '/admin/admin-include/db_config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Our Lodges | Évangéline Grand</title>
+    <title>Our Lodges | <?= e(setting('hotel_name')) ?></title>
     <?php require('include/links.php') ?>
 </head>
 <body class="bg-light">
@@ -27,7 +28,7 @@
   .page-hero-bg{
     position: absolute;
     inset: 0;
-    background-image: url('images/lodge/hallway.jpg');
+    background-image: url('<?= e(img('lodges_banner')) ?>');
     background-size: cover;
     background-position: center;
     transform: scale(1.03);
@@ -443,25 +444,27 @@
   }
 </style>
 
-<?php require('include/navbar.php') ?>
+<?php
+  $lodges = rows('SELECT * FROM lodges WHERE is_active = 1 ORDER BY sort_order, id');
+  require('include/navbar.php');
+?>
 
 <!-- PAGE HERO -->
 <div class="page-hero">
   <div class="page-hero-bg"></div>
   <div class="page-hero-content">
     <h1 class="page-hero-title">Our Lodges</h1>
-    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="page-hero-logo">
+    <img src="<?= e(img('logo_hero')) ?>" alt="<?= e(setting('hotel_name')) ?>" class="page-hero-logo">
   </div>
 </div>
 
 <!-- INTRO -->
 <div class="container lodges-intro text-center">
-  <span class="section-eyebrow d-block">Find Your Retreat</span>
-  <h2 class="mb-0 fw-bold section-font">ALL LODGES</h2>
+  <span class="section-eyebrow d-block"><?= e(setting('lodges_eyebrow')) ?></span>
+  <h2 class="mb-0 fw-bold section-font"><?= e(setting('lodges_title')) ?></h2>
   <div class="h-line bg-dark mx-auto mt-3"></div>
   <p>
-    From cozy signature rooms to the fully attended Grand Reserve, every lodge here is shaped around
-    a slower kind of stay. Filter by dates, party size, and budget to find the one that fits.
+    <?= e(setting('lodges_intro')) ?>
   </p>
 </div>
 
@@ -532,7 +535,7 @@
         </div>
         
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
-          <span class="filters-results-note" id="filterResultsNote">Showing <strong>10</strong> of <strong>10</strong> lodges</span>
+          <span class="filters-results-note" id="filterResultsNote">Showing <strong><?= count($lodges) ?></strong> of <strong><?= count($lodges) ?></strong> lodges</span>
           <button type="button" class="btn btn-sm btn-outline-dark px-3 shadow-none" id="filterResetBtn">Reset Filters</button>
         </div>
       </form>
@@ -544,396 +547,51 @@
 <div class="container lodges-grid-wrap reveal">
   <div id="lodgeGrid" class="view-grid">
 
-    <!-- 1: The Nirvana Pavilion -->
-    <div class="lodge-item" data-price="5000" data-adults="6" data-children="4">
+<?php foreach ($lodges as $i => $l): ?>
+    <!-- <?= $i + 1 ?>: <?= e($l['name']) ?> -->
+    <div class="lodge-item" data-price="<?= (int)$l['price_min'] ?>" data-adults="<?= (int)$l['max_adults'] ?>" data-children="<?= (int)$l['max_children'] ?>">
       <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="left">
+        <div class="list-card-flip" data-flip="<?= $i % 2 === 0 ? 'left' : 'right' ?>">
           <div class="list-card-details">
             <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Signature</span>
-            <h5>The Nirvana Pavilion</h5>
-            <div class="price-line">₹5,000 – ₹9,000 per night</div>
-            <p class="blurb">Spacious signature comfort with a king bed and private bath, built for an easy, relaxed stay.</p>
+            <?php if ($l['tier'] !== ''): ?><span class="lodge-tier"><?= e($l['tier']) ?></span><?php endif; ?>
+            <h5><?= e($l['name']) ?></h5>
+            <div class="price-line"><?= e(price_line($l['price_min'], $l['price_max'])) ?></div>
+            <?php if (trim((string)$l['blurb']) !== ''): ?><p class="blurb"><?= e($l['blurb']) ?></p><?php endif; ?>
+            <?php if (lines($l['features'])): ?>
             <div class="pill-group">
               <div class="mini-label">Features</div>
-              <span class="pill">Spacious Deluxe Rooms</span>
-              <span class="pill">King size Bed</span>
+              <?php foreach (lines($l['features']) as $p): ?><span class="pill"><?= e($p) ?></span>
+              <?php endforeach; ?>
             </div>
+            <?php endif; ?>
+            <?php if (lines($l['facilities'])): ?>
             <div class="pill-group">
               <div class="mini-label">Facilities</div>
-              <span class="pill">High-speed Wi-Fi</span>
-              <span class="pill">Air Conditioning</span>
+              <?php foreach (lines($l['facilities']) as $p): ?><span class="pill"><?= e($p) ?></span>
+              <?php endforeach; ?>
             </div>
+            <?php endif; ?>
             <div class="guests-limit">
               <div class="mini-label">Guests Limit</div>
-              <span class="pill">6 Adults</span>
-              <span class="pill">4 Childrens</span>
+              <span class="pill"><?= e(adults_text($l['max_adults'])) ?></span>
+              <?php if ((int)$l['max_children'] > 0): ?><span class="pill"><?= e(children_text($l['max_children'])) ?></span><?php endif; ?>
             </div>
             <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
           </div>
           <div class="list-card-image">
-            <img src="images/lodge/1.jpeg" alt="The Nirvana Pavilion">
+            <img src="<?= e(asset($l['image'])) ?>" alt="<?= e($l['name']) ?>">
             <div class="list-card-image-caption">
-              <span class="lodge-tier">Signature</span>
-              <h6>The Nirvana Pavilion</h6>
+              <?php if ($l['tier'] !== ''): ?><span class="lodge-tier"><?= e($l['tier']) ?></span><?php endif; ?>
+              <h6><?= e($l['name']) ?></h6>
               <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
             </div>
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- 2: The Panorama Suite -->
-    <div class="lodge-item" data-price="10000" data-adults="7" data-children="3">
-      <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="right">
-          <div class="list-card-details">
-            <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Premier</span>
-            <h5>The Panorama Suite</h5>
-            <div class="price-line">₹10,000 – ₹15,000 per night</div>
-            <p class="blurb">Wide dual-view windows and a lounge seating area for a bright, elevated stay in the valley.</p>
-            <div class="pill-group">
-              <div class="mini-label">Features</div>
-              <span class="pill">King size Bed</span>
-              <span class="pill">Cove lighting</span>
-            </div>
-            <div class="pill-group">
-              <div class="mini-label">Facilities</div>
-              <span class="pill">Lounge seating</span>
-              <span class="pill">5-G Wi-Fi</span>
-            </div>
-            <div class="guests-limit">
-              <div class="mini-label">Guests Limit</div>
-              <span class="pill">7 Adults</span>
-              <span class="pill">3 Childrens</span>
-            </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
-          </div>
-          <div class="list-card-image">
-            <img src="images/lodge/2.jpeg" alt="The Panorama Suite">
-            <div class="list-card-image-caption">
-              <span class="lodge-tier">Premier</span>
-              <h6>The Panorama Suite</h6>
-              <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
-            </div>
-            </div>
-            </div>
-      </div>
-    </div>
+<?php endforeach; ?>
 
-    <!-- 3: The Regal Canopy Lodge -->
-    <div class="lodge-item" data-price="18000" data-adults="8" data-children="6">
-      <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="left">
-          <div class="list-card-details">
-            <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Grand Reserve</span>
-            <h5>The Regal Canopy Lodge</h5>
-            <div class="price-line">₹18,000 – ₹23,000 per night</div>
-            <p class="blurb">Grand Reserve indulgence with a private platform, canopy bed, and dedicated butler service.</p>
-            <div class="pill-group">
-              <div class="mini-label">Features</div>
-              <span class="pill">Curved Floor Ceiling</span>
-              <span class="pill">Canopy Poster bed</span>
-            </div>
-            <div class="pill-group">
-              <div class="mini-label">Facilities</div>
-              <span class="pill">Butler Service</span>
-              <span class="pill">In room mini-bar</span>
-            </div>
-            <div class="guests-limit">
-              <div class="mini-label">Guests Limit</div>
-              <span class="pill">8 Adults</span>
-              <span class="pill">6 Childrens</span>
-            </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
-          </div>
-          <div class="list-card-image">
-            <img src="images/lodge/3.jpeg" alt="The Regal Canopy Lodge">
-            <div class="list-card-image-caption">
-              <span class="lodge-tier">Grand Reserve</span>
-              <h6>The Regal Canopy Lodge</h6>
-              <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <!-- 4: The Willow Brook Cabin -->
-    <div class="lodge-item" data-price="4500" data-adults="4" data-children="2">
-      <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="right">
-          <div class="list-card-details">
-            <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Signature</span>
-            <h5>The Willow Brook Cabin</h5>
-            <div class="price-line">₹4,500 – ₹7,500 per night</div>
-            <p class="blurb">A rustic wood-lined cabin with a quiet reading nook, perfect for a simple getaway.</p>
-            <div class="pill-group">
-              <div class="mini-label">Features</div>
-              <span class="pill">Queen size Bed</span>
-              <span class="pill">Rustic wood interiors</span>
-            </div>
-            <div class="pill-group">
-              <div class="mini-label">Facilities</div>
-              <span class="pill">High-speed Wi-Fi</span>
-              <span class="pill">Air Conditioning</span>
-            </div>
-            <div class="guests-limit">
-              <div class="mini-label">Guests Limit</div>
-              <span class="pill">4 Adults</span>
-              <span class="pill">2 Childrens</span>
-            </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
-          </div>
-          <div class="list-card-image">
-            <img src="images/lodge/4.jpg" alt="The Willow Brook Cabin">
-            <div class="list-card-image-caption">
-              <span class="lodge-tier">Signature</span>
-              <h6>The Willow Brook Cabin</h6>
-              <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 5: The Meadow Vista Room -->
-    <div class="lodge-item" data-price="6000" data-adults="5" data-children="3">
-      <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="left">
-          <div class="list-card-details">
-            <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Signature</span>
-            <h5>The Meadow Vista Room</h5>
-            <div class="price-line">₹6,000 – ₹8,500 per night</div>
-            <p class="blurb">Garden-facing balcony room with a private sitting area overlooking open meadow.</p>
-            <div class="pill-group">
-              <div class="mini-label">Features</div>
-              <span class="pill">King size Bed</span>
-              <span class="pill">Garden facing balcony</span>
-            </div>
-            <div class="pill-group">
-              <div class="mini-label">Facilities</div>
-              <span class="pill">High-speed Wi-Fi</span>
-              <span class="pill">Smart TV</span>
-            </div>
-            <div class="guests-limit">
-              <div class="mini-label">Guests Limit</div>
-              <span class="pill">5 Adults</span>
-              <span class="pill">3 Childrens</span>
-            </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
-          </div>
-          <div class="list-card-image">
-            <img src="images/lodge/5.png" alt="The Meadow Vista Room">
-            <div class="list-card-image-caption">
-              <span class="lodge-tier">Signature</span>
-              <h6>The Meadow Vista Room</h6>
-              <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 6: The Orchard View Suite -->
-    <div class="lodge-item" data-price="9500" data-adults="6" data-children="4">
-      <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="right">
-          <div class="list-card-details">
-            <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Premier</span>
-            <h5>The Orchard View Suite</h5>
-            <div class="price-line">₹9,500 – ₹13,000 per night</div>
-            <p class="blurb">Orchard-facing windows and a walk-in closet, with an in-room espresso setup.</p>
-            <div class="pill-group">
-              <div class="mini-label">Features</div>
-              <span class="pill">King size Bed</span>
-              <span class="pill">Orchard facing windows</span>
-            </div>
-            <div class="pill-group">
-              <div class="mini-label">Facilities</div>
-              <span class="pill">Lounge seating</span>
-              <span class="pill">Espresso machine</span>
-            </div>
-            <div class="guests-limit">
-              <div class="mini-label">Guests Limit</div>
-              <span class="pill">6 Adults</span>
-              <span class="pill">4 Childrens</span>
-            </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
-          </div>
-          <div class="list-card-image">
-            <img src="images/lodge/6.png" alt="The Orchard View Suite">
-            <div class="list-card-image-caption">
-              <span class="lodge-tier">Premier</span>
-              <h6>The Orchard View Suite</h6>
-              <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 7: The Cellar Loft -->
-    <div class="lodge-item" data-price="11000" data-adults="5" data-children="2">
-      <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="left">
-          <div class="list-card-details">
-            <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Premier</span>
-            <h5>The Cellar Loft</h5>
-            <div class="price-line">₹11,000 – ₹14,500 per night</div>
-            <p class="blurb">A split-level loft with an exposed stone wall and a private balcony retreat.</p>
-            <div class="pill-group">
-              <div class="mini-label">Features</div>
-              <span class="pill">Split level layout</span>
-              <span class="pill">Private balcony</span>
-            </div>
-            <div class="pill-group">
-              <div class="mini-label">Facilities</div>
-              <span class="pill">In room mini-bar</span>
-              <span class="pill">High-speed Wi-Fi</span>
-            </div>
-            <div class="guests-limit">
-              <div class="mini-label">Guests Limit</div>
-              <span class="pill">5 Adults</span>
-              <span class="pill">2 Childrens</span>
-            </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
-          </div>
-          <div class="list-card-image">
-            <img src="images/lodge/7.png" alt="The Cellar Loft">
-            <div class="list-card-image-caption">
-              <span class="lodge-tier">Premier</span>
-              <h6>The Cellar Loft</h6>
-              <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 8: The Vineyard Terrace Lodge -->
-    <div class="lodge-item" data-price="16000" data-adults="6" data-children="4">
-      <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="right">
-          <div class="list-card-details">
-            <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Grand Reserve</span>
-            <h5>The Vineyard Terrace Lodge</h5>
-            <div class="price-line">₹16,000 – ₹20,000 per night</div>
-            <p class="blurb">Private vineyard terrace living with a soaking tub and full butler service.</p>
-            <div class="pill-group">
-              <div class="mini-label">Features</div>
-              <span class="pill">Private vineyard terrace</span>
-              <span class="pill">Soaking tub</span>
-            </div>
-            <div class="pill-group">
-              <div class="mini-label">Facilities</div>
-              <span class="pill">Butler Service</span>
-              <span class="pill">In room mini-bar</span>
-            </div>
-            <div class="guests-limit">
-              <div class="mini-label">Guests Limit</div>
-              <span class="pill">6 Adults</span>
-              <span class="pill">4 Childrens</span>
-            </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
-          </div>
-          <div class="list-card-image">
-            <img src="images/lodge/8.png" alt="The Vineyard Terrace Lodge">
-            <div class="list-card-image-caption">
-              <span class="lodge-tier">Grand Reserve</span>
-              <h6>The Vineyard Terrace Lodge</h6>
-              <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 9: The Harvest Moon Retreat -->
-    <div class="lodge-item" data-price="20000" data-adults="10" data-children="6">
-      <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="left">
-          <div class="list-card-details">
-            <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Grand Reserve</span>
-            <h5>The Harvest Moon Retreat</h5>
-            <div class="price-line">₹20,000 – ₹26,000 per night</div>
-            <p class="blurb">Our largest retreat, a multi-room stay built for bigger families and gatherings.</p>
-            <div class="pill-group">
-              <div class="mini-label">Features</div>
-              <span class="pill">Multi-room retreat</span>
-              <span class="pill">Canopy Poster bed</span>
-            </div>
-            <div class="pill-group">
-              <div class="mini-label">Facilities</div>
-              <span class="pill">Butler Service</span>
-              <span class="pill">Private dining setup</span>
-            </div>
-            <div class="guests-limit">
-              <div class="mini-label">Guests Limit</div>
-              <span class="pill">10 Adults</span>
-              <span class="pill">6 Childrens</span>
-            </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
-          </div>
-          <div class="list-card-image">
-            <img src="images/lodge/9.png" alt="The Harvest Moon Retreat">
-            <div class="list-card-image-caption">
-              <span class="lodge-tier">Grand Reserve</span>
-              <h6>The Harvest Moon Retreat</h6>
-              <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 10: The Garden Folly Cottage -->
-    <div class="lodge-item" data-price="5500" data-adults="4" data-children="3">
-      <div class="list-card-wrap reveal">
-        <div class="list-card-flip" data-flip="right">
-          <div class="list-card-details">
-            <button type="button" class="list-card-close" aria-label="Back to photo"><i class="fa-solid fa-image"></i></button>
-            <span class="lodge-tier">Signature</span>
-            <h5>The Garden Folly Cottage</h5>
-            <div class="price-line">₹5,500 – ₹8,000 per night</div>
-            <p class="blurb">A cottage-style stay with a garden patio, ideal for a slower kind of weekend.</p>
-            <div class="pill-group">
-              <div class="mini-label">Features</div>
-              <span class="pill">Cottage style interiors</span>
-              <span class="pill">Garden facing patio</span>
-            </div>
-            <div class="pill-group">
-              <div class="mini-label">Facilities</div>
-              <span class="pill">High-speed Wi-Fi</span>
-              <span class="pill">Tea station</span>
-            </div>
-            <div class="guests-limit">
-              <div class="mini-label">Guests Limit</div>
-              <span class="pill">4 Adults</span>
-              <span class="pill">3 Childrens</span>
-            </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
-          </div>
-          <div class="list-card-image">
-            <img src="images/lodge/10.png" alt="The Garden Folly Cottage">
-            <div class="list-card-image-caption">
-              <span class="lodge-tier">Signature</span>
-              <h6>The Garden Folly Cottage</h6>
-              <span class="tap-hint"><i class="fa-solid fa-hand-pointer"></i> Tap to view details</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
 
   </div>
 

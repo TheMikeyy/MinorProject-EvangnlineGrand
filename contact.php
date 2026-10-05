@@ -1,9 +1,37 @@
-<!DOCTYPE html>
+<?php
+require_once __DIR__ . '/admin/admin-include/db_config.php';
+
+/* ---- contact form: validate, save into the database, then redirect (so a refresh never re-sends) ---- */
+$contact_errors = [];
+$contact_old = ['name' => '', 'email' => '', 'subject' => '', 'message' => ''];
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
+    csrf_check();
+    foreach ($contact_old as $k => $unused) { $contact_old[$k] = trim((string)($_POST[$k] ?? '')); }
+
+    if (trim((string)($_POST['website'] ?? '')) !== '') {                  // hidden "honeypot" field: only bots fill it
+        flash_set('success', 'Thank you! Your message has been sent. We will get back to you soon.');
+        redirect('contact.php#send');
+    }
+    if (time() - (int)($_SESSION['last_contact_at'] ?? 0) < 20) { $contact_errors[] = 'Please wait a few seconds before sending another message.'; }
+    if (mb_strlen($contact_old['name']) < 2 || mb_strlen($contact_old['name']) > 100)             { $contact_errors[] = 'Please enter your name.'; }
+    if (!filter_var($contact_old['email'], FILTER_VALIDATE_EMAIL) || mb_strlen($contact_old['email']) > 150) { $contact_errors[] = 'Please enter a valid email address.'; }
+    if ($contact_old['subject'] === '' || mb_strlen($contact_old['subject']) > 200)               { $contact_errors[] = 'Please enter a subject (up to 200 characters).'; }
+    if (mb_strlen($contact_old['message']) < 5 || mb_strlen($contact_old['message']) > 3000)      { $contact_errors[] = 'Please write a message (5 to 3000 characters).'; }
+
+    if (!$contact_errors) {
+        run('INSERT INTO contact_messages (name, email, subject, message) VALUES (?, ?, ?, ?)',
+            [$contact_old['name'], $contact_old['email'], $contact_old['subject'], $contact_old['message']]);
+        $_SESSION['last_contact_at'] = time();
+        flash_set('success', 'Thank you! Your message has been sent. We will get back to you soon.');
+        redirect('contact.php#send');
+    }
+}
+?><!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact Us | Évangéline Grand</title>
+    <title>Contact Us | <?= e(setting('hotel_name')) ?></title>
     <?php require('include/links.php') ?>
 </head>
 <body class="bg-light">
@@ -27,7 +55,7 @@
   .contact-hero-bg{
     position: absolute;
     inset: 0;
-    background-image: url('images/contact/front.jpeg');
+    background-image: url('<?= e(img('contact_banner')) ?>');
     background-size: cover;
     background-position: center;
     transform: scale(1.03);
@@ -146,11 +174,11 @@
   }
 
   .card-cap-visit{
-    --card-cap-img: url('images/contact/cap1.jpeg');
+    --card-cap-img: url('<?= e(img('contact_cap1')) ?>');
   }
 
   .card-cap-message{
-    --card-cap-img: url('images/contact/cap2.jpeg');
+    --card-cap-img: url('<?= e(img('contact_cap2')) ?>');
   }
 
   .card-cap-eyebrow{
@@ -363,18 +391,17 @@
   <div class="contact-hero-bg"></div>
   <div class="contact-hero-content">
     <h1 class="contact-hero-title">Contact Us</h1>
-    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="contact-hero-logo">
+    <img src="<?= e(img('logo_hero')) ?>" alt="<?= e(setting('hotel_name')) ?>" class="contact-hero-logo">
   </div>
 </div>
 
 <!-- INTRO -->
 <div class="container contact-intro text-center">
-  <span class="section-eyebrow d-block">Reach Out</span>
-  <h2 class="mb-0 fw-bold section-font">GET IN TOUCH</h2>
+  <span class="section-eyebrow d-block"><?= e(setting('contact_eyebrow')) ?></span>
+  <h2 class="mb-0 fw-bold section-font"><?= e(setting('contact_title')) ?></h2>
   <div class="h-line bg-dark mx-auto mt-3"></div>
   <p>
-    Whether it's a question before you book, a request for your upcoming stay, or simply directions to
-    the valley, our team is on hand to help. Find us on the map below, or send a message directly.
+    <?= e(setting('contact_intro')) ?>
   </p>
 </div>
 
@@ -391,7 +418,7 @@
         </div>
         <div class="card-badge"><i class="fa-solid fa-location-dot"></i></div>
 
-        <iframe class="map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2816.1670154276353!2d-64.30946076511229!3d45.10268230000001!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4b58559db9646275%3A0xcca6eaa98adc0353!2sThe%20Evangeline%20Hotel!5e0!3m2!1sen!2sin!4v1784649732488!5m2!1sen!2sin" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+        <iframe class="map-frame" src="<?= e(setting('map_embed_url')) ?>" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
         </iframe>
 
         <div class="contact-info-pad">
@@ -400,7 +427,7 @@
               <span class="contact-info-icon"><i class="fa-solid fa-location-dot"></i></span>
               Address
             </div>
-            <p>Grand Pré, Annapolis Valley, Nova Scotia, Canada</p>
+            <p><?= e(setting('address')) ?></p>
           </div>
 
           <div class="contact-info-block">
@@ -408,8 +435,8 @@
               <span class="contact-info-icon"><i class="fa-solid fa-phone"></i></span>
               Call Us
             </div>
-            <p><a href="tel:+919016588906">+1 902 555 0198</a></p>
-            <p><a href="tel:+19025550198">+1 902 555 0198</a></p>
+            <p><a href="<?= e(tel_href(setting('phone'))) ?>"><?= e(setting('phone')) ?></a></p>
+            <?php if (trim(setting('phone2')) !== ''): ?><p><a href="<?= e(tel_href(setting('phone2'))) ?>"><?= e(setting('phone2')) ?></a></p><?php endif; ?>
           </div>
 
           <div class="contact-info-block">
@@ -417,7 +444,7 @@
               <span class="contact-info-icon"><i class="fa-solid fa-envelope"></i></span>
               Email
             </div>
-            <p><a href="mailto:stay@evangelinegrand.com">stay@evangelinegrand.com</a></p>
+            <p><a href="mailto:<?= e(setting('email')) ?>"><?= e(setting('email')) ?></a></p>
           </div>
 
           <div class="contact-info-block">
@@ -426,10 +453,10 @@
               Follow Us
             </div>
             <div class="contact-social">
-              <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
-              <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
-              <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
-              <a href="#" aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
+              <a <?= social_attrs('social_instagram') ?> aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+              <a <?= social_attrs('social_facebook') ?> aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+              <a <?= social_attrs('social_youtube') ?> aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+              <a <?= social_attrs('social_x') ?> aria-label="X"><i class="fa-brands fa-x-twitter"></i></a>
             </div>
           </div>
         </div>
@@ -445,26 +472,35 @@
         </div>
         <div class="card-badge"><i class="fa-solid fa-envelope"></i></div>
 
-        <div class="contact-form-body">
-        <form action="" method="POST">
+        <div class="contact-form-body" id="send">
+        <?php foreach (flash_take() as $fl): ?>
+          <div class="alert alert-<?= $fl['type'] === 'success' ? 'success' : 'danger' ?> py-2" role="alert"><?= e($fl['msg']) ?></div>
+        <?php endforeach; ?>
+        <?php foreach ($contact_errors as $er): ?>
+          <div class="alert alert-danger py-2" role="alert"><?= e($er) ?></div>
+        <?php endforeach; ?>
+        <form action="contact.php#send" method="POST">
+          <?= csrf_field() ?>
+          <input type="hidden" name="contact_form" value="1">
+          <div style="position:absolute;left:-9999px;" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
           <div class="mb-3">
             <label for="contactName" class="form-label">Name</label>
-            <input type="text" class="form-control" id="contactName" name="name" placeholder="Your full name" required>
+            <input type="text" class="form-control" id="contactName" name="name" placeholder="Your full name" value="<?= e($contact_old['name']) ?>" required>
           </div>
 
           <div class="mb-3">
             <label for="contactEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="contactEmail" name="email" placeholder="you@example.com" required>
+            <input type="email" class="form-control" id="contactEmail" name="email" placeholder="you@example.com" value="<?= e($contact_old['email']) ?>" required>
           </div>
 
           <div class="mb-3">
             <label for="contactSubject" class="form-label">Subject</label>
-            <input type="text" class="form-control" id="contactSubject" name="subject" placeholder="What's this about?" required>
+            <input type="text" class="form-control" id="contactSubject" name="subject" placeholder="What's this about?" value="<?= e($contact_old['subject']) ?>" required>
           </div>
 
           <div class="mb-3 message-group">
             <label for="contactMessage" class="form-label">Message</label>
-            <textarea class="form-control" id="contactMessage" name="message" placeholder="Tell us a little more..." required></textarea>
+            <textarea class="form-control" id="contactMessage" name="message" placeholder="Tell us a little more..." required><?= e($contact_old['message']) ?></textarea>
           </div>
 
           <div class="contact-form-submit">

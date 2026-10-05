@@ -1,0 +1,61 @@
+ÉVANGÉLINE GRAND - ADMIN PANEL UPGRADE
+======================================
+
+WHAT CHANGED
+  The website now reads its text, photos, lodges, comforts, team and reviews from the
+  database. The admin panel (admin/) writes to that same database. The hotel owner never
+  opens phpMyAdmin or code: they log in, edit a form, press Save.
+
+STEP 1 - Back up, then copy the files
+  1. Copy your whole project folder somewhere as a backup.
+  2. Copy everything from THIS zip into your project folder and choose "Replace".
+     Your images/ folder stays as it is. The zip only adds images/uploads/.
+     (Files replaced: all .php pages, include/, admin/, Dockerfile, evangelinewebsite.sql)
+
+STEP 2 - Import the database  (this REPLACES the old tables, which is what we want)
+  phpMyAdmin > click "evangelinewebsite" (or just go to Import) > Import >
+  choose evangelinewebsite.sql from this zip > Go.
+  You should now see 8 tables: admin_cred, site_settings, hero_slides, lodges,
+  comforts, team_members, testimonials, contact_messages.
+
+STEP 3 - Log in
+  http://localhost/<your-folder>/admin/admin-index.php
+  Name:     admin.evangelinegrand.com
+  Password: admin1234
+  FIRST THING: open "Account & Password" and change both.
+
+STEP 4 - Try it
+  Site Content > Hotel & Contact > change the phone number > Save > refresh the website.
+
+IF SOMETHING GOES WRONG
+  * "Could not connect to the database": MySQL is not running in XAMPP, or the name /
+    user / password at the top of admin/admin-include/db_config.php is different.
+  * Photo upload fails: folder images/uploads must exist and be writable; and php.ini
+    upload_max_filesize should be at least 8M (XAMPP default is 40M, fine).
+  * Docker: inside Docker "127.0.0.1" is the container itself. Set environment variables
+    DB_HOST (e.g. host.docker.internal), DB_NAME, DB_USER, DB_PASS.
+  * Forgot the admin password: in phpMyAdmin > SQL run
+        DELETE FROM admin_cred;
+        INSERT INTO admin_cred (admin_mail, admin_pass) VALUES ('admin', 'temp12345');
+    then log in with  admin / temp12345  (it converts itself to a secure hash) and change it.
+
+WHAT THE ADMIN CAN EDIT
+  Site Content   hotel name, phone(s), email, address, Google map, opening hours, social
+                 links, 3 logos, and every heading / paragraph / banner photo on the
+                 Home, Lodges, Comforts, About and Contact pages
+  Home Slideshow add / remove / reorder / hide the big photos on the home page
+  Lodges         add / edit / delete / hide / reorder; photo, price, rating, features,
+                 facilities, guest limits, "show on home page"
+  Comforts       cards + signature rows, icon, photo, "show in home strip"
+  Team           names, roles, descriptions, photos
+  Guest Reviews  the sliding reviews on the home page
+  Messages       everything visitors send from the Contact form
+
+HOW TO MAKE MORE TEXT EDITABLE LATER
+  1. Add one line for it in admin/admin-include/fields.php (key, label, type, original text).
+  2. In the page, replace the text with:  <?= e(setting('your_key')) ?>
+  It then appears automatically in Admin > Site Content.
+
+NOT DONE YET (needs its own step)
+  User signup/login, room booking and "Book Now" buttons are still design only. They
+  need a bookings table and availability logic; that is the natural next feature.

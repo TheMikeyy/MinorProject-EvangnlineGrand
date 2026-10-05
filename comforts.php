@@ -1,9 +1,10 @@
+<?php require_once __DIR__ . '/admin/admin-include/db_config.php'; ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comforts | Évangéline Grand</title>
+    <title>Comforts | <?= e(setting('hotel_name')) ?></title>
     <?php require('include/links.php') ?>
 </head>
 <body class="bg-light">
@@ -28,7 +29,7 @@
   .page-hero-bg{
     position: absolute;
     inset: 0;
-    background-image: url('images/comforts/entry.jpeg');
+    background-image: url('<?= e(img('comforts_banner')) ?>');
     background-size: cover;
     background-position: center;
     transform: scale(1.03);
@@ -222,7 +223,7 @@
   .comfort-cta-bg{
     position: absolute;
     inset: 0;
-    background-image: url('images/comforts/entrycloseup.jpeg');
+    background-image: url('<?= e(img('cta_bg')) ?>');
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
@@ -258,18 +259,16 @@
   <div class="page-hero-bg"></div>
   <div class="page-hero-content">
     <h1 class="page-hero-title">OUR COMFORTS</h1>
-    <img src="images/logo/logo-hero-body.png" alt="Évangéline Grand" class="page-hero-logo">
+    <img src="<?= e(img('logo_hero')) ?>" alt="<?= e(setting('hotel_name')) ?>" class="page-hero-logo">
   </div>
 </div>
 
 <!-- INTRO -->
 <div class="container comfort-intro text-center">
-  <h2 class="mb-0 fw-bold section-font">Your Comfort Zone Might Be Here</h2>
+  <h2 class="mb-0 fw-bold section-font"><?= e(setting('comforts_title')) ?></h2>
   <div class="h-line bg-dark mx-auto mt-3"></div>
   <p>
-    Every stay here is built around the little things that make it feel effortless and thoughtful
-    comforts, quiet luxuries, and details attended to before you even ask. This is where rest comes
-    easy and every need is already taken care of.
+    <?= e(setting('comforts_intro')) ?>
   </p>
 </div>
 
@@ -277,104 +276,18 @@
 <div class="container comfort-grid">
   <div class="row g-4">
 
+    <?php foreach (rows("SELECT * FROM comforts WHERE is_active = 1 AND section = 'card' ORDER BY sort_order, id") as $c): ?>
     <div class="col-lg-4 col-md-6 reveal">
       <div class="comfort-card shadow lodge-hover">
-        <img src="images/comforts/breakfast.jpeg" alt="Complimentary breakfast">
-        <div class="comfort-icon-badge"><i class="fa-solid fa-mug-saucer"></i></div>
+        <img src="<?= e(asset($c['image'])) ?>" alt="<?= e($c['title']) ?>">
+        <?php if ($c['icon'] !== ''): ?><div class="comfort-icon-badge"><i class="<?= e($c['icon']) ?>"></i></div><?php endif; ?>
         <div class="text-center card-body-pad">
-          <h5>Complimentary Breakfast</h5>
-          <p>A curated morning spread served daily, from fresh local produce to warm pastries, included with every stay.</p>
+          <h5><?= e($c['title']) ?></h5>
+          <p><?= e($c['description']) ?></p>
         </div>
       </div>
     </div>
-
-    <div class="col-lg-4 col-md-6 reveal">
-      <div class="comfort-card shadow lodge-hover">
-        <img src="images/comforts/charge.jpeg" alt="EV Charging Station">
-        <div class="comfort-icon-badge"><i class="fa-solid fa-charging-station"></i></div>
-        <div class="text-center card-body-pad">
-          <h5>EV Charging Station</h5>
-          <p>On-site charging points for electric vehicles, so your stay stays effortless whichever way you arrived.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 reveal">
-      <div class="comfort-card shadow lodge-hover">
-        <img src="images/comforts/security.jpeg" alt="24/7 security & CCTV">
-        <div class="comfort-icon-badge"><i class="fa-solid fa-video"></i></div>
-        <div class="text-center card-body-pad">
-          <h5>24/7 Security &amp; CCTV</h5>
-          <p>Round-the-clock monitoring and on-property security, so you can rest easy at every hour.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 reveal">
-      <div class="comfort-card shadow lodge-hover">
-        <img src="images/comforts/hall.jpeg" alt="Conference/banquet halls">
-        <div class="comfort-icon-badge"><i class="fa-solid fa-people-group"></i></div>
-        <div class="text-center card-body-pad">
-          <h5>Conference &amp; Banquet Halls</h5>
-          <p>Elegant event spaces suited for intimate gatherings or larger celebrations, fully serviced on request.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 reveal">
-      <div class="comfort-card shadow lodge-hover">
-        <img src="images/comforts/laundry.jpeg" alt="Laundry service">
-        <div class="comfort-icon-badge"><i class="fa-solid fa-shirt"></i></div>
-        <div class="text-center card-body-pad">
-          <h5>Laundry Service</h5>
-          <p>Same-day laundry and pressing, handled with care so you always travel light.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 reveal">
-      <div class="comfort-card shadow lodge-hover">
-        <img src="images/comforts/rooftop.jpeg" alt="Rooftop Bar">
-        <div class="comfort-icon-badge"><i class="fa-solid fa-martini-glass-citrus"></i></div>
-        <div class="text-center card-body-pad">
-          <h5>Rooftop Bar</h5>
-          <p>Handcrafted cocktails and valley views, open every evening for a slower kind of night.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 reveal">
-      <div class="comfort-card shadow lodge-hover">
-        <img src="images/comforts/desk.jpeg" alt="Concierge desk">
-        <div class="comfort-icon-badge"><i class="fa-solid fa-bell-concierge"></i></div>
-        <div class="text-center card-body-pad">
-          <h5>Concierge Desk</h5>
-          <p>From dinner reservations to local excursions, our concierge is on hand daily to plan the details.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 reveal">
-      <div class="comfort-card shadow lodge-hover">
-        <img src="images/comforts/parking.jpeg" alt="Valet parking">
-        <div class="comfort-icon-badge"><i class="fa-solid fa-car"></i></div>
-        <div class="text-center card-body-pad">
-          <h5>Valet Parking</h5>
-          <p>Complimentary valet on arrival, so your stay begins the moment you step out of the car.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="col-lg-4 col-md-6 reveal">
-      <div class="comfort-card shadow lodge-hover">
-        <img src="images/comforts/pet.jpeg" alt="Pet-friendly rooms">
-        <div class="comfort-icon-badge"><i class="fa-solid fa-paw"></i></div>
-        <div class="text-center card-body-pad">
-          <h5>Pet-Friendly Stays</h5>
-          <p>Select rooms welcome your companions, with bedding and bowls ready before you arrive.</p>
-        </div>
-      </div>
-    </div>
+    <?php endforeach; ?>
 
   </div>
 </div>
@@ -382,39 +295,23 @@
 <!-- SIGNATURE COMFORTS -->
 <div class="section-white signature-section">
   <div class="text-center section-head reveal">
-    <span class="section-eyebrow">A Little Further, A Little Deeper</span>
-    <h2 class="mb-0 fw-bold section-font">OUE SIGNATURE COMFORTS</h2>
+    <span class="section-eyebrow"><?= e(setting('signature_eyebrow')) ?></span>
+    <h2 class="mb-0 fw-bold section-font"><?= e(setting('signature_title')) ?></h2>
   </div>
 
   <div class="container">
-    <div class="feature-row reveal">
+    <?php foreach (rows("SELECT * FROM comforts WHERE is_active = 1 AND section = 'signature' ORDER BY sort_order, id") as $i => $c): ?>
+    <div class="feature-row<?= $i % 2 === 1 ? ' reverse' : '' ?> reveal">
       <div class="col-lg-6">
-        <img src="images/comforts/swimpool.jpeg" alt="Swimming pool & spa">
+        <img src="<?= e(asset($c['image'])) ?>" alt="<?= e($c['title']) ?>">
       </div>
       <div class="col-lg-6 feature-text">
-        <span class="lodge-tier">Wellness</span>
-        <h3>Swimming Pool &amp; Spa</h3>
-        <p>
-          An open-air pool framed by the valley, paired with a spa menu built around slow, restorative
-          treatments. Whether it's a sunrise swim or an evening massage, this is where the pace of the
-          day finally softens.
-        </p>
+        <?php if ($c['tag'] !== ''): ?><span class="lodge-tier"><?= e($c['tag']) ?></span><?php endif; ?>
+        <h3><?= e($c['title']) ?></h3>
+        <p><?= e($c['description']) ?></p>
       </div>
     </div>
-
-    <div class="feature-row reverse reveal">
-      <div class="col-lg-6">
-        <img src="images/comforts/butlerservice.jpeg" alt="Special butler service">
-      </div>
-      <div class="col-lg-6 feature-text">
-        <span class="lodge-tier">Personal Service</span>
-        <h3>Dedicated Butler Service</h3>
-        <p>
-          Available to our Grand Reserve guests, our butlers handle everything from unpacking to late-night
-          requests, quietly and without ceremony, so your stay feels attended to rather than managed.
-        </p>
-      </div>
-    </div>
+    <?php endforeach; ?>
   </div>
 </div>
 
@@ -422,9 +319,9 @@
 <div class="comfort-cta">
   <div class="comfort-cta-bg"></div>
   <div class="container comfort-cta-content">
-    <h2>Ready to experience it yourself ?</h2>
-    <p class="mb-4">Reserve your stay and let every detail take care of itself.</p>
-    <a href="index.php#lodges" class="btn btn-wine rounded-pill px-4 py-2">Book Your Stay</a>
+    <h2><?= e(setting('cta_title')) ?></h2>
+    <p class="mb-4"><?= e(setting('cta_text')) ?></p>
+    <a href="index.php#lodges" class="btn btn-wine rounded-pill px-4 py-2"><?= e(setting('cta_button')) ?></a>
   </div>
 </div>
 

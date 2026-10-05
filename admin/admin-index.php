@@ -1,6 +1,5 @@
 <?php
-  session_start();
-  require('admin-include/db_config.php');
+  require_once 'admin-include/db_config.php';   // starts the session + connects to the database
 
   // Already logged in? skip straight to the dashboard.
   if (!empty($_SESSION['admin_logged_in'])) {
@@ -11,29 +10,48 @@
   $error = '';
 
   if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    csrf_check();
     $name     = trim($_POST['name'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+    $password = (string)($_POST['password'] ?? '');
 
-    if ($name === '' || $password === '') {
+    $wait = ($_SESSION['login_locked_until'] ?? 0) - time();
+    if ($wait > 0) {
+      // too many wrong attempts: block for a minute
+      $error = 'Too many failed attempts. Please wait ' . $wait . ' seconds and try again.';
+    } elseif ($name === '' || $password === '') {
       $error = 'Please enter both your name and password.';
     } else {
-      $stmt = $con->prepare("SELECT sr_no FROM admin_cred WHERE admin_mail = ? AND admin_pass = ?");
-      $stmt->bind_param("ss", $name, $password);
-      $stmt->execute();
-      $result = $stmt->get_result();
+      $admin = row('SELECT sr_no, admin_mail, admin_pass FROM admin_cred WHERE admin_mail = ? LIMIT 1', [$name]);
+      $ok = false;
+      if ($admin) {
+        if (password_verify($password, $admin['admin_pass'])) {
+          $ok = true;
+          if (password_needs_rehash($admin['admin_pass'], PASSWORD_DEFAULT)) {
+            run('UPDATE admin_cred SET admin_pass = ? WHERE sr_no = ?', [password_hash($password, PASSWORD_DEFAULT), $admin['sr_no']]);
+          }
+        } elseif (strpos($admin['admin_pass'], '$2y$') !== 0 && hash_equals($admin['admin_pass'], $password)) {
+          // an old plain-text password: accept it once and convert it to a secure hash
+          $ok = true;
+          run('UPDATE admin_cred SET admin_pass = ? WHERE sr_no = ?', [password_hash($password, PASSWORD_DEFAULT), $admin['sr_no']]);
+        }
+      }
 
-      if ($result->num_rows === 1) {
-        // Fresh session ID on every successful login.
-        session_regenerate_id(true);
+      if ($ok) {
+        session_regenerate_id(true);      // fresh session ID on every successful login
+        unset($_SESSION['login_fails'], $_SESSION['login_locked_until']);
         $_SESSION['admin_logged_in'] = true;
-        $_SESSION['admin_name'] = $name;
-
+        $_SESSION['admin_id']   = (int)$admin['sr_no'];
+        $_SESSION['admin_name'] = $admin['admin_mail'];
         header('Location: admin-dashboard.php');
         exit;
-      } else {
-        $error = 'Incorrect name or password.';
       }
-      $stmt->close();
+
+      $_SESSION['login_fails'] = ($_SESSION['login_fails'] ?? 0) + 1;
+      if ($_SESSION['login_fails'] >= 5) {
+        $_SESSION['login_locked_until'] = time() + 60;
+        $_SESSION['login_fails'] = 0;
+      }
+      $error = 'Incorrect name or password.';
     }
   }
 ?>
@@ -260,6 +278,7 @@
     <?php endif; ?>
 
     <form action="" method="POST">
+      <?= csrf_field() ?>
       <div class="mb-3">
         <label for="adminName" class="form-label">Name</label>
         <input required type="text" class="form-control" id="adminName" name="name" placeholder="Enter your name" value="<?php echo isset($_POST['name']) ? htmlspecialchars($_POST['name']) : ''; ?>">
