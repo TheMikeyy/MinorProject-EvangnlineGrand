@@ -1,0 +1,64 @@
+PUT THE WEBSITE ONLINE ON RENDER  (with a database)
+====================================================
+WHY IT SAID "SQL NOT FOUND": Render has no MySQL. Your website runs on Render, but the database
+(the tables with lodges, users, bookings...) must live somewhere else and be filled once.
+We use Aiven's free MySQL (no card needed; 1 GB). Check aiven.io for the current free-plan limits.
+
+PART 1 - Create the online database (5 minutes)
+  1. Sign up at aiven.io  ->  Create service  ->  MySQL  ->  choose the FREE plan  ->  Create.
+  2. Wait until it says "Running". Open the service > Overview. Copy these 5 things:
+        Host          (something like  mysql-xxxx.a.aivencloud.com)
+        Port          (NOT 3306, e.g. 12345)
+        User          (avnadmin)
+        Password      (click the eye icon)
+        Database name (defaultdb)
+  3. If a connection is refused later: Service > "Allowed IP addresses" must allow 0.0.0.0/0.
+
+PART 2 - Fill it with your tables (once)
+  Use a free tool on your PC: MySQL Workbench, DBeaver or HeidiSQL.
+  1. New connection: Host, Port, User, Password from Part 1, and turn SSL ON ("Require").
+  2. Open the file  evangelinewebsite-hosting.sql  (from this zip), make sure the database
+     "defaultdb" is selected (or write  USE defaultdb;  on top), and Run/Execute the whole file.
+  3. Refresh: you should see 14 tables. (Command-line alternative:
+     mysql -h HOST -P PORT -u avnadmin -p --ssl-mode=REQUIRED defaultdb < evangelinewebsite-hosting.sql )
+  WARNING: that file ERASES and recreates the tables, so use it only this first time. After
+  that, your live content lives in this database. Back it up from the Aiven page before changes.
+
+PART 3 - Tell Render how to connect (this is where the database password goes)
+  Render > your web service > Environment > add:
+        DB_HOST    = the Host from Part 1
+        DB_PORT    = the Port from Part 1
+        DB_NAME    = defaultdb
+        DB_USER    = avnadmin
+        DB_PASS    = the Password from Part 1
+        DB_SSL     = 1
+        SITE_URL   = https://YOUR-SERVICE.onrender.com        (used for links inside e-mails)
+  Save: Render redeploys by itself. NEVER write the password inside your code or on GitHub.
+  Copy the updated files from this zip into your project and push them to GitHub first.
+
+PART 4 - First things to do on the live site
+  1. Open  https://YOUR-SERVICE.onrender.com/admin/admin-index.php
+     Login: admin.evangelinegrand.com / admin1234   -> go to "Account & Password" and CHANGE BOTH NOW.
+  2. Admin > Site Content: set your real phone, e-mail, address, map.
+
+HOW TO CHANGE THE DATABASE PASSWORD
+  Online (Aiven):  Aiven > your service > Users (or Overview) > avnadmin > "Reset password" / generate new.
+                   Then Render > Environment > DB_PASS = the new password > Save (it redeploys).
+                   Until you update Render, the live site cannot connect, so do both together.
+  Local (XAMPP):   phpMyAdmin > User accounts > root > Edit privileges > Change password.
+                   Then:  (a) in  xampp/phpMyAdmin/config.inc.php  put the same password in
+                   $cfg['Servers'][$i]['password']  (otherwise phpMyAdmin locks you out), and
+                   (b) set it for the website: in  admin/admin-include/db_config.php  change
+                   if ($db_pass === false) { $db_pass = ''; }   to   { $db_pass = 'YOUR_PASSWORD'; }
+                   (local use only; do not push that edit to GitHub).
+
+IMPORTANT LIMITS OF FREE HOSTING (read this)
+  * PHOTOS: Render's disk is wiped on every deploy/restart unless you attach a paid Render Disk.
+    Photos you upload from the admin panel (and guest profile pictures) would disappear while the
+    database still points to them. Your original design photos are fine (they are in GitHub).
+    Fix: (a) attach a Render Disk mounted at  /var/www/html/images/uploads , or
+         (b) later move uploads to cloud storage such as Cloudinary (a code change; ask me).
+  * Free Render web services go to sleep when unused, so the first visit can take about a minute.
+  * Aiven may power off a free database that is unused for a long time (they notify you first).
+  * "Keep me logged in", bookings and users are in the database, so they survive restarts.
+    Normal logins (without "keep me logged in") may be reset when Render restarts.

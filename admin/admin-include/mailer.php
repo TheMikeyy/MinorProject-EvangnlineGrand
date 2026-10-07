@@ -59,7 +59,7 @@ function site_url(string $path = ''): string {
     if (!$base) {
         $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
         if (!preg_match('/^[A-Za-z0-9.\-]+(:\d+)?$/', $host)) { $host = 'localhost'; }
-        $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+        $https = is_https();
         $dir   = rtrim(str_replace('\\', '/', dirname($_SERVER['SCRIPT_NAME'] ?? '/')), '/');
         $dir   = preg_replace('#/admin$#', '', $dir);
         $base  = ($https ? 'https://' : 'http://') . $host . $dir;

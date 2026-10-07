@@ -7,6 +7,9 @@ RUN docker-php-ext-install pdo_mysql mysqli
 # Allow photo uploads from the admin panel (PHP's default is only 2 MB)
 RUN { echo 'upload_max_filesize=16M'; echo 'post_max_size=20M'; } > /usr/local/etc/php/conf.d/uploads.ini
 
+# Production PHP settings: errors are NOT shown to visitors (they go to the server log)
+RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
 # Copy all your project files into the web server directory
 COPY . /var/www/html/
 

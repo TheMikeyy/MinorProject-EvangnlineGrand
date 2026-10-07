@@ -91,7 +91,7 @@ function is_adult(DateTimeImmutable $dob): bool {
 function remember_cookie_set(string $value, int $expires): void {
     if (headers_sent()) { return; }
     setcookie('eg_remember', $value, ['expires' => $expires, 'path' => '/', 'httponly' => true, 'samesite' => 'Lax',
-        'secure' => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off']);
+        'secure' => is_https()]);
 }
 function remember_issue(int $userId): void {
     $sel = bin2hex(random_bytes(9)); $val = bin2hex(random_bytes(32));

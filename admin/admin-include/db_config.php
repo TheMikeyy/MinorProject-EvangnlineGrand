@@ -13,10 +13,15 @@
 // Time zone used for "today", check-in rules and timestamps. Change it if the hotel is elsewhere (or set APP_TZ).
 date_default_timezone_set(getenv('APP_TZ') ?: 'Asia/Kolkata');
 
+// true on https:// pages, also when the hosting platform (Render...) terminates https in front of PHP
+function is_https(): bool {
+    return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
+}
+
 if (session_status() === PHP_SESSION_NONE) {
     session_set_cookie_params([
         'lifetime' => 0, 'path' => '/', 'httponly' => true, 'samesite' => 'Lax',
-        'secure'   => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+        'secure'   => is_https(),
     ]);
     session_start();
 }
@@ -29,16 +34,25 @@ define('MAX_UPLOAD_BYTES', 8 * 1024 * 1024);        // 8 MB per image
 $db_pass = getenv('DB_PASS');
 if ($db_pass === false) { $db_pass = ''; }
 
+$db_options = [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,
+];
+// Online databases (Aiven, TiDB ...) require an encrypted connection: set the environment variable DB_SSL=1.
+// For full certificate checking also set DB_SSL_CA to the path of the provider's ca.pem file.
+if (getenv('DB_SSL') || getenv('DB_SSL_CA')) {
+    $db_options[PDO::MYSQL_ATTR_SSL_CA] = getenv('DB_SSL_CA') ?: '/etc/ssl/certs/ca-certificates.crt';
+    if (!getenv('DB_SSL_CA')) { $db_options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false; }
+}
+
 try {
     $pdo = new PDO(
-        'mysql:host=' . (getenv('DB_HOST') ?: '127.0.0.1') . ';dbname=' . (getenv('DB_NAME') ?: 'evangelinewebsite') . ';charset=utf8mb4',
+        'mysql:host=' . (getenv('DB_HOST') ?: '127.0.0.1') . ';port=' . (int)(getenv('DB_PORT') ?: 3306)
+            . ';dbname=' . (getenv('DB_NAME') ?: 'evangelinewebsite') . ';charset=utf8mb4',
         getenv('DB_USER') ?: 'root',
         $db_pass,
-        [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-            PDO::ATTR_EMULATE_PREPARES   => false,
-        ]
+        $db_options
     );
 } catch (PDOException $ex) {
     error_log('Evangeline DB connection failed: ' . $ex->getMessage());
