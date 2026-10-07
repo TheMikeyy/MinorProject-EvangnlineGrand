@@ -1,4 +1,13 @@
 <?php
+/*
+ * Reusable "list / add / edit / delete / move up-down" screen.
+ * A page (admin-lodge.php, admin-team.php ...) only defines a $cfg array describing its table and
+ * form fields, then does:   require 'admin-include/crud.php';
+ *
+ * $cfg keys:  table, page, title, singular, active, intro, fields[], card (function), group, group_labels
+ * field keys: name, label, type (text|textarea|number|select|checkbox|image|icon), required, col (1-12),
+ *             help, max, rows, min, max_val, options, nullable, default, list (suggestions), preview_class
+ */
 require_once __DIR__ . '/db_config.php';
 require_admin();
 
@@ -8,16 +17,24 @@ $fields = $cfg['fields'];
 $word   = $cfg['singular'];
 
 $errors  = [];
-$posted  = null;
+$posted  = null;     // submitted values, kept to refill the form after a validation error
 $edit_id = 0;
 
+/* ================================================================== */
+/* 1) Handle form submissions                                          */
+/* ================================================================== */
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
     $action = $_POST['action'] ?? '';
     $id     = (int)($_POST['id'] ?? 0);
 
+    /* ---- delete ---- */
     if ($action === 'delete' && $id) {
         $old = row("SELECT * FROM `$table` WHERE id = ?", [$id]);
+        if ($old && !empty($cfg['can_delete']) && ($why = $cfg['can_delete']($old))) {
+            flash_set('error', $why);
+            redirect($page);
+        }
         if ($old) {
             run("DELETE FROM `$table` WHERE id = ?", [$id]);
             foreach ($fields as $f) {
@@ -28,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect($page);
     }
 
+    /* ---- move up / down (swaps the order number with the neighbour) ---- */
     if ($action === 'move' && $id) {
         $cur = row("SELECT * FROM `$table` WHERE id = ?", [$id]);
         if ($cur) {
@@ -41,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($pos !== null && isset($list[$to])) {
                 $a = $list[$pos]; $b = $list[$to];
                 $oa = (int)$a['sort_order']; $ob = (int)$b['sort_order'];
-                if ($oa === $ob) { $ob = $oa + ($to > $pos ? 1 : -1); }   
+                if ($oa === $ob) { $ob = $oa + ($to > $pos ? 1 : -1); }   // tie safety
                 run("UPDATE `$table` SET sort_order = ? WHERE id = ?", [$ob, $a['id']]);
                 run("UPDATE `$table` SET sort_order = ? WHERE id = ?", [$oa, $b['id']]);
             }
@@ -49,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         redirect($page);
     }
 
+    /* ---- save (add new or update existing) ---- */
     if ($action === 'save') {
         $existing = $id ? row("SELECT * FROM `$table` WHERE id = ?", [$id]) : null;
         if ($id && !$existing) { flash_set('error', 'That item no longer exists.'); redirect($page); }
@@ -123,12 +142,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             redirect($page);
         }
+        // validation failed: throw away images uploaded in this attempt, show the form again
         foreach ($newImages as $p) { delete_uploaded_image($p); }
         $posted  = $_POST;
         $edit_id = $id;
     }
 }
 
+/* ================================================================== */
+/* 2) Decide what to show                                              */
+/* ================================================================== */
 $view = 'list';
 $row  = null;
 if ($posted !== null) {
@@ -142,6 +165,7 @@ if ($posted !== null) {
     $view = 'form';
 }
 
+/* current value of a field, for the form */
 function crud_val(array $f, ?array $row, ?array $posted) {
     $n = $f['name'];
     if ($posted !== null) {
@@ -226,7 +250,7 @@ require __DIR__ . '/header.php';
     </div>
   <?php endforeach; ?>
 
-<?php else:  ?>
+<?php else: /* ================= form view ================= */ ?>
 
   <div class="page-head">
     <div>
@@ -280,7 +304,7 @@ require __DIR__ . '/header.php';
             </div>
           </div>
 
-        <?php else: ?>
+        <?php else: /* text / icon */ ?>
           <input type="text" class="form-control" id="<?= e($key) ?>" name="<?= e($key) ?>" value="<?= e($val) ?>" maxlength="<?= (int)($f['max'] ?? 250) ?>"
                  <?= !empty($f['list']) ? 'list="dl_' . e($n) . '"' : '' ?>>
           <?php if (!empty($f['list'])): ?>

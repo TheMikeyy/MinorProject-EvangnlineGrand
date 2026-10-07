@@ -9,10 +9,15 @@ require_admin();
 $page_title = $page_title ?? 'Admin';
 $active     = $active ?? '';
 $unread     = (int)value('SELECT COUNT(*) FROM contact_messages WHERE is_read = 0');
+$pending_bookings = (int)value("SELECT COUNT(*) FROM bookings WHERE status = 'pending'");
 
 $menu = [
     ['Overview', [
         ['dashboard',    'admin-dashboard.php',    'fa-solid fa-gauge-high',    'Dashboard'],
+    ]],
+    ['Bookings & guests', [
+        ['bookings',     'admin-bookings.php',     'fa-solid fa-calendar-check', 'Bookings'],
+        ['users',        'admin-users.php',        'fa-solid fa-users',          'Guests'],
     ]],
     ['Website content', [
         ['content',      'admin-setting.php',      'fa-solid fa-sliders',       'Site Content'],
@@ -24,6 +29,7 @@ $menu = [
     ]],
     ['Inbox & account', [
         ['messages',     'admin-messages.php',     'fa-solid fa-envelope',      'Messages'],
+        ['emails',       'admin-emails.php',       'fa-solid fa-paper-plane',   'Email Log'],
         ['password',     'admin-password.php',     'fa-solid fa-key',           'Account & Password'],
     ]],
 ];
@@ -62,6 +68,7 @@ $menu = [
         <a class="side-link <?= $active === $id ? 'active' : '' ?>" href="<?= e($href) ?>">
           <i class="<?= e($icon) ?>"></i><?= e($label) ?>
           <?php if ($id === 'messages' && $unread > 0): ?><span class="side-badge"><?= $unread ?></span><?php endif; ?>
+          <?php if ($id === 'bookings' && $pending_bookings > 0): ?><span class="side-badge"><?= $pending_bookings ?></span><?php endif; ?>
         </a>
       <?php endforeach; ?>
     <?php endforeach; ?>

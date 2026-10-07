@@ -168,4 +168,19 @@ return [
     ]],
     ],
   ],
+  'booking' => [
+    'label' => 'Bookings & Email', 'icon' => 'fa-solid fa-calendar-check', 'desc' => 'Rules for online bookings and where booking / message alerts are sent.',
+    'groups' => [
+    ['title' => 'Booking rules', 'note' => 'These appear on the booking page and in booking e-mails.', 'fields' => [
+      $f('check_in_time', 'Check-in time', 'text', '2:00 PM'),
+      $f('check_out_time', 'Check-out time', 'text', '11:00 AM'),
+      $f('max_nights', 'Maximum nights per booking', 'number', '14', 'A whole number from 1 to 90.'),
+      $f('tax_percent', 'Tax added to every booking (%)', 'number', '0', 'Enter 0 for no tax, or e.g. 12 for 12%. Shown separately on the booking.'),
+      $f('booking_policy', 'Booking & payment notes', 'textarea', 'Payment is collected at the hotel during check-in. Please carry a valid photo ID. You can cancel from My Bookings any time before your check-in date.', 'Shown to guests before they confirm a booking.'),
+    ]],
+    ['title' => 'Alerts', 'note' => 'E-mail sending is connected later: until then every e-mail is saved in Email Log.', 'fields' => [
+      $f('notify_email', 'Alert e-mail (new bookings and contact messages)', 'text', '', 'Leave empty to use the hotel e-mail from "Hotel & Contact".'),
+    ]],
+    ],
+  ],
 ];

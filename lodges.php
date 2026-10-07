@@ -481,12 +481,12 @@
 
           <div class="col-lg-2 col-md-6 col-12">
             <label for="filterCheckin" class="form-label">Check-In</label>
-            <input type="date" class="form-control shadow-none" id="filterCheckin">
+            <input type="date" class="form-control shadow-none" id="filterCheckin" min="<?= date('Y-m-d') ?>">
           </div>
 
           <div class="col-lg-2 col-md-6 col-12">
             <label for="filterCheckout" class="form-label">Check-Out</label>
-            <input type="date" class="form-control shadow-none" id="filterCheckout">
+            <input type="date" class="form-control shadow-none" id="filterCheckout" min="<?= date('Y-m-d', strtotime('+1 day')) ?>">
           </div>
 
           <div class="col-lg-2 col-md-6 col-12">
@@ -549,7 +549,7 @@
 
 <?php foreach ($lodges as $i => $l): ?>
     <!-- <?= $i + 1 ?>: <?= e($l['name']) ?> -->
-    <div class="lodge-item" data-price="<?= (int)$l['price_min'] ?>" data-adults="<?= (int)$l['max_adults'] ?>" data-children="<?= (int)$l['max_children'] ?>">
+    <div class="lodge-item" data-id="<?= (int)$l['id'] ?>" data-price="<?= (int)$l['price_min'] ?>" data-adults="<?= (int)$l['max_adults'] ?>" data-children="<?= (int)$l['max_children'] ?>">
       <div class="list-card-wrap reveal">
         <div class="list-card-flip" data-flip="<?= $i % 2 === 0 ? 'left' : 'right' ?>">
           <div class="list-card-details">
@@ -557,6 +557,7 @@
             <?php if ($l['tier'] !== ''): ?><span class="lodge-tier"><?= e($l['tier']) ?></span><?php endif; ?>
             <h5><?= e($l['name']) ?></h5>
             <div class="price-line"><?= e(price_line($l['price_min'], $l['price_max'])) ?></div>
+            <div class="stay-total fw-semibold mb-2 d-none"></div>
             <?php if (trim((string)$l['blurb']) !== ''): ?><p class="blurb"><?= e($l['blurb']) ?></p><?php endif; ?>
             <?php if (lines($l['features'])): ?>
             <div class="pill-group">
@@ -577,7 +578,7 @@
               <span class="pill"><?= e(adults_text($l['max_adults'])) ?></span>
               <?php if ((int)$l['max_children'] > 0): ?><span class="pill"><?= e(children_text($l['max_children'])) ?></span><?php endif; ?>
             </div>
-            <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
+            <a href="book.php?lodge=<?= (int)$l['id'] ?>" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3 js-book">Book Now</a>
           </div>
           <div class="list-card-image">
             <img src="<?= e(asset($l['image'])) ?>" alt="<?= e($l['name']) ?>">
@@ -654,7 +655,7 @@
   });
 })();
 
-/* ---------- Lodge filters  ---------- */
+/* ---------- Lodge filters (guests, price, and REAL availability for the chosen dates) ---------- */
 (function(){
   var form = document.getElementById('lodgeFilterForm');
   var lodgeItems = Array.prototype.slice.call(document.querySelectorAll('.lodge-item'));
@@ -663,53 +664,107 @@
   var resultsNote = document.getElementById('filterResultsNote');
   var checkinInput = document.getElementById('filterCheckin');
   var checkoutInput = document.getElementById('filterCheckout');
+  var adultsSel = document.getElementById('filterAdults'), childrenSel = document.getElementById('filterChildren');
   var resetBtn = document.getElementById('filterResetBtn');
+  var seq = 0;
 
-  function applyFilters(e){
-    if (e) e.preventDefault();
-
-    if (checkinInput.value && checkoutInput.value && checkoutInput.value <= checkinInput.value) {
-      checkoutInput.setCustomValidity('Check-out must be after check-in');
-      checkoutInput.reportValidity();
-      return;
-    }
-    checkoutInput.setCustomValidity('');
-
-    var adults = parseInt(document.getElementById('filterAdults').value, 10) || 0;
-    var children = parseInt(document.getElementById('filterChildren').value, 10) || 0;
+  function setBookLinks(){
+    var hasDates = checkinInput.value && checkoutInput.value;
+    lodgeItems.forEach(function(item){
+      var a = item.querySelector('a.js-book'); if (!a) return;
+      var q = new URLSearchParams({ lodge: item.getAttribute('data-id') });
+      if (hasDates) { q.set('checkin', checkinInput.value); q.set('checkout', checkoutInput.value); }
+      if (parseInt(adultsSel.value, 10) > 0) q.set('adults', adultsSel.value);
+      if (parseInt(childrenSel.value, 10) > 0) q.set('children', childrenSel.value);
+      a.setAttribute('href', 'book.php?' + q.toString());
+    });
+  }
+  function showNote(visible, hiddenFull){
+    resultsNote.innerHTML = 'Showing <strong>' + visible + '</strong> of <strong>' + totalCount + '</strong> lodges' +
+      (hiddenFull ? ' &middot; <span>' + hiddenFull + ' fully booked for your dates</span>' : '');
+  }
+  function render(avail){
+    var adults = parseInt(adultsSel.value, 10) || 0;
+    var children = parseInt(childrenSel.value, 10) || 0;
     var minPrice = parseFloat(document.getElementById('filterMinPrice').value);
     var maxPrice = parseFloat(document.getElementById('filterMaxPrice').value);
-    var visibleCount = 0;
+    var visibleCount = 0, fullCount = 0;
 
     lodgeItems.forEach(function(item){
       var price = parseFloat(item.getAttribute('data-price'));
       var itemAdults = parseInt(item.getAttribute('data-adults'), 10);
       var itemChildren = parseInt(item.getAttribute('data-children'), 10);
+      var info = avail && avail.lodges ? avail.lodges[item.getAttribute('data-id')] : null;
+      var tot = item.querySelector('.stay-total');
 
       var matches = true;
       if (adults > 0 && itemAdults < adults) matches = false;
       if (children > 0 && itemChildren < children) matches = false;
       if (!isNaN(minPrice) && price < minPrice) matches = false;
       if (!isNaN(maxPrice) && price > maxPrice) matches = false;
+      if (info && !info.available) { if (matches) fullCount++; matches = false; }
 
+      if (tot) {
+        if (info && info.available && matches) { tot.textContent = info.total_text + ' for ' + avail.nights + ' night' + (avail.nights > 1 ? 's' : ''); tot.classList.remove('d-none'); }
+        else { tot.classList.add('d-none'); }
+      }
       item.classList.toggle('d-none', !matches);
       if (matches) visibleCount++;
     });
-
     noResultsMsg.classList.toggle('d-none', visibleCount !== 0);
-    resultsNote.innerHTML = 'Showing <strong>' + visibleCount + '</strong> of <strong>' + totalCount + '</strong> lodges';
+    showNote(visibleCount, fullCount);
+    setBookLinks();
+  }
+
+  function applyFilters(e){
+    if (e) e.preventDefault();
+    checkoutInput.setCustomValidity('');
+    if ((checkinInput.value && !checkoutInput.value) || (!checkinInput.value && checkoutInput.value)) {
+      (checkinInput.value ? checkoutInput : checkinInput).setCustomValidity('Please choose both check-in and check-out dates');
+      (checkinInput.value ? checkoutInput : checkinInput).reportValidity();
+      (checkinInput.value ? checkoutInput : checkinInput).setCustomValidity('');
+      return;
+    }
+    if (checkinInput.value && checkoutInput.value && checkoutInput.value <= checkinInput.value) {
+      checkoutInput.setCustomValidity('Check-out must be after check-in');
+      checkoutInput.reportValidity();
+      return;
+    }
+    if (!checkinInput.value) { render(null); return; }          // no dates: filter by guests / price only
+
+    var mine = ++seq;
+    var q = new URLSearchParams({ checkin: checkinInput.value, checkout: checkoutInput.value });
+    fetch('availability.php?' + q.toString()).then(function(r){ return r.json(); }).then(function(d){
+      if (mine !== seq) return;
+      if (!d.ok) { checkoutInput.setCustomValidity(d.message); checkoutInput.reportValidity(); checkoutInput.setCustomValidity(''); return; }
+      render(d);
+    }).catch(function(){ if (mine === seq) { render(null); } });
   }
 
   function resetFilters(){
-    form.reset();
+    form.reset(); seq++;
     checkoutInput.setCustomValidity('');
-    lodgeItems.forEach(function(item){ item.classList.remove('d-none'); });
+    lodgeItems.forEach(function(item){ item.classList.remove('d-none'); var t = item.querySelector('.stay-total'); if (t) t.classList.add('d-none'); });
     noResultsMsg.classList.add('d-none');
-    resultsNote.innerHTML = 'Showing <strong>' + totalCount + '</strong> of <strong>' + totalCount + '</strong> lodges';
+    showNote(totalCount, 0); setBookLinks();
   }
 
+  checkinInput.addEventListener('change', function(){
+    if (checkinInput.value) { var d = new Date(checkinInput.value + 'T00:00:00'); d.setDate(d.getDate() + 1);
+      checkoutInput.min = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  });
   form.addEventListener('submit', applyFilters);
   resetBtn.addEventListener('click', resetFilters);
+
+  // arriving from the home page search (lodges.php?checkin=...&checkout=...&adults=2&children=0)
+  var p = new URLSearchParams(window.location.search);
+  if (p.get('checkin') && p.get('checkout')) {
+    checkinInput.value = p.get('checkin'); checkoutInput.value = p.get('checkout');
+    checkinInput.dispatchEvent(new Event('change'));
+    if (p.get('adults')) adultsSel.value = p.get('adults');
+    if (p.get('children')) childrenSel.value = p.get('children');
+    applyFilters();
+  } else { setBookLinks(); }
 })();
 </script>
 

@@ -7,6 +7,9 @@ $active     = 'dashboard';
 require 'admin-include/header.php';
 
 $counts = [
+    'pending'  => [$pending_bookings,                                                    'Pending bookings',    'fa-solid fa-calendar-check', 'admin-bookings.php?status=pending'],
+    'today'    => [(int)value("SELECT COUNT(*) FROM bookings WHERE status = 'confirmed' AND check_in = CURDATE()"), 'Check-ins today', 'fa-solid fa-door-open', 'admin-bookings.php?status=upcoming'],
+    'guests'   => [(int)value('SELECT COUNT(*) FROM users'),                             'Registered guests',   'fa-solid fa-users',        'admin-users.php'],
     'lodges'   => [(int)value('SELECT COUNT(*) FROM lodges WHERE is_active = 1'),        'Lodges live',         'fa-solid fa-bed',          'admin-lodge.php'],
     'comforts' => [(int)value('SELECT COUNT(*) FROM comforts WHERE is_active = 1'),      'Comforts live',       'fa-solid fa-mug-saucer',   'admin-comforts.php'],
     'team'     => [(int)value('SELECT COUNT(*) FROM team_members'),                      'Team members',        'fa-solid fa-people-group', 'admin-team.php'],
@@ -15,6 +18,7 @@ $counts = [
     'messages' => [$unread,                                                              'Unread messages',     'fa-solid fa-envelope',     'admin-messages.php'],
 ];
 $latest = rows('SELECT * FROM contact_messages ORDER BY created_at DESC, id DESC LIMIT 4');
+$latestBookings = rows('SELECT * FROM bookings ORDER BY created_at DESC, id DESC LIMIT 5');
 ?>
 
 <div class="page-head">
@@ -28,6 +32,22 @@ $latest = rows('SELECT * FROM contact_messages ORDER BY created_at DESC, id DESC
   <?php foreach ($counts as [$num, $label, $icon, $href]): ?>
     <a class="stat-box" href="<?= e($href) ?>"><i class="<?= e($icon) ?>"></i><div class="num"><?= $num ?></div><div class="lbl"><?= e($label) ?></div></a>
   <?php endforeach; ?>
+</div>
+
+<div class="panel-card">
+  <h2>Latest bookings</h2>
+  <div class="note">Newest booking requests first.</div>
+  <?php if (!$latestBookings): ?>
+    <p class="text-muted mb-0">No bookings yet.</p>
+  <?php else: foreach ($latestBookings as $lb): [$lbl, $lk] = booking_status_info($lb); ?>
+    <div class="d-flex justify-content-between gap-3 py-2 border-top flex-wrap align-items-center">
+      <div><a href="admin-booking.php?id=<?= (int)$lb['id'] ?>" style="color:var(--ink);font-weight:600;text-decoration:none"><?= e($lb['ref']) ?></a> &ndash; <?= e($lb['guest_name']) ?>, <?= e($lb['lodge_name']) ?>
+        <span class="text-muted small">(<?= e(date('d M', strtotime($lb['check_in']))) ?> &rarr; <?= e(date('d M Y', strtotime($lb['check_out']))) ?>)</span></div>
+      <span class="st <?= e($lk) ?>"><?= e($lbl) ?></span>
+    </div>
+  <?php endforeach; ?>
+    <a class="btn-soft mt-3" href="admin-bookings.php">Open all bookings</a>
+  <?php endif; ?>
 </div>
 
 <div class="panel-card">

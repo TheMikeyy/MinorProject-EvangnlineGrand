@@ -1,13 +1,30 @@
 <?php
+/*
+ * Évangéline Grand - shared core.
+ * Loaded by EVERY public page and EVERY admin page:
+ *   - connects to MySQL
+ *   - provides the helper functions (setting(), e(), upload_image(), csrf, login check...)
+ *
+ * Database login details: change them here, or set the environment variables
+ * DB_HOST, DB_NAME, DB_USER, DB_PASS (useful for Docker / hosting).
+ * XAMPP defaults: user "root", empty password.
+ */
+
+// Time zone used for "today", check-in rules and timestamps. Change it if the hotel is elsewhere (or set APP_TZ).
+date_default_timezone_set(getenv('APP_TZ') ?: 'Asia/Kolkata');
 
 if (session_status() === PHP_SESSION_NONE) {
+    session_set_cookie_params([
+        'lifetime' => 0, 'path' => '/', 'httponly' => true, 'samesite' => 'Lax',
+        'secure'   => !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off',
+    ]);
     session_start();
 }
 
-define('SITE_ROOT', dirname(__DIR__, 2));
+define('SITE_ROOT', dirname(__DIR__, 2));          // the folder that contains index.php
 define('UPLOAD_DIR', SITE_ROOT . '/images/uploads/');
-define('UPLOAD_URL', 'images/uploads/');
-define('MAX_UPLOAD_BYTES', 8 * 1024 * 1024);
+define('UPLOAD_URL', 'images/uploads/');            // what is stored in the database
+define('MAX_UPLOAD_BYTES', 8 * 1024 * 1024);        // 8 MB per image
 
 $db_pass = getenv('DB_PASS');
 if ($db_pass === false) { $db_pass = ''; }
@@ -32,6 +49,9 @@ try {
        . '<code>admin/admin-include/db_config.php</code>.</p>');
 }
 
+/* ------------------------------------------------------------------ */
+/* Small database helpers                                              */
+/* ------------------------------------------------------------------ */
 function run(string $sql, array $params = []): PDOStatement {
     global $pdo;
     $st = $pdo->prepare($sql);
@@ -45,13 +65,20 @@ function row(string $sql, array $params = []): ?array {
 }
 function value(string $sql, array $params = []) { return run($sql, $params)->fetchColumn(); }
 
+/* ------------------------------------------------------------------ */
+/* Output helpers                                                      */
+/* ------------------------------------------------------------------ */
 function e($v): string { return htmlspecialchars((string)$v, ENT_QUOTES, 'UTF-8'); }
 
+/* Make a stored image path safe to print in HTML / CSS (relative paths only). */
 function asset($path): string {
     $path = str_replace(['\\', '..', "'", '"', '(', ')', '<', '>', ' '], ['/', '', '', '', '', '', '', '', '%20'], (string)$path);
     return ltrim($path, '/');
 }
 
+/* ------------------------------------------------------------------ */
+/* Site settings (text + images edited from Admin > Site Content)       */
+/* ------------------------------------------------------------------ */
 function site_config(): array {
     static $cfg = null;
     if ($cfg === null) { $cfg = require __DIR__ . '/fields.php'; }
@@ -81,10 +108,13 @@ function setting(string $key, string $fallback = ''): string {
     $defaults = site_defaults();
     return array_key_exists($key, $defaults) ? (string)$defaults[$key] : $fallback;
 }
-
+/* image setting -> safe relative path */
 function img(string $key): string { return asset(setting($key)); }
 
-function inr($n): string {          
+/* ------------------------------------------------------------------ */
+/* Formatting helpers used by the public pages                         */
+/* ------------------------------------------------------------------ */
+function inr($n): string {          // 1234567 -> 12,34,567 (Indian digit grouping)
     $n = (string)(int)$n;
     if (strlen($n) <= 3) { return $n; }
     $last3 = substr($n, -3);
@@ -97,14 +127,14 @@ function price_line($min, $max): string {
     if ($max > $min) { return '₹' . inr($min) . ' – ₹' . inr($max) . ' per night'; }
     return '₹' . inr($min) . ' per night';
 }
-function stars_html($rating): string {
+function stars_html($rating): string {   // 3.5 -> 3 full stars + 1 half star
     $rating = (float)$rating;
     $full = (int)floor($rating);
     $half = ($rating - $full) >= 0.5;
     return str_repeat('<i class="bi bi-star-fill"></i>', $full) . ($half ? '<i class="bi bi-star-half"></i>' : '');
 }
 function tel_href(string $phone): string { return 'tel:' . preg_replace('/[^0-9+]/', '', $phone); }
-function lines(?string $text): array {    
+function lines(?string $text): array {    // textarea (one item per line) -> array
     $out = [];
     foreach (preg_split('/\R/', (string)$text) as $l) {
         $l = trim($l);
@@ -117,18 +147,25 @@ function social_url(string $key): string {
     return preg_match('#^https?://#i', $u) ? $u : '#';
 }
 
+/* ready-to-print attributes for a social link:  href="..."  (+ opens in a new tab when a real link is set) */
 function social_attrs(string $key): string {
     $u = social_url($key);
     return 'href="' . e($u) . '"' . ($u === '#' ? '' : ' target="_blank" rel="noopener"');
 }
-
+/* "6 Adults" / "1 Adult" / "4 Children" / "1 Child" */
 function adults_text($n): string   { $n = (int)$n; return $n . ($n === 1 ? ' Adult' : ' Adults'); }
 function children_text($n): string { $n = (int)$n; return $n . ($n === 1 ? ' Child' : ' Children'); }
 
+/* ------------------------------------------------------------------ */
+/* Flash messages (one-time notices after saving)                      */
+/* ------------------------------------------------------------------ */
 function flash_set(string $type, string $msg): void { $_SESSION['flash'][] = ['type' => $type, 'msg' => $msg]; }
 function flash_take(): array { $f = $_SESSION['flash'] ?? []; unset($_SESSION['flash']); return $f; }
 function redirect(string $url): void { header('Location: ' . $url); exit; }
 
+/* ------------------------------------------------------------------ */
+/* CSRF protection for every form that changes data                    */
+/* ------------------------------------------------------------------ */
 function csrf_token(): string {
     if (empty($_SESSION['csrf'])) { $_SESSION['csrf'] = bin2hex(random_bytes(16)); }
     return $_SESSION['csrf'];
@@ -142,11 +179,19 @@ function csrf_check(): void {
     }
 }
 
+/* ------------------------------------------------------------------ */
+/* Admin login check                                                   */
+/* ------------------------------------------------------------------ */
 function is_admin(): bool { return !empty($_SESSION['admin_logged_in']); }
 function require_admin(): void {
     if (!is_admin()) { redirect('admin-index.php'); }
 }
 
+/* ------------------------------------------------------------------ */
+/* Image uploads                                                       */
+/* ------------------------------------------------------------------ */
+/* Returns "images/uploads/xyz.jpg" on success, null when nothing was uploaded.
+   If something was uploaded but is not acceptable, $error explains why. */
 function upload_image(string $field, ?string &$error = null): ?string {
     $error = null;
     if (empty($_FILES[$field]) || !is_array($_FILES[$field]) || ($_FILES[$field]['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
@@ -174,8 +219,19 @@ function upload_image(string $field, ?string &$error = null): ?string {
     }
     return UPLOAD_URL . $name;
 }
+/* Only ever deletes files that were uploaded through the admin panel; never your original design images. */
 function delete_uploaded_image(?string $path): void {
     if (!$path || strpos($path, UPLOAD_URL) !== 0 || strpos($path, '..') !== false) { return; }
     $file = SITE_ROOT . '/' . $path;
     if (is_file($file)) { @unlink($file); }
 }
+
+/* ------------------------------------------------------------------ */
+/* Guest accounts, bookings and e-mail                                 */
+/* ------------------------------------------------------------------ */
+require_once __DIR__ . '/schema.php';
+require_once __DIR__ . '/mailer.php';
+require_once __DIR__ . '/user.php';
+require_once __DIR__ . '/booking.php';
+ensure_schema();      // creates the booking tables the first time (existing data is never touched)
+current_user();       // restores a "keep me logged in" guest before any page output starts

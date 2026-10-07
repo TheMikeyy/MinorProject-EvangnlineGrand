@@ -424,22 +424,23 @@
     <div class="col-lg-10">
       <div class="shadow p-4 availability-card">
         <span class="section-eyebrow d-block mb-1 text-center">Reserve your stay</span>
-        <form>
+        <form action="lodges.php" method="get">
           <div class="row align-items-end availability-row">
 
             <div class="field-checkin mb-3">
               <label class="form-label">Check-In</label>
-              <input type="date" class="form-control shadow-none">
+              <input type="date" name="checkin" class="form-control shadow-none" required min="<?= date('Y-m-d') ?>">
             </div>
 
             <div class="field-checkout mb-3">
               <label class="form-label">Check-Out</label>
-              <input type="date" class="form-control shadow-none">
+              <input type="date" name="checkout" class="form-control shadow-none" required min="<?= date('Y-m-d', strtotime('+1 day')) ?>">
             </div>
 
             <div class="field-children mb-3">
               <label class="form-label">Children</label>
-              <select class="form-select shadow-none">
+              <select name="children" class="form-select shadow-none">
+                <option value="0" selected>None</option>
                 <option value="1">One</option>
                 <option value="2">Two</option>
                 <option value="3">Three</option>
@@ -449,9 +450,9 @@
 
             <div class="field-adult mb-3">
               <label class="form-label">Adult</label>
-              <select class="form-select shadow-none">
+              <select name="adults" class="form-select shadow-none">
                 <option value="1">One</option>
-                <option value="2">Two</option>
+                <option value="2" selected>Two</option>
                 <option value="3">Three</option>
                 <option value="4">Four</option>
               </select>
@@ -512,7 +513,7 @@
           <?php if ((int)$l['max_children'] > 0): ?><span class="pill"><?= e(children_text($l['max_children'])) ?></span><?php endif; ?>
         </div>
         <div class="d-flex justify-content-center gap-3 mb-2">
-          <a href="#" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
+          <a href="book.php?lodge=<?= (int)$l['id'] ?>" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3">Book Now</a>
           <a href="lodges.php" class="btn btn-sm btn-outline-dark shadow-none rounded-pill px-3">More Details</a>
         </div>
       </div>

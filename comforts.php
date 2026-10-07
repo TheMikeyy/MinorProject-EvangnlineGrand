@@ -321,7 +321,7 @@
   <div class="container comfort-cta-content">
     <h2><?= e(setting('cta_title')) ?></h2>
     <p class="mb-4"><?= e(setting('cta_text')) ?></p>
-    <a href="index.php#lodges" class="btn btn-wine rounded-pill px-4 py-2"><?= e(setting('cta_button')) ?></a>
+    <a href="lodges.php" class="btn btn-wine rounded-pill px-4 py-2"><?= e(setting('cta_button')) ?></a>
   </div>
 </div>
 

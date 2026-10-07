@@ -17,23 +17,29 @@ $cfg = [
         ['name' => 'name',         'label' => 'Lodge name',                       'type' => 'text',   'required' => true, 'col' => 8, 'max' => 120],
         ['name' => 'tier',         'label' => 'Category label',                   'type' => 'text',   'col' => 4, 'max' => 60, 'list' => ['Signature', 'Premier', 'Grand Reserve'], 'help' => 'e.g. Signature, Premier, Grand Reserve'],
         ['name' => 'blurb',        'label' => 'Short description',                'type' => 'textarea', 'rows' => 3, 'max' => 400, 'help' => 'One or two sentences, shown on the lodge card.'],
-        ['name' => 'price_min',    'label' => 'Price from (₹ per night)',         'type' => 'number', 'required' => true, 'min' => 0, 'col' => 4],
-        ['name' => 'price_max',    'label' => 'Price up to (₹ per night)',        'type' => 'number', 'nullable' => true, 'min' => 0, 'col' => 4, 'help' => 'Optional. Leave empty to show a single price.'],
+        ['name' => 'price_min',    'label' => 'Price from (₹ per night)',         'type' => 'number', 'required' => true, 'min' => 0, 'col' => 4, 'help' => 'Charged for Sun–Thu nights.'],
+        ['name' => 'price_max',    'label' => 'Price up to (₹ per night)',        'type' => 'number', 'nullable' => true, 'min' => 0, 'col' => 4, 'help' => 'Charged for Fri & Sat nights. Leave empty for one price every night.'],
         ['name' => 'rating',       'label' => 'Star rating',                      'type' => 'select', 'options' => $ratings, 'nullable' => true, 'col' => 4, 'help' => 'Shown on the home page card.'],
         ['name' => 'max_adults',   'label' => 'Maximum adults',                   'type' => 'number', 'required' => true, 'min' => 1, 'max_val' => 50, 'default' => 2, 'col' => 3],
         ['name' => 'max_children', 'label' => 'Maximum children',                 'type' => 'number', 'min' => 0, 'max_val' => 50, 'default' => 0, 'col' => 3],
+        ['name' => 'units',        'label' => 'Rooms of this type',               'type' => 'number', 'required' => true, 'min' => 1, 'max_val' => 200, 'default' => 1, 'col' => 3, 'help' => 'How many guests can book this lodge for the same night.'],
         ['name' => 'features',     'label' => 'Features (one per line)',          'type' => 'textarea', 'rows' => 6, 'col' => 6, 'max' => 1500, 'help' => 'e.g. King size Bed'],
         ['name' => 'facilities',   'label' => 'Facilities (one per line)',        'type' => 'textarea', 'rows' => 6, 'col' => 6, 'max' => 1500, 'help' => 'e.g. High-speed Wi-Fi'],
         ['name' => 'image',        'label' => 'Lodge photo',                      'type' => 'image',  'required' => true],
         ['name' => 'show_on_home', 'label' => 'Show on home page ("Preview our lodges", maximum 6)', 'type' => 'checkbox'],
         ['name' => 'is_active',    'label' => 'Visible on the website',           'type' => 'checkbox', 'default' => 1, 'help' => 'Untick to hide this lodge without deleting it.'],
     ],
+    'can_delete' => function (array $r): ?string {
+        $n = (int)value("SELECT COUNT(*) FROM bookings WHERE lodge_id = ? AND status IN ('pending','confirmed') AND check_out >= CURDATE()", [(int)$r['id']]);
+        return $n ? "This lodge has $n upcoming booking(s), so it cannot be deleted. Untick \"Visible on the website\" to stop new bookings, and cancel or complete the existing ones first." : null;
+    },
     'card' => function (array $r): array {
         $b = [];
         if ($r['show_on_home']) { $b[] = ['On home page', 'good']; }
         if (!$r['is_active'])   { $b[] = ['Hidden', 'warn']; }
         if ($r['rating'] !== null) { $b[] = [rtrim(rtrim((string)$r['rating'], '0'), '.') . ' ★', '']; }
         $b[] = [$r['max_adults'] . ' adults · ' . $r['max_children'] . ' children', ''];
+        if ((int)$r['units'] > 1) { $b[] = [(int)$r['units'] . ' rooms', '']; }
         return ['title' => $r['name'], 'sub' => trim($r['tier'] . ' · ' . price_line($r['price_min'], $r['price_max']), ' ·'), 'image' => $r['image'], 'badges' => $b];
     },
 ];

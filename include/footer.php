@@ -33,7 +33,7 @@
   </div>
 </div>
  
-<h6 class="text-center footer-bottom p-3 m-0">© <?= date('Y') ?> <span class="footer-brand-font"><?= e(setting('hotel_name')) ?></span>. All rights reserved.</h6>
+<h6 class="text-center footer-bottom p-3 m-0">© <?= date('Y') ?> <span class="footer-brand-font"><?= e(setting('hotel_name')) ?></span>. All rights reserved. <span class="staff-link"><a href="admin/admin-index.php">Staff Login</a></span></h6>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
@@ -42,6 +42,7 @@
 (function(){
   var nav = document.querySelector('.navbar');
   function onScroll(){
+    if (nav.classList.contains('navbar-solid')) { return; }   // account pages keep the light navbar
     if (window.scrollY > 40) {
       nav.classList.add('navbar-scrolled');
     } else {
@@ -52,4 +53,29 @@
   onScroll();
 })();
 
+</script>
+
+<script>
+  // re-open the Signup / Login / Forgot pop-up after a mistake, and switch between pop-ups
+  document.addEventListener('DOMContentLoaded', function () {
+    <?php if (!empty($auth_open)): ?>
+    var open = document.getElementById('<?= e($auth_open) ?>');
+    if (open) { new bootstrap.Modal(open).show(); }
+    <?php endif; ?>
+    document.querySelectorAll('[data-switch-modal]').forEach(function (a) {
+      a.addEventListener('click', function (ev) {
+        ev.preventDefault();
+        var from = a.closest('.modal'), to = document.querySelector(a.getAttribute('data-switch-modal'));
+        var f = bootstrap.Modal.getInstance(from) || new bootstrap.Modal(from);
+        var go = function () {
+          if (f._isTransitioning) { setTimeout(go, 80); return; }          // wait until the pop-up has finished fading in
+          from.addEventListener('hidden.bs.modal', function () { new bootstrap.Modal(to).show(); }, { once: true });
+          f.hide();
+        };
+        go();
+      });
+    });
+    // pop-up notices fade away by themselves
+    setTimeout(function () { document.querySelectorAll('.site-toast').forEach(function (t) { t.classList.remove('show'); setTimeout(function () { t.remove(); }, 400); }); }, 6000);
+  });
 </script>

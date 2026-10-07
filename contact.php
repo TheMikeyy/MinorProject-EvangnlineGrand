@@ -4,6 +4,8 @@ require_once __DIR__ . '/admin/admin-include/db_config.php';
 /* ---- contact form: validate, save into the database, then redirect (so a refresh never re-sends) ---- */
 $contact_errors = [];
 $contact_old = ['name' => '', 'email' => '', 'subject' => '', 'message' => ''];
+$cu = current_user();
+if ($cu && $_SERVER['REQUEST_METHOD'] !== 'POST') { $contact_old['name'] = $cu['name']; $contact_old['email'] = $cu['email']; }   // logged-in guests: pre-filled
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
     csrf_check();
     foreach ($contact_old as $k => $unused) { $contact_old[$k] = trim((string)($_POST[$k] ?? '')); }
@@ -22,6 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['contact_form'])) {
         run('INSERT INTO contact_messages (name, email, subject, message) VALUES (?, ?, ?, ?)',
             [$contact_old['name'], $contact_old['email'], $contact_old['subject'], $contact_old['message']]);
         $_SESSION['last_contact_at'] = time();
+        notify_admin('New message: ' . $contact_old['subject'], "From: {$contact_old['name']} <{$contact_old['email']}>\nSubject: {$contact_old['subject']}\n\n{$contact_old['message']}\n\nOpen the inbox: " . site_url('admin/admin-messages.php'));
         flash_set('success', 'Thank you! Your message has been sent. We will get back to you soon.');
         redirect('contact.php#send');
     }
