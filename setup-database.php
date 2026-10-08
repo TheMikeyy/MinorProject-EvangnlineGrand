@@ -81,6 +81,7 @@ try {
     }
     if (trim($cur) !== '') { $stmts[] = trim($cur); }
 
+    try { $pdo->exec('SET SESSION sql_require_primary_key = 0'); } catch (Throwable $ex) { /* not allowed on this host: the file already has primary keys */ }
     $done = 0;
     foreach ($stmts as $s) {
         if (preg_match('/^(CREATE DATABASE|USE)\b/i', $s)) { continue; }      // hosted databases already exist
