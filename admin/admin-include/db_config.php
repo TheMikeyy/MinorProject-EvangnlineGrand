@@ -5,15 +5,13 @@
  *   - connects to MySQL
  *   - provides the helper functions (setting(), e(), upload_image(), csrf, login check...)
  *
- * Database login details: change them here, or set the environment variables
- * DB_HOST, DB_NAME, DB_USER, DB_PASS (useful for Docker / hosting).
- * XAMPP defaults: user "root", empty password.
+ * Database login details: Updated to use direct XAMPP defaults for easy migration.
  */
 
-// Time zone used for "today", check-in rules and timestamps. Change it if the hotel is elsewhere (or set APP_TZ).
-date_default_timezone_set(getenv('APP_TZ') ?: 'Asia/Kolkata');
+// Time zone used for "today", check-in rules and timestamps. Change it if the hotel is elsewhere.
+date_default_timezone_set('Asia/Kolkata');
 
-// true on https:// pages, also when the hosting platform (Render...) terminates https in front of PHP
+// true on https:// pages, also when the hosting platform terminates https in front of PHP
 function is_https(): bool {
     return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
 }
@@ -31,26 +29,23 @@ define('UPLOAD_DIR', SITE_ROOT . '/images/uploads/');
 define('UPLOAD_URL', 'images/uploads/');            // what is stored in the database
 define('MAX_UPLOAD_BYTES', 8 * 1024 * 1024);        // 8 MB per image
 
-$db_pass = getenv('DB_PASS');
-if ($db_pass === false) { $db_pass = ''; }
+// Hardcoded XAMPP Defaults for seamless transfer between PC1 and PC2
+$db_host = '127.0.0.1';
+$db_port = 3306;
+$db_name = 'evangelinewebsite'; // Ensure your imported database matches this exactly
+$db_user = 'root';
+$db_pass = ''; // Default XAMPP has no password
 
 $db_options = [
     PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES   => false,
 ];
-// Online databases (Aiven, TiDB ...) require an encrypted connection: set the environment variable DB_SSL=1.
-// For full certificate checking also set DB_SSL_CA to the path of the provider's ca.pem file.
-if (getenv('DB_SSL') || getenv('DB_SSL_CA')) {
-    $db_options[PDO::MYSQL_ATTR_SSL_CA] = getenv('DB_SSL_CA') ?: '/etc/ssl/certs/ca-certificates.crt';
-    if (!getenv('DB_SSL_CA')) { $db_options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false; }
-}
 
 try {
     $pdo = new PDO(
-        'mysql:host=' . (getenv('DB_HOST') ?: '127.0.0.1') . ';port=' . (int)(getenv('DB_PORT') ?: 3306)
-            . ';dbname=' . (getenv('DB_NAME') ?: 'evangelinewebsite') . ';charset=utf8mb4',
-        getenv('DB_USER') ?: 'root',
+        "mysql:host={$db_host};port={$db_port};dbname={$db_name};charset=utf8mb4",
+        $db_user,
         $db_pass,
         $db_options
     );
@@ -176,76 +171,3 @@ function children_text($n): string { $n = (int)$n; return $n . ($n === 1 ? ' Chi
 function flash_set(string $type, string $msg): void { $_SESSION['flash'][] = ['type' => $type, 'msg' => $msg]; }
 function flash_take(): array { $f = $_SESSION['flash'] ?? []; unset($_SESSION['flash']); return $f; }
 function redirect(string $url): void { header('Location: ' . $url); exit; }
-
-/* ------------------------------------------------------------------ */
-/* CSRF protection for every form that changes data                    */
-/* ------------------------------------------------------------------ */
-function csrf_token(): string {
-    if (empty($_SESSION['csrf'])) { $_SESSION['csrf'] = bin2hex(random_bytes(16)); }
-    return $_SESSION['csrf'];
-}
-function csrf_field(): string { return '<input type="hidden" name="csrf" value="' . e(csrf_token()) . '">'; }
-function csrf_check(): void {
-    $sent = $_POST['csrf'] ?? '';
-    if (!is_string($sent) || !hash_equals($_SESSION['csrf'] ?? '', $sent)) {
-        http_response_code(400);
-        exit('Your session expired or the form was invalid. Please go back, refresh the page and try again.');
-    }
-}
-
-/* ------------------------------------------------------------------ */
-/* Admin login check                                                   */
-/* ------------------------------------------------------------------ */
-function is_admin(): bool { return !empty($_SESSION['admin_logged_in']); }
-function require_admin(): void {
-    if (!is_admin()) { redirect('admin-index.php'); }
-}
-
-/* ------------------------------------------------------------------ */
-/* Image uploads                                                       */
-/* ------------------------------------------------------------------ */
-/* Returns "images/uploads/xyz.jpg" on success, null when nothing was uploaded.
-   If something was uploaded but is not acceptable, $error explains why. */
-function upload_image(string $field, ?string &$error = null): ?string {
-    $error = null;
-    if (empty($_FILES[$field]) || !is_array($_FILES[$field]) || ($_FILES[$field]['error'] ?? UPLOAD_ERR_NO_FILE) === UPLOAD_ERR_NO_FILE) {
-        return null;
-    }
-    $f = $_FILES[$field];
-    if ($f['error'] !== UPLOAD_ERR_OK) {
-        $error = ($f['error'] === UPLOAD_ERR_INI_SIZE || $f['error'] === UPLOAD_ERR_FORM_SIZE)
-            ? 'That image is too large for the server (limit ' . ini_get('upload_max_filesize') . ').'
-            : 'The upload failed (error code ' . (int)$f['error'] . '). Please try again.';
-        return null;
-    }
-    if ($f['size'] > MAX_UPLOAD_BYTES) { $error = 'Image is larger than 8 MB. Please upload a smaller one.'; return null; }
-
-    $info = @getimagesize($f['tmp_name']);
-    $types = [IMAGETYPE_JPEG => 'jpg', IMAGETYPE_PNG => 'png', IMAGETYPE_WEBP => 'webp', IMAGETYPE_GIF => 'gif'];
-    if (!$info || !isset($types[$info[2]])) { $error = 'Only JPG, PNG, WEBP or GIF images are allowed.'; return null; }
-
-    if (!is_dir(UPLOAD_DIR) && !@mkdir(UPLOAD_DIR, 0755, true)) {
-        $error = 'The folder images/uploads/ does not exist and could not be created.'; return null;
-    }
-    $name = date('Ymd-His') . '-' . bin2hex(random_bytes(4)) . '.' . $types[$info[2]];
-    if (!@move_uploaded_file($f['tmp_name'], UPLOAD_DIR . $name)) {
-        $error = 'The image could not be saved. Check that the folder images/uploads/ is writable.'; return null;
-    }
-    return UPLOAD_URL . $name;
-}
-/* Only ever deletes files that were uploaded through the admin panel; never your original design images. */
-function delete_uploaded_image(?string $path): void {
-    if (!$path || strpos($path, UPLOAD_URL) !== 0 || strpos($path, '..') !== false) { return; }
-    $file = SITE_ROOT . '/' . $path;
-    if (is_file($file)) { @unlink($file); }
-}
-
-/* ------------------------------------------------------------------ */
-/* Guest accounts, bookings and e-mail                                 */
-/* ------------------------------------------------------------------ */
-require_once __DIR__ . '/schema.php';
-require_once __DIR__ . '/mailer.php';
-require_once __DIR__ . '/user.php';
-require_once __DIR__ . '/booking.php';
-ensure_schema();      // creates the booking tables the first time (existing data is never touched)
-current_user();       // restores a "keep me logged in" guest before any page output starts
