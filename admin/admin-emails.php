@@ -6,6 +6,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
     if (($_POST['action'] ?? '') === 'clear') { run('DELETE FROM email_log'); flash_set('success', 'Email log cleared.'); }
     if (($_POST['action'] ?? '') === 'delete') { run('DELETE FROM email_log WHERE id = ?', [(int)($_POST['id'] ?? 0)]); }
+    if (($_POST['action'] ?? '') === 'test') {
+        $to = trim(setting('notify_email')) ?: trim(setting('email'));
+        send_mail($to, 'Test e-mail from your website', "This is a test e-mail from the " . setting('hotel_name') . " admin panel.\n\nIf you can read it, e-mail sending works.");
+        $last = row('SELECT status, error FROM email_log ORDER BY id DESC LIMIT 1');
+        if ($last && $last['status'] === 'sent')        { flash_set('success', 'Test e-mail sent to ' . $to . '. Check that inbox (and the spam folder).'); }
+        elseif ($last && $last['status'] === 'failed')  { flash_set('error', 'The test e-mail could not be sent: ' . $last['error']); }
+        else                                            { flash_set('error', 'E-mail sending is not connected yet, so the test e-mail was only saved in the log below.'); }
+    }
     redirect('admin-emails.php');
 }
 
@@ -21,18 +29,14 @@ require 'admin-include/header.php';
     <h1>Email Log</h1>
     <p>Every e-mail the website creates (booking received, booking confirmed, password reset, new message alerts). The latest 100 are kept.</p>
   </div>
+  <div class="d-flex gap-2 flex-wrap">
+  <form method="post" class="m-0"><?= csrf_field() ?><input type="hidden" name="action" value="test"><button class="btn btn-ink" type="submit"><i class="fa-solid fa-paper-plane me-1"></i> Send test e-mail</button></form>
   <?php if ($list): ?>
     <form method="post" class="m-0" onsubmit="return confirm('Delete all entries in the email log?');"><?= csrf_field() ?><input type="hidden" name="action" value="clear">
       <button class="btn-danger-soft" type="submit">Clear log</button></form>
   <?php endif; ?>
-</div>
-
-<?php if (MAIL_MODE === 'log'): ?>
-  <div class="panel-card">
-    <h2>E-mail sending is not connected yet</h2>
-    <div class="note mb-0">Nothing is lost: every e-mail waits here as <b>Queued</b>. When you add your e-mail service (see <code>admin/admin-include/mailer.php</code>), new e-mails will be sent automatically and marked <b>Sent</b>. Password-reset links also appear below, so guests who forget their password can be helped by you in the meantime (or use <i>Guests &rarr; Set password</i>).</div>
   </div>
-<?php endif; ?>
+</div>
 
 <?php if (!$list): ?>
   <div class="panel-card empty-state"><i class="fa-regular fa-paper-plane"></i>No e-mails yet. They appear when a guest books, registers or sends a message.</div>

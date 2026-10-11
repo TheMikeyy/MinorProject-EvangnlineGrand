@@ -6,7 +6,7 @@
 :root{
   --nav-h: 58px;
   --a-grey:  #4a4a4f;   /* dark grey: sidebar icons, secondary buttons */
-  --a-muted: #686870;   /* helper text */
+  --a-muted: #000000;   /* helper text */
   --a-line:  rgba(31,42,82,.12);
   --a-side:  #F3EFE6;   /* left panel */
 }
@@ -21,7 +21,7 @@ body.admin-body{ background-image:none !important; background-color:#fff !import
 }
 .admin-navbar .navbar-brand{ margin-right: 1rem; }
 .admin-navbar .admin-brand-label{
-  font-family:'DM Serif Display',serif; font-size:1.3rem; color:var(--ink);
+  font-family:inherit; font-weight:600; font-size:1.3rem; color:var(--ink);
   margin-left:.7rem; position:relative; top:3px; letter-spacing:.3px; white-space:nowrap;
 }
 .admin-navbar .btn{ white-space:nowrap; }
@@ -65,12 +65,12 @@ body.admin-body{ background-image:none !important; background-color:#fff !import
 
 /* ---------- page header ---------- */
 .page-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:1rem; flex-wrap:wrap; margin-bottom:1.4rem; }
-.page-head h1{ font-family:'DM Serif Display',serif; color:var(--ink); font-size:1.85rem; margin:0 0 .25rem; }
-.page-head p{ color:var(--a-muted); margin:0; max-width:680px; font-size:.95rem; }
+.page-head h1{ font-family:inherit; font-weight:600; color:var(--ink); font-size:1.85rem; margin:0 0 .25rem; }
+.page-head p{ color:var(--a-muted); margin:0; max-width:none; font-size:.95rem; }
 
 /* ---------- cards (white, thin blue-grey outline, same lift-on-hover as the website cards) ---------- */
 .panel-card{ background:#fff; border:1px solid var(--a-line); border-radius:18px; box-shadow:0 6px 24px rgba(19,20,28,.06); padding:1.5rem 1.6rem; margin-bottom:1.4rem; }
-.panel-card h2{ font-family:'DM Serif Display',serif; font-size:1.2rem; color:var(--ink); margin:0 0 .3rem; }
+.panel-card h2{ font-family:inherit; font-weight:600; font-size:1.2rem; color:var(--ink); margin:0 0 .3rem; }
 .panel-card .note{ color:var(--a-muted); font-size:.85rem; margin-bottom:1rem; }
 
 /* ---------- buttons: identical colours + hover animation to the website (.custom-bg / .btn-outline-dark) ---------- */
@@ -118,15 +118,15 @@ body.admin-body{ background-image:none !important; background-color:#fff !import
 /* ---------- item cards (lodges, comforts, team...) ---------- */
 .item-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:1.2rem; }
 .item-card{
-  background:#fff; border:1px solid var(--a-line); border-top:3px solid transparent; border-radius:18px;
+  background:#fff; border:1px solid var(--a-line); border-radius:18px;
   box-shadow:0 6px 24px rgba(19,20,28,.06); overflow:hidden; display:flex; flex-direction:column;
-  transition:transform .3s ease, box-shadow .3s ease, border-top-color .3s ease;
+  transition:transform .3s ease, box-shadow .3s ease;
 }
-.item-card:hover{ transform:translateY(-6px); box-shadow:0 20px 36px rgba(31,42,82,.16); border-top-color:var(--ink); }
+.item-card:hover{ transform:translateY(-6px); box-shadow:0 20px 36px rgba(31,42,82,.16); }
 .item-card .thumb{ height:160px; width:100%; object-fit:cover; background:#ddd; display:block; }
 .item-card .thumb.none{ display:flex; align-items:center; justify-content:center; color:#fff; opacity:1; font-size:2.2rem; background:var(--ink); }
 .item-card .body{ padding:1rem 1.1rem .6rem; flex:1; }
-.item-card h3{ font-family:'DM Serif Display',serif; font-size:1.15rem; color:var(--ink); margin:0 0 .15rem; font-weight:400; }
+.item-card h3{ font-family:inherit; font-weight:600; font-size:1.15rem; color:var(--ink); margin:0 0 .15rem; }
 .item-card .sub{ color:var(--a-muted); font-size:.85rem; margin-bottom:.5rem; }
 .item-card .badges{ display:flex; flex-wrap:wrap; gap:.3rem; }
 .badge-pill{ font-size:.7rem; padding:.2rem .6rem; border-radius:50px; background:rgba(31,42,82,.09); color:var(--ink); font-weight:600; }
@@ -143,12 +143,12 @@ body.admin-body{ background-image:none !important; background-color:#fff !import
 /* ---------- dashboard ---------- */
 .stat-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(190px,1fr)); gap:1rem; margin-bottom:1.6rem; }
 .stat-box{
-  background:#fff; border:1px solid var(--a-line); border-top:3px solid transparent; border-radius:18px; padding:1.1rem 1.2rem;
+  background:#fff; border:1px solid var(--a-line); border-radius:18px; padding:1.1rem 1.2rem;
   box-shadow:0 6px 24px rgba(19,20,28,.06); text-decoration:none; color:var(--ink); display:block;
-  transition:transform .3s ease, box-shadow .3s ease, border-top-color .3s ease;
+  transition:transform .3s ease, box-shadow .3s ease;
 }
-.stat-box:hover{ transform:translateY(-6px); box-shadow:0 20px 36px rgba(31,42,82,.16); border-top-color:var(--ink); color:var(--ink); }
-.stat-box .num{ font-family:'DM Serif Display',serif; font-size:2rem; line-height:1; }
+.stat-box:hover{ transform:translateY(-6px); box-shadow:0 20px 36px rgba(31,42,82,.16); color:var(--ink); }
+.stat-box .num{ font-family:inherit; font-weight:600; font-size:2rem; line-height:1; }
 .stat-box .lbl{ color:var(--a-muted); font-size:.85rem; margin-top:.3rem; }
 .stat-box i{ float:right; color:var(--a-grey); font-size:1.3rem; }
 
@@ -157,7 +157,7 @@ body.admin-body{ background-image:none !important; background-color:#fff !import
 .msg-card.unread{ border-left-color:var(--ink); }
 .msg-card .meta{ color:var(--a-muted); font-size:.82rem; }
 .msg-card .meta a{ color:var(--ink); }
-.msg-card h3{ font-size:1.05rem; margin:.15rem 0 .5rem; color:var(--ink); font-family:'DM Serif Display',serif; font-weight:400; }
+.msg-card h3{ font-size:1.05rem; margin:.15rem 0 .5rem; color:var(--ink); font-family:inherit; font-weight:600; }
 .msg-card .text{ white-space:pre-wrap; font-size:.94rem; color:var(--ink-black); }
 
 /* ---------- notices (blue / grey only, told apart by the icon) ---------- */
@@ -205,3 +205,6 @@ details.inline > summary{ cursor:pointer; list-style:none; display:inline-block;
 details.inline > summary::-webkit-details-marker{ display:none; }
 details.inline[open] > .box{ margin-top:.6rem; padding:.8rem; background:var(--a-side); border-radius:12px; min-width:230px; }
 pre.mail-body{ white-space:pre-wrap; font-family:inherit; font-size:.88rem; background:var(--a-side); border-radius:12px; padding:.9rem 1rem; margin:.6rem 0 0; color:var(--ink-black); }
+
+/* helper text everywhere in the panel stays black and readable */
+.admin-main .text-muted{ color:#000 !important; }

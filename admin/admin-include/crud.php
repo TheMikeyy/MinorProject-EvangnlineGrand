@@ -214,7 +214,7 @@ require __DIR__ . '/header.php';
 
   <?php foreach ($groups as $gname => $gitems): ?>
     <?php if ($gname !== '' && !empty($cfg['group_labels'][$gname])): ?>
-      <h2 class="h5 mt-4 mb-3" style="font-family:'DM Serif Display',serif;color:var(--ink)"><?= e($cfg['group_labels'][$gname]) ?></h2>
+      <h2 class="h5 mt-4 mb-3" style="font-weight:600;color:var(--ink)"><?= e($cfg['group_labels'][$gname]) ?></h2>
     <?php endif; ?>
     <div class="item-grid mb-3">
       <?php foreach ($gitems as $i => $it): $card = $cfg['card']($it); ?>

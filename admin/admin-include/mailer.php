@@ -2,29 +2,63 @@
 /*
  * E-MAIL  -  one single place.
  *
- * Every e-mail the website wants to send (booking received, booking confirmed, password reset,
- * new contact message ...) goes through send_mail(). Right now e-mail sending is NOT connected,
- * so every message is simply saved in the database and appears in  Admin > Email Log.
- * Nothing is lost, and nothing breaks.
+ * Every e-mail the website creates (booking received / confirmed, welcome, password reset, alerts for
+ * the hotel ...) goes through send_mail() and is also saved in  Admin > Email Log.
  *
- * WHEN YOU ARE READY TO SEND REAL E-MAILS:
- *   Option A (simple):   set the environment variable MAIL_MODE=mail   (uses PHP mail(); needs a mail server)
- *   Option B (SMTP):     put PHPMailer / your provider's code inside deliver_mail() below. That is the only
- *                        function you need to change. It must return [true, ''] on success or [false, 'reason'].
+ * MAIL_MODE decides what happens:
+ *   log    (default) only save in the Email Log, nothing is sent
+ *   brevo  send for real through Brevo's web API (free plan: 300 e-mails/day). Works on Render's free plan,
+ *          which blocks normal SMTP ports (25, 465, 587) - the API uses port 443.
+ *   mail   PHP mail() (needs a mail server on the machine)
  *
- * Who receives alerts about new bookings and messages?  Admin > Site Content > Bookings & Email > "Alert e-mail".
+ * Settings (set them as Render environment variables, OR copy mail-config.sample.php to mail-config.php):
+ *   MAIL_MODE=brevo   BREVO_API_KEY=...   MAIL_FROM=your-verified-sender@example.com   MAIL_FROM_NAME=optional
+ * Who receives alerts about new bookings/messages: Admin > Site Content > Bookings & Email > "Alert e-mail".
  */
-define('MAIL_MODE', getenv('MAIL_MODE') ?: 'log');   // 'log' = only save to the Email Log (default)
+function mail_cfg(string $key, string $default = ''): string {
+    static $file = null;
+    if ($file === null) { $p = __DIR__ . '/mail-config.php'; $file = is_file($p) ? (array)(require $p) : []; }
+    $v = getenv($key);
+    if ($v !== false && $v !== '') { return (string)$v; }
+    return (string)($file[$key] ?? $default);
+}
+define('MAIL_MODE', mail_cfg('MAIL_MODE', 'log'));
+
+/* tiny HTTPS POST helper: returns [http status, response text, error text] */
+function http_post_json(string $url, string $payload, array $headers): array {
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [CURLOPT_POST => true, CURLOPT_POSTFIELDS => $payload, CURLOPT_HTTPHEADER => $headers,
+            CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 8]);
+        $resp = curl_exec($ch); $err = curl_error($ch); $code = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE); curl_close($ch);
+        return [$code, (string)$resp, $err];
+    }
+    $ctx = stream_context_create(['http' => ['method' => 'POST', 'header' => implode("\r\n", $headers), 'content' => $payload, 'timeout' => 15, 'ignore_errors' => true]]);
+    $resp = @file_get_contents($url, false, $ctx);
+    $code = 0;
+    if (isset($http_response_header[0]) && preg_match('#HTTP/\S+\s+(\d+)#', $http_response_header[0], $mm)) { $code = (int)$mm[1]; }
+    return [$code, (string)$resp, $resp === false ? 'Could not connect to the e-mail service.' : ''];
+}
 
 function deliver_mail(string $to, string $subject, string $body): array {
+    $from     = preg_replace('/[\r\n]+/', '', mail_cfg('MAIL_FROM') ?: setting('email'));
+    $fromName = preg_replace('/[\r\n]+/', ' ', mail_cfg('MAIL_FROM_NAME') ?: setting('hotel_name'));
+
+    if (MAIL_MODE === 'brevo') {
+        $key = mail_cfg('BREVO_API_KEY');
+        if ($key === '')                                  { return [false, 'BREVO_API_KEY is not set.']; }
+        if (!filter_var($from, FILTER_VALIDATE_EMAIL))    { return [false, 'MAIL_FROM must be a valid sender e-mail that you verified in Brevo.']; }
+        $payload = json_encode(['sender' => ['name' => $fromName, 'email' => $from], 'to' => [['email' => $to]], 'subject' => $subject, 'textContent' => $body], JSON_UNESCAPED_UNICODE);
+        [$code, $resp, $err] = http_post_json(mail_cfg('BREVO_API_URL', 'https://api.brevo.com/v3/smtp/email'), $payload,
+            ['accept: application/json', 'content-type: application/json', 'api-key: ' . $key]);
+        if ($code >= 200 && $code < 300) { return [true, '']; }
+        return [false, $err !== '' ? $err : ('Brevo answered HTTP ' . $code . ': ' . mb_substr($resp, 0, 200))];
+    }
     if (MAIL_MODE === 'mail') {
-        $from = getenv('MAIL_FROM') ?: setting('email');
-        $from = preg_replace('/[\r\n]+/', '', $from);
-        $headers = "From: " . setting('hotel_name') . " <$from>\r\nContent-Type: text/plain; charset=UTF-8\r\nMIME-Version: 1.0";
+        $headers = "From: $fromName <$from>\r\nContent-Type: text/plain; charset=UTF-8\r\nMIME-Version: 1.0";
         $ok = @mail($to, '=?UTF-8?B?' . base64_encode($subject) . '?=', $body, $headers);
         return $ok ? [true, ''] : [false, 'PHP mail() could not send the message (no mail server configured?).'];
     }
-    // ---> PUT YOUR SMTP / PHPMailer CODE HERE <---
     return [false, 'E-mail sending is not set up yet.'];
 }
 

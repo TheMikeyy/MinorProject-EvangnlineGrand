@@ -150,7 +150,7 @@
     border: 1.5px solid rgba(31,42,82,.14);
     padding: .7rem .95rem;
     font-size: .95rem;
-    background-color: var(--cream);
+    background-color: #F1F1F3;
   }
 
   .admin-login-card .form-control:focus{
@@ -257,6 +257,10 @@
     margin-top: 1.6rem;
   }
 
+  .admin-login-card form .btn-admin-login{
+    margin-top: 1.7rem;
+  }
+
   @media screen and (max-width: 420px){
     .admin-login-card{
       padding: 2.2rem 1.6rem 1.8rem;
@@ -292,10 +296,6 @@
             <i class="fa-solid fa-eye"></i>
           </button>
         </div>
-      </div>
-
-      <div class="admin-login-options">
-        <a href="#">Forgot password?</a>
       </div>
 
       <button type="submit" class="btn btn-admin-login">Sign In</button>
