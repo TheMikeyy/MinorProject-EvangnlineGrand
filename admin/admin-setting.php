@@ -51,6 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($k === 'max_nights') { if ((float)$v < 1 || (float)$v > 90 || floor((float)$v) != (float)$v) { $errors[] = "$label must be a whole number from 1 to 90."; continue; } }
                 if ($k === 'tax_percent' && (float)$v > 100) { $errors[] = "$label cannot be more than 100."; continue; }
                 $v = (string)(float)$v === (string)(int)(float)$v ? (string)(int)(float)$v : (string)(float)$v;
+            } elseif ($k === 'upi_id') {
+                if ($v !== '' && !preg_match('/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z][a-zA-Z0-9]{1,63}$/', $v)) { $errors[] = "$label must look like name@bank, for example hotelname@okhdfcbank."; continue; }
             } elseif ($k === 'notify_email') {
                 if ($v !== '' && !filter_var($v, FILTER_VALIDATE_EMAIL)) { $errors[] = "$label must be a valid e-mail address."; continue; }
             } elseif ($type === 'url') {

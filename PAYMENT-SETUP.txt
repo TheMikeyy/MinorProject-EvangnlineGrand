@@ -1,0 +1,15 @@
+ONLINE PAYMENT (UPI QR) + ARRIVAL/DEPARTURE TIMES
+=================================================
+1. Copy these files over your project (same paths). Open the site once: the database upgrades itself
+   (adds time + payment columns, keeps all data). On the live site this needs a normal page visit after the deploy.
+2. Admin > Site Content > "Bookings & Email" tab > "Online payment (UPI QR)":
+   enter your UPI ID (like hotelname@okhdfcbank) and the name to show. Save.
+   (Empty UPI ID = online payment is switched off; guests pay at the hotel.)
+3. Guest flow: books -> My Bookings shows "Pay online" -> QR code with the exact amount and booking reference ->
+   guest pays in any UPI app -> types the UPI transaction ID (UTR) -> status "Payment being verified".
+4. YOU: Admin > Bookings > open the booking > check your UPI app/bank for the money (note = booking reference)
+   > press "Mark payment received". The guest gets an e-mail and sees "Paid".
+IMPORTANT: this is a QR + manual confirmation system. UPI does not tell the website automatically when money
+arrives, so you confirm each payment yourself. Automatic confirmation needs a payment gateway (e.g. Razorpay) with
+your business KYC; it can be added later in the same place.
+Refunds, if needed, are done by you in your bank/UPI app.

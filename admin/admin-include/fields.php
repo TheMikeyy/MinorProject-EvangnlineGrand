@@ -176,7 +176,11 @@ return [
       $f('check_out_time', 'Check-out time', 'text', '11:00 AM'),
       $f('max_nights', 'Maximum nights per booking', 'number', '14', 'A whole number from 1 to 90.'),
       $f('tax_percent', 'Tax added to every booking (%)', 'number', '0', 'Enter 0 for no tax, or e.g. 12 for 12%. Shown separately on the booking.'),
-      $f('booking_policy', 'Booking & payment notes', 'textarea', 'Payment is collected at the hotel during check-in. Please carry a valid photo ID. You can cancel from My Bookings any time before your check-in date.', 'Shown to guests before they confirm a booking.'),
+      $f('booking_policy', 'Booking & payment notes', 'textarea', 'You can pay online with UPI (scan the QR code in My Bookings after sending your request) or pay at the hotel during check-in. Please carry a valid photo ID. You can cancel from My Bookings any time before your check-in date.', 'Shown to guests before they confirm a booking.'),
+    ]],
+    ['title' => 'Online payment (UPI QR)', 'note' => 'Guests see a QR code to pay with any UPI app (Google Pay, PhonePe, Paytm, BHIM). Leave the UPI ID empty to switch online payment off: guests then pay at the hotel.', 'fields' => [
+      $f('upi_id', 'UPI ID that receives the money', 'text', '', 'Your UPI ID / VPA, for example hotelname@okhdfcbank. You confirm each payment yourself in the Bookings screen.'),
+      $f('upi_name', 'Name shown to the payer', 'text', '', 'Usually the hotel or account holder name. Empty = hotel name.'),
     ]],
     ['title' => 'Alerts', 'note' => 'E-mail sending is connected later: until then every e-mail is saved in Email Log.', 'fields' => [
       $f('notify_email', 'Alert e-mail (new bookings and contact messages)', 'text', '', 'Leave empty to use the hotel e-mail from "Hotel & Contact".'),

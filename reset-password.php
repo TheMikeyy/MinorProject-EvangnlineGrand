@@ -30,7 +30,7 @@ if ($reset && $_SERVER['REQUEST_METHOD'] === 'POST') {
   <title>Reset Password | <?= e(setting('hotel_name')) ?></title>
   <?php require('include/links.php') ?>
 </head>
-<body>
+<body class="page-plain">
 
 <?php require('include/navbar.php') ?>
 

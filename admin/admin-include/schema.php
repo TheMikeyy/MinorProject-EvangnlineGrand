@@ -7,7 +7,7 @@
  * (lodges.units). Existing data (lodges, messages, your edits...) is never touched.
  * (evangelinewebsite.sql contains the same structure for a brand-new database.)
  */
-const SCHEMA_VERSION = 3;
+const SCHEMA_VERSION = 4;
 
 function schema_statements(): array {
     $tail = 'ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci';
@@ -83,6 +83,8 @@ function schema_statements(): array {
   `tax_amount`       INT(11) NOT NULL DEFAULT 0,
   `total`            INT(11) NOT NULL DEFAULT 0,
   `special_requests` TEXT,
+  `check_in_time`    VARCHAR(5)  NOT NULL DEFAULT '',
+  `check_out_time`   VARCHAR(5)  NOT NULL DEFAULT '',
   `status`           VARCHAR(12) NOT NULL DEFAULT 'pending',
   `source`           VARCHAR(10) NOT NULL DEFAULT 'online',
   `guest_name`       VARCHAR(100) NOT NULL DEFAULT '',
@@ -90,6 +92,9 @@ function schema_statements(): array {
   `guest_phone`      VARCHAR(25)  NOT NULL DEFAULT '',
   `admin_note`       TEXT,
   `cancelled_by`     VARCHAR(10) DEFAULT NULL,
+  `payment_status`   VARCHAR(10) NOT NULL DEFAULT 'unpaid',
+  `payment_ref`      VARCHAR(40) NOT NULL DEFAULT '',
+  `paid_at`          DATETIME DEFAULT NULL,
   `created_at`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`       DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -129,6 +134,11 @@ function ensure_schema(): void {
         if (!$has) {
             try { $pdo->exec("ALTER TABLE `lodges` ADD COLUMN `units` INT(11) NOT NULL DEFAULT 1 AFTER `max_children`"); }
             catch (Throwable $ex) { /* another request added it at the same moment */ }
+        }
+        foreach (['check_in_time' => "VARCHAR(5) NOT NULL DEFAULT ''", 'check_out_time' => "VARCHAR(5) NOT NULL DEFAULT ''",
+                  'payment_status' => "VARCHAR(10) NOT NULL DEFAULT 'unpaid'", 'payment_ref' => "VARCHAR(40) NOT NULL DEFAULT ''", 'paid_at' => 'DATETIME DEFAULT NULL'] as $col => $def) {
+            $has = (int)value("SELECT COUNT(*) FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'bookings' AND COLUMN_NAME = ?", [$col]);
+            if (!$has) { try { $pdo->exec("ALTER TABLE `bookings` ADD COLUMN `$col` $def"); } catch (Throwable $ex) { /* added by another request */ } }
         }
         run("INSERT INTO site_settings (setting_key, setting_value) VALUES ('schema_version', ?)
              ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value)", [(string)SCHEMA_VERSION]);

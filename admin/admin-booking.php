@@ -7,7 +7,8 @@ $isNew = isset($_GET['new']) || (($_POST['action'] ?? '') === 'create');
 $f = ['lodge_id' => (int)($_POST['lodge_id'] ?? 0), 'check_in' => trim((string)($_POST['check_in'] ?? '')), 'check_out' => trim((string)($_POST['check_out'] ?? '')),
       'adults' => max(1, (int)($_POST['adults'] ?? 2)), 'children' => max(0, (int)($_POST['children'] ?? 0)), 'guest_name' => trim((string)($_POST['guest_name'] ?? '')),
       'guest_phone' => trim((string)($_POST['guest_phone'] ?? '')), 'guest_email' => trim((string)($_POST['guest_email'] ?? '')),
-      'requests' => trim((string)($_POST['requests'] ?? '')), 'status' => ($_POST['status'] ?? 'confirmed') === 'pending' ? 'pending' : 'confirmed', 'admin_note' => trim((string)($_POST['admin_note'] ?? ''))];
+      'requests' => trim((string)($_POST['requests'] ?? '')), 'status' => ($_POST['status'] ?? 'confirmed') === 'pending' ? 'pending' : 'confirmed', 'admin_note' => trim((string)($_POST['admin_note'] ?? '')),
+      'check_in_time' => norm_time($_POST['check_in_time'] ?? '', 'check_in_time'), 'check_out_time' => norm_time($_POST['check_out_time'] ?? '', 'check_out_time')];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     csrf_check();
@@ -33,6 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($action === 'note') {
             run('UPDATE bookings SET admin_note = ?, updated_at = NOW() WHERE id = ?', [mb_substr($note, 0, 1000), $id]);
             flash_set('success', 'Note saved.');
+        } elseif ($action === 'paid' || $action === 'unpaid') {
+            $err = set_payment_status($id, $action);
+            flash_set($err ? 'error' : 'success', $err ?: ($action === 'paid' ? 'Payment marked as received.' : 'Payment marked as not paid.'));
         } elseif (in_array($action, ['confirmed', 'declined', 'cancelled', 'completed'], true)) {
             $err = change_booking_status($id, $action, 'admin', $note);
             flash_set($err ? 'error' : 'success', $err ?: 'Booking updated to ' . $action . '.');
@@ -70,6 +74,8 @@ require 'admin-include/header.php';
       <div class="col-md-3"><label class="form-label">Check-out <span class="req">*</span></label><input type="date" class="form-control" name="check_out" required min="<?= e(date('Y-m-d')) ?>" value="<?= e($f['check_out']) ?>"></div>
       <div class="col-md-3"><label class="form-label">Adults</label><input type="number" class="form-control" name="adults" min="1" max="50" value="<?= (int)$f['adults'] ?>"></div>
       <div class="col-md-3"><label class="form-label">Children</label><input type="number" class="form-control" name="children" min="0" max="50" value="<?= (int)$f['children'] ?>"></div>
+      <div class="col-md-3"><label class="form-label">Check-in time</label><select class="form-select" name="check_in_time"><?= time_options($f['check_in_time']) ?></select></div>
+      <div class="col-md-3"><label class="form-label">Check-out time</label><select class="form-select" name="check_out_time"><?= time_options($f['check_out_time']) ?></select></div>
       <div class="col-md-3"><label class="form-label">Status</label>
         <select class="form-select" name="status"><option value="confirmed" <?= $f['status'] === 'confirmed' ? 'selected' : '' ?>>Confirmed</option><option value="pending" <?= $f['status'] === 'pending' ? 'selected' : '' ?>>Pending</option></select></div>
       <div class="col-12"><hr class="my-1"></div>
@@ -101,8 +107,8 @@ require 'admin-include/header.php';
     <div class="panel-card">
       <h2>Stay</h2><div class="mb-2"></div>
       <div class="kv"><span>Lodge</span><span><?= e($b['lodge_name']) ?></span></div>
-      <div class="kv"><span>Check-in</span><span><?= e(fmt_date($b['check_in'])) ?></span></div>
-      <div class="kv"><span>Check-out</span><span><?= e(fmt_date($b['check_out'])) ?></span></div>
+      <div class="kv"><span>Check-in</span><span><?= e(fmt_date($b['check_in'])) ?><?= ($b['check_in_time'] ?? '') !== '' ? ', ' . e(fmt_time($b['check_in_time'])) : '' ?></span></div>
+      <div class="kv"><span>Check-out</span><span><?= e(fmt_date($b['check_out'])) ?><?= ($b['check_out_time'] ?? '') !== '' ? ', ' . e(fmt_time($b['check_out_time'])) : '' ?></span></div>
       <div class="kv"><span>Nights</span><span><?= (int)$b['nights'] ?></span></div>
       <div class="kv"><span>Guests</span><span><?= e(adults_text($b['adults'])) ?>, <?= e(children_text($b['children'])) ?></span></div>
     </div>
@@ -111,7 +117,19 @@ require 'admin-include/header.php';
       <?php if ($b['std_nights']): ?><div class="kv"><span><?= (int)$b['std_nights'] ?> night(s) × ₹<?= e(inr($b['std_rate'])) ?></span><span>₹<?= e(inr($b['std_nights'] * $b['std_rate'])) ?></span></div><?php endif; ?>
       <?php if ($b['peak_nights']): ?><div class="kv"><span><?= (int)$b['peak_nights'] ?> weekend night(s) × ₹<?= e(inr($b['peak_rate'])) ?></span><span>₹<?= e(inr($b['peak_nights'] * $b['peak_rate'])) ?></span></div><?php endif; ?>
       <?php if ($b['tax_amount'] > 0): ?><div class="kv"><span>Tax (<?= e(rtrim(rtrim((string)$b['tax_percent'], '0'), '.')) ?>%)</span><span>₹<?= e(inr($b['tax_amount'])) ?></span></div><?php endif; ?>
-      <div class="kv total"><span>Total (pay at hotel)</span><span>₹<?= e(inr($b['total'])) ?></span></div>
+      <div class="kv total"><span>Total</span><span>₹<?= e(inr($b['total'])) ?></span></div>
+    </div>
+    <div class="panel-card">
+      <h2>Payment</h2><div class="mb-2"></div>
+      <?php [$plabel, $pkey] = payment_info($b); ?>
+      <div class="kv"><span>Status</span><span><span class="st <?= $pkey === 'paid' ? 'confirmed' : ($pkey === 'verifying' ? 'pending' : 'completed') ?>"><?= e($plabel) ?></span></span></div>
+      <div class="kv"><span>UPI transaction ID</span><span><?= $b['payment_ref'] !== '' ? e($b['payment_ref']) : '—' ?></span></div>
+      <div class="kv"><span>Paid on</span><span><?= !empty($b['paid_at']) ? e(date('d M Y, H:i', strtotime($b['paid_at']))) : '—' ?></span></div>
+      <form method="post" class="mt-3 d-flex gap-2 flex-wrap"><?= csrf_field() ?><input type="hidden" name="id" value="<?= (int)$b['id'] ?>">
+        <?php if ($pkey !== 'paid'): ?><button class="btn btn-ink" type="submit" name="action" value="paid">Mark payment received</button>
+        <?php else: ?><button class="btn-danger-soft" type="submit" name="action" value="unpaid" onclick="return confirm('Mark this booking as NOT paid?');">Mark as not paid</button><?php endif; ?>
+      </form>
+      <div class="form-text mt-2">Check your UPI app or bank for the payment (note: <?= e($b['ref']) ?>) before pressing the button.</div>
     </div>
   </div>
 

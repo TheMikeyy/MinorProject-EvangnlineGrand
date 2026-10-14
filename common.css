@@ -430,7 +430,7 @@ input[type="number"] {
 .booking-item .b-ref{ font-size: .8rem; letter-spacing: 1.4px; color: var(--muted); text-transform: uppercase; }
 .booking-item h5{ font-family: "Lora", serif; color: var(--ink); margin: .15rem 0 .5rem; }
 .booking-item .b-meta{ color: var(--charcoal); font-size: .95rem; }
-.booking-item .b-meta i{ color: var(--ink); width: 1.2rem; }
+.booking-item .b-meta i{ color: var(--ink); display: inline-block; width: 1.3rem; margin-right: .5rem; text-align: center; }
 .booking-item .b-side{ text-align: right; display: flex; flex-direction: column; align-items: flex-end; justify-content: space-between; gap: .8rem; }
 .booking-item .b-total{ font-family: "Lora", serif; font-size: 1.4rem; color: var(--ink); }
 .booking-item.is-new{ outline: 2px solid var(--ink); outline-offset: 3px; }
@@ -500,4 +500,26 @@ input[type="number"] {
   .acct-side form{ flex:0 0 auto; }
   .acct-link{ margin:0; flex:0 0 auto; width:auto; }
   .acct-main{ padding:1.4rem 1rem 3rem; }
+}
+
+/* pages with a plain tan background (no dotted pattern) */
+.page-plain{ background-image: none !important; }
+.qr-box{ background:#fff; border-radius:14px; padding:14px; display:inline-block; border:1px solid rgba(31,42,82,.15); }
+.qr-box svg{ display:block; width:250px; height:250px; }
+
+
+/* =====================================================================
+   BOOKING PAGE: BACKGROUND IMAGE (the tan area behind the two white cards)
+   ---------------------------------------------------------------------
+   TO ADD YOUR IMAGE: put the picture in the  images  folder (for example images/booking/bg.jpg)
+   and type its path in the line marked  <<< TYPE HERE.  Keep  none  for the plain tan background.
+   ===================================================================== */
+.book-bg{
+  --book-bg-image: none;                              /* <<< TYPE HERE, e.g.  url('images/booking/bg.jpg')  */
+  background-color: var(--cream);
+  background-image: var(--book-bg-image);
+  background-size: cover;                             /* fills the whole area */
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;                       /* image stays still while scrolling; remove this line to scroll with the page */
 }

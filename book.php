@@ -9,6 +9,8 @@ $errors = [];
 $form = [
     'checkin'  => (string)($_REQUEST['checkin'] ?? ''),
     'checkout' => (string)($_REQUEST['checkout'] ?? ''),
+    'cin_time' => norm_time($_REQUEST['checkin_time'] ?? '', 'check_in_time'),
+    'cout_time' => norm_time($_REQUEST['checkout_time'] ?? '', 'check_out_time'),
     'adults'   => (int)($_REQUEST['adults'] ?? 2),
     'children' => (int)($_REQUEST['children'] ?? 0),
     'requests' => trim((string)($_POST['requests'] ?? '')),
@@ -23,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (mb_strlen($form['requests']) > 500) { $errors[] = 'Special requests can be at most 500 characters.'; }
     if (!$errors) {
         $res = create_booking([
-            'lodge_id' => $lodge['id'], 'check_in' => $form['checkin'], 'check_out' => $form['checkout'],
+            'lodge_id' => $lodge['id'], 'check_in' => $form['checkin'], 'check_out' => $form['checkout'], 'check_in_time' => $form['cin_time'], 'check_out_time' => $form['cout_time'],
             'adults' => $form['adults'], 'children' => $form['children'], 'requests' => $form['requests'],
             'user_id' => $user['id'], 'guest_name' => $user['name'], 'guest_email' => $user['email'], 'guest_phone' => $user['phone'],
             'source' => 'online', 'status' => 'pending',
@@ -50,7 +52,7 @@ $today = date('Y-m-d');
   <title>Book <?= e($lodge['name']) ?> | <?= e(setting('hotel_name')) ?></title>
   <?php require('include/links.php') ?>
 </head>
-<body>
+<body class="page-plain">
 
 <?php require('include/navbar.php') ?>
 
@@ -61,7 +63,8 @@ $today = date('Y-m-d');
   </div>
 </div>
 
-<div class="container my-5">
+<section class="book-bg">
+<div class="container py-5">
   <div class="row g-4">
 
     <!-- the lodge -->
@@ -97,12 +100,14 @@ $today = date('Y-m-d');
           <div class="col-sm-6">
             <label class="form-label" for="checkin">Check-in</label>
             <input type="date" class="form-control shadow-none" id="checkin" name="checkin" required min="<?= e($today) ?>" value="<?= e($form['checkin']) ?>">
-            <div class="form-text">From <?= e(setting('check_in_time')) ?></div>
+            <select name="checkin_time" class="form-select shadow-none mt-2" aria-label="Check-in time"><?= time_options($form['cin_time']) ?></select>
+            <div class="form-text">Your arrival time (hotel check-in is from <?= e(setting('check_in_time')) ?>)</div>
           </div>
           <div class="col-sm-6">
             <label class="form-label" for="checkout">Check-out</label>
             <input type="date" class="form-control shadow-none" id="checkout" name="checkout" required min="<?= e($today) ?>" value="<?= e($form['checkout']) ?>">
-            <div class="form-text">By <?= e(setting('check_out_time')) ?></div>
+            <select name="checkout_time" class="form-select shadow-none mt-2" aria-label="Check-out time"><?= time_options($form['cout_time']) ?></select>
+            <div class="form-text">Your departure time (hotel check-out is by <?= e(setting('check_out_time')) ?>)</div>
           </div>
           <div class="col-sm-6">
             <label class="form-label" for="adults">Adults</label>
@@ -136,11 +141,12 @@ $today = date('Y-m-d');
         <p class="small text-secondary"><?= nl2br(e(setting('booking_policy'))) ?></p>
 
         <button type="submit" class="btn btn-lg text-white custom-bg shadow-none rounded-pill px-5 w-100" id="submitBtn" disabled>Request booking</button>
-        <div class="form-text text-center mt-2">Your booking is confirmed once the hotel accepts it. You will not be charged online.</div>
+        <div class="form-text text-center mt-2">You pay nothing now. Once the hotel accepts your request, you can pay online with a UPI QR code (in My Bookings) or pay at the hotel.</div>
       </form>
     </div>
   </div>
 </div>
+</section>
 
 <?php require('include/footer.php') ?>
 

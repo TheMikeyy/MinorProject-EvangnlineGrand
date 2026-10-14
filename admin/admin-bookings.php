@@ -82,7 +82,7 @@ require 'admin-include/header.php';
         <td><?= e(date('d M Y', strtotime($b['check_in']))) ?> → <?= e(date('d M Y', strtotime($b['check_out']))) ?><div class="sub"><?= (int)$b['nights'] ?> night<?= $b['nights'] > 1 ? 's' : '' ?></div></td>
         <td><?= (int)$b['adults'] ?>A<?= (int)$b['children'] > 0 ? ' + ' . (int)$b['children'] . 'C' : '' ?></td>
         <td>₹<?= e(inr($b['total'])) ?></td>
-        <td><span class="st <?= e($key) ?>"><?= e($label) ?></span></td>
+        <td><span class="st <?= e($key) ?>"><?= e($label) ?></span><?php if (in_array($b['status'], ['pending', 'confirmed'], true)): ?><div class="sub mt-1"><?= e(payment_info($b)[0]) ?></div><?php endif; ?></td>
         <td>
           <div class="actions">
             <?php if ($b['status'] === 'pending'): ?>

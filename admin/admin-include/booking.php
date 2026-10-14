@@ -113,11 +113,12 @@ function create_booking(array $in): array {
         $ref = new_booking_ref();
         run('INSERT INTO bookings (ref, user_id, lodge_id, lodge_name, check_in, check_out, nights, adults, children,
                  std_nights, peak_nights, std_rate, peak_rate, subtotal, tax_percent, tax_amount, total,
-                 special_requests, status, source, guest_name, guest_email, guest_phone, admin_note)
-             VALUES (?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?)',
+                 special_requests, check_in_time, check_out_time, status, source, guest_name, guest_email, guest_phone, admin_note)
+             VALUES (?,?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?, ?,?,?,?,?,?,?,?,?)',
             [$ref, $in['user_id'] ?? null, $lodge['id'], $lodge['name'], $checkin->format('Y-m-d'), $checkout->format('Y-m-d'), $c['nights'], $adults, $children,
              $c['std_nights'], $c['peak_nights'], $c['std_rate'], $c['peak_rate'], $c['subtotal'], $c['tax_percent'], $c['tax'], $c['total'],
-             mb_substr(trim((string)($in['requests'] ?? '')), 0, 500), $status, ($in['source'] ?? 'online') === 'admin' ? 'admin' : 'online',
+             mb_substr(trim((string)($in['requests'] ?? '')), 0, 500),
+             norm_time($in['check_in_time'] ?? '', 'check_in_time'), norm_time($in['check_out_time'] ?? '', 'check_out_time'), $status, ($in['source'] ?? 'online') === 'admin' ? 'admin' : 'online',
              mb_substr(trim((string)($in['guest_name'] ?? '')), 0, 100), mb_substr(trim((string)($in['guest_email'] ?? '')), 0, 150),
              mb_substr(trim((string)($in['guest_phone'] ?? '')), 0, 25), mb_substr(trim((string)($in['admin_note'] ?? '')), 0, 1000)]);
         $id = (int)$pdo->lastInsertId();
@@ -161,9 +162,9 @@ function change_booking_status(int $id, string $new, string $by, string $note = 
 
 /* ---------- e-mails (saved in Admin > Email Log until sending is connected) ---------- */
 function booking_summary_text(array $b): string {
-    return "Booking reference: {$b['ref']}\nLodge: {$b['lodge_name']}\nCheck-in: " . fmt_date($b['check_in']) . ' (from ' . setting('check_in_time') . ")\n"
-         . 'Check-out: ' . fmt_date($b['check_out']) . ' (by ' . setting('check_out_time') . ")\nNights: {$b['nights']}\n"
-         . "Guests: {$b['adults']} adult(s), {$b['children']} child(ren)\nTotal: ₹" . inr($b['total']) . ($b['tax_amount'] > 0 ? ' (includes ₹' . inr($b['tax_amount']) . ' tax)' : '') . "\nPayment: at the hotel\n";
+    return "Booking reference: {$b['ref']}\nLodge: {$b['lodge_name']}\nCheck-in: " . fmt_date($b['check_in']) . ' (from ' . (($b['check_in_time'] ?? '') !== '' ? fmt_time($b['check_in_time']) : setting('check_in_time')) . ")\n"
+         . 'Check-out: ' . fmt_date($b['check_out']) . ' (by ' . (($b['check_out_time'] ?? '') !== '' ? fmt_time($b['check_out_time']) : setting('check_out_time')) . ")\nNights: {$b['nights']}\n"
+         . "Guests: {$b['adults']} adult(s), {$b['children']} child(ren)\nTotal: ₹" . inr($b['total']) . ($b['tax_amount'] > 0 ? ' (includes ₹' . inr($b['tax_amount']) . ' tax)' : '') . "\nPayment: online by UPI QR or at the hotel\n";
 }
 function email_booking_created(array $b): void {
     $hotel = setting('hotel_name');
@@ -190,4 +191,49 @@ function email_booking_changed(array $b, string $by): void {
     if ($s === 'cancelled' && $by === 'guest') {
         notify_admin("Booking {$b['ref']} cancelled by guest", "The guest cancelled this booking.\n\n" . booking_summary_text($b) . "\nGuest: {$b['guest_name']} ({$b['guest_phone']})");
     }
+}
+
+
+/* ---------- arrival / departure times ---------- */
+function default_time(string $settingKey, string $fallback): string { $t = strtotime(setting($settingKey)); return $t ? date('H:i', $t) : $fallback; }
+function norm_time($v, string $which): string {
+    $v = trim((string)$v);
+    if (preg_match('/^([01]\d|2[0-3]):[0-5]\d$/', $v)) { return $v; }
+    return $which === 'check_in_time' ? default_time('check_in_time', '14:00') : default_time('check_out_time', '11:00');
+}
+function fmt_time(string $hhmm): string { return $hhmm === '' ? '' : date('g:i A', strtotime($hhmm)); }
+function time_options(string $selected): string {       // <option> list in 30-minute steps
+    $out = '';
+    for ($m = 0; $m < 1440; $m += 30) { $v = sprintf('%02d:%02d', intdiv($m, 60), $m % 60); $out .= '<option value="' . $v . '"' . ($v === $selected ? ' selected' : '') . '>' . date('g:i A', strtotime($v)) . '</option>'; }
+    return $out;
+}
+
+/* ---------- online payment by UPI QR (the guest pays, the hotel confirms) ---------- */
+function upi_enabled(): bool { return (bool)preg_match('/^[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z][a-zA-Z0-9]{1,63}$/', trim(setting('upi_id'))); }
+function upi_link(array $b): string {
+    return 'upi://pay?' . http_build_query(['pa' => trim(setting('upi_id')), 'pn' => trim(setting('upi_name')) ?: setting('hotel_name'),
+        'am' => number_format((int)$b['total'], 2, '.', ''), 'cu' => 'INR', 'tn' => $b['ref']], '', '&', PHP_QUERY_RFC3986);
+}
+function guest_can_pay(array $b): bool { return upi_enabled() && in_array($b['status'], BOOKING_ACTIVE, true) && ($b['payment_status'] ?? 'unpaid') !== 'paid' && $b['check_out'] >= date('Y-m-d'); }
+function payment_info(array $b): array {      // [label, key]
+    $s = $b['payment_status'] ?? 'unpaid';
+    return $s === 'paid' ? ['Paid', 'paid'] : ($s === 'verifying' ? ['Payment being verified', 'verifying'] : ['Not paid yet', 'unpaid']);
+}
+function submit_payment_ref(int $id, int $userId, string $ref): ?string {
+    $b = row('SELECT * FROM bookings WHERE id = ? AND user_id = ?', [$id, $userId]);
+    if (!$b || !guest_can_pay($b)) { return 'This booking cannot be paid online any more.'; }
+    run("UPDATE bookings SET payment_status = 'verifying', payment_ref = ?, updated_at = NOW() WHERE id = ?", [$ref, $id]);
+    notify_admin("Payment reported for booking {$b['ref']}", "The guest says the payment of ₹" . inr($b['total']) . " was made.\n\nUPI transaction ID: $ref\nGuest: {$b['guest_name']} ({$b['guest_phone']})\n\nCheck your UPI app / bank, then press 'Mark payment received':\n" . site_url('admin/admin-booking.php?id=' . $b['id']));
+    return null;
+}
+function set_payment_status(int $id, string $new): ?string {
+    $b = row('SELECT * FROM bookings WHERE id = ?', [$id]);
+    if (!$b) { return 'Booking not found.'; }
+    if ($new === 'paid') {
+        run("UPDATE bookings SET payment_status = 'paid', paid_at = NOW(), updated_at = NOW() WHERE id = ?", [$id]);
+        if ($b['guest_email'] !== '') { send_mail($b['guest_email'], "Payment received - {$b['ref']}", "Dear {$b['guest_name']},\n\nWe have received your payment of ₹" . inr($b['total']) . " for booking {$b['ref']}. Thank you!\n\n" . booking_summary_text($b) . "\nWarm regards,\n" . setting('hotel_name')); }
+    } elseif ($new === 'unpaid') {
+        run("UPDATE bookings SET payment_status = 'unpaid', payment_ref = '', paid_at = NULL, updated_at = NOW() WHERE id = ?", [$id]);
+    } else { return 'Invalid payment status.'; }
+    return null;
 }

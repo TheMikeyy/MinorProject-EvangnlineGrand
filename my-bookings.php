@@ -33,7 +33,7 @@ function booking_card(array $b, string $highlight): void {
         <div class="b-ref"><?= e($b['ref']) ?></div>
         <h5><?= e($b['lodge_name']) ?></h5>
         <div class="b-meta">
-          <div><i class="bi bi-calendar-event"></i><?= e(fmt_date($b['check_in'])) ?> &rarr; <?= e(fmt_date($b['check_out'])) ?> &middot; <?= (int)$b['nights'] ?> night<?= $b['nights'] > 1 ? 's' : '' ?></div>
+          <div><i class="bi bi-calendar-event"></i><?= e(fmt_date($b['check_in'])) ?><?= ($b['check_in_time'] ?? '') !== '' ? ', ' . e(fmt_time($b['check_in_time'])) : '' ?> &rarr; <?= e(fmt_date($b['check_out'])) ?><?= ($b['check_out_time'] ?? '') !== '' ? ', ' . e(fmt_time($b['check_out_time'])) : '' ?> &middot; <?= (int)$b['nights'] ?> night<?= $b['nights'] > 1 ? 's' : '' ?></div>
           <div><i class="bi bi-people"></i><?= e(adults_text($b['adults'])) ?><?= (int)$b['children'] > 0 ? ', ' . e(children_text($b['children'])) : '' ?></div>
           <?php if ($b['special_requests'] !== ''): ?><div><i class="bi bi-chat-left-text"></i><?= e($b['special_requests']) ?></div><?php endif; ?>
           <?php if (in_array($b['status'], ['declined', 'cancelled'], true) && $b['admin_note'] !== '' && $b['cancelled_by'] !== 'guest'): ?>
@@ -45,8 +45,11 @@ function booking_card(array $b, string $highlight): void {
         <span class="status-pill <?= e($key) ?>"><?= e($label) ?></span>
         <div>
           <div class="b-total">₹<?= e(inr($b['total'])) ?></div>
-          <div class="small text-muted">Pay at the hotel<?= (int)$b['tax_amount'] > 0 ? ' · incl. tax' : '' ?></div>
+          <div class="small text-muted"><?php $pk = payment_info($b)[1]; echo $pk === 'paid' ? 'Paid online ✓' : ($pk === 'verifying' ? 'Payment sent, the hotel is verifying it' : (upi_enabled() ? 'Pay online (UPI) or at the hotel' : 'Pay at the hotel')); ?><?= (int)$b['tax_amount'] > 0 ? ' · incl. tax' : '' ?></div>
         </div>
+        <?php if (guest_can_pay($b)): ?>
+          <a href="pay.php?ref=<?= e($b['ref']) ?>" class="btn btn-sm text-white custom-bg shadow-none rounded-pill px-3"><?= payment_info($b)[1] === 'verifying' ? 'View payment' : 'Pay online' ?></a>
+        <?php endif; ?>
         <?php if (guest_can_cancel($b)): ?>
           <form method="post" class="m-0" onsubmit="return confirm('Cancel booking <?= e($b['ref']) ?>?');">
             <?= csrf_field() ?><input type="hidden" name="action" value="cancel"><input type="hidden" name="id" value="<?= (int)$b['id'] ?>">
