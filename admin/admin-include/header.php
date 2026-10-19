@@ -47,21 +47,25 @@ $menu = [
 
 <nav class="navbar navbar-scrolled admin-navbar">
   <div class="container-fluid">
-    <a class="navbar-brand" href="admin-dashboard.php">
-      <img src="admin-images/logo/logo-light.png" alt="<?= e(setting('hotel_name')) ?>" class="logo-img">
-      <span class="admin-brand-label">Administration Panel</span>
-    </a>
+    <div class="d-flex align-items-center">
+      <button type="button" class="admin-menu-toggle d-lg-none" id="adminMenuToggle" aria-label="Open menu" aria-controls="adminSide"><i class="fa-solid fa-bars"></i></button>
+      <a class="navbar-brand" href="admin-dashboard.php">
+        <img src="admin-images/logo/logo-light.png" alt="<?= e(setting('hotel_name')) ?>" class="logo-img">
+        <span class="admin-brand-label">Administration Panel</span>
+      </a>
+    </div>
     <div class="d-flex">
-      <a href="../index.php" class="btn btn-outline-dark shadow-none me-lg-3 me-3">
+      <a href="../index.php" class="btn btn-outline-dark shadow-none me-lg-3 me-3 d-none d-sm-inline-block">
         <span class="d-none d-sm-inline">Back to Your Website</span><span class="d-sm-none">Back</span>
       </a>
       <a href="admin-logout.php" class="btn btn-dark shadow-none custom-bg">Logout</a>
     </div>
   </div>
 </nav>
+<div class="admin-backdrop" id="adminBackdrop"></div>
 
 <div class="admin-layout">
-  <aside class="admin-side">
+  <aside class="admin-side" id="adminSide">
     <?php foreach ($menu as [$group, $items]): ?>
       <div class="side-title"><?= e($group) ?></div>
       <?php foreach ($items as [$id, $href, $icon, $label]): ?>
@@ -72,6 +76,8 @@ $menu = [
         </a>
       <?php endforeach; ?>
     <?php endforeach; ?>
+    <div class="side-title d-sm-none">Website</div>
+    <a class="side-link d-sm-none" href="../index.php"><i class="fa-solid fa-arrow-left"></i>Back to Your Website</a>
   </aside>
 
   <main class="admin-main">

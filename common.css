@@ -515,7 +515,7 @@ input[type="number"] {
    and type its path in the line marked  <<< TYPE HERE.  Keep  none  for the plain tan background.
    ===================================================================== */
 .book-bg{
-  --book-bg-image: none;                              /* <<< TYPE HERE, e.g.  url('images/booking/bg.jpg')  */
+  --book-bg-image: url('images/lodge/book-page.jpg');                              /* <<< TYPE HERE, e.g.  url('images/booking/bg.jpg')  */
   background-color: var(--cream);
   background-image: var(--book-bg-image);
   background-size: cover;                             /* fills the whole area */
