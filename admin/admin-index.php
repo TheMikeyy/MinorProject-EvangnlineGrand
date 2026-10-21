@@ -298,7 +298,7 @@
         </div>
       </div>
 
-      <button type="submit" class="btn btn-admin-login">Sign In</button>
+      <button type="submit" class="btn btn-admin-login">Log In</button>
     </form>
 
     <p class="admin-login-footnote">Restricted to authorized Évangéline Grand staff only.</p>
